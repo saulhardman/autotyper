@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Autotyper</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="../dist/jquery.autotyper.js"></script>
+  </head>
+  <body>
+    <h1>Autotyper</h1>
+    <p>A simple JavaScript (currently jQuery) plugin to automatically type out text.</p>
+    <div id="js-terminal" class="terminal" data-autotyper-text="This is some text being typed out automatically!">This is the no-JavaScript fallback.</div>
+    <script>
+      $(function() {
+        $("#js-terminal").autotyper();
+      });
+    </script>
+  </body>
+</html>

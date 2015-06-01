@@ -1,0 +1,30 @@
+{
+  "name": "autotyper",
+  "title": "Autotyper",
+  "description": "A simple JavaScript (currently jQuery) plugin to automatically type out text.",
+  "keywords": [
+    "jquery",
+    "jquery-plugin",
+    "automatic",
+    "auto",
+    "typer",
+    "autotyper"
+  ],
+  "author": "Saul Hardman <hello@iamsaul.co.uk>",
+  "homepage": "https://github.com/saulhardman/autotyper/",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saulhardman/autotyper.git"
+  },
+  "readme": "README.md",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.0"
+  },
+  "scripts": {
+    "test": "grunt travis --verbose"
+  }
+}

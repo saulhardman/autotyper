@@ -1,0 +1,31 @@
+{
+  "name": "autotyper",
+  "version": "0.1.0",
+  "authors": [
+    "Saul Hardman <hello@iamsaul.co.uk>"
+  ],
+  "description": "A simple JavaScript (currently jQuery) plugin to automatically type out text.",
+  "main": "dist/jquery.autotyper.js",
+  "keywords": [
+    "jquery",
+    "jquery-plugin",
+    "automatic",
+    "auto",
+    "typer",
+    "autotyper"
+  ],
+  "license": "MIT",
+  "homepage": "http://github.com/saulhardman/autotyper",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "demo",
+    "src",
+    "*.json",
+    "*.js",
+    "*.md"
+  ]
+}
