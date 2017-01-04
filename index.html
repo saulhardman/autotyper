@@ -1,0 +1,44 @@
+<!doctype html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        min-height: 100%;
+      }
+
+      html {
+        font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Droid Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="js-terminal"
+         class="terminal"
+         data-autotyper-interval="[50, 500]"
+         data-autotyper-auto-start="false"
+         data-autotyper-text='"This is some text being typed out automatically!"'>
+      This also acts as the no-JavaScript fallback.
+    </div>
+
+    <script src="<%= htmlWebpackPlugin.options.name %>.js"></script>
+    <script>
+      const terminal = Object.create(window.autotyper);
+
+      terminal.init(document.getElementById('js-terminal'));
+
+      setTimeout(() => terminal.start(), 2000);
+    </script>
+  </body>
+</html>
