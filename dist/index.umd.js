@@ -14,7 +14,7 @@ var name = "autotyper";
 
 
 
-var version = "0.2.0";
+var version = "0.2.1";
 
 function random(min, max) {
   return Math.floor(Math.random() * (max - (min + 1))) + min;
