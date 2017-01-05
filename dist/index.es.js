@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.4.1";
+var version = "0.4.2";
 
 function lowerCaseFirstLetter(string) {
   // e.g. AutoStart => autoStart
