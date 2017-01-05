@@ -24,8 +24,7 @@
     </style>
   </head>
   <body>
-    <div id="js-terminal"
-         class="terminal"
+    <div id="js-example"
          data-autotyper-interval="[50, 500]"
          data-autotyper-auto-start="false"
          data-autotyper-text='"This is some text being typed out automatically!"'>
@@ -34,11 +33,13 @@
 
     <script src="<%= htmlWebpackPlugin.options.name %>.js"></script>
     <script>
-      const terminal = Object.create(window.autotyper);
+      const example = Object.create(autotyper);
 
-      terminal.init(document.getElementById('js-terminal'));
+      example.init(document.getElementById('js-example'));
 
-      setTimeout(() => terminal.start(), 2000);
+      example.on('start', () => console.log('It started!'));
+
+      setTimeout(() => example.start(), 2000);
     </script>
   </body>
 </html>
