@@ -4,7 +4,7 @@ import Emitter from 'component-emitter';
 import { name, version } from '../package.json';
 import random from './random';
 
-const DEFAULTS = {
+const DEFAULT_OPTIONS = {
   interval: [200, 300],
   autoStart: true,
   loop: false,
@@ -15,18 +15,23 @@ const autotyper = {
   init(element, options = {}) {
     const text = element.innerHTML;
     const { dataset } = element;
-    const attrOptions = Object.keys(dataset).reduce((obj, key) => {
-      if (key.indexOf(name) !== -1) {
-        const attr = camelCase(key.substring(name.length));
+    const attributeOptions = Object.keys(dataset).reduce((obj, key) => {
+      if (key === 'autotyper') {
+        const value = JSON.parse(dataset[key]);
 
-        return { ...obj, [attr]: JSON.parse(dataset[key]) };
+        return Object.assign(obj, value);
+      } else if (key.indexOf(name) !== -1) {
+        const attr = camelCase(key.substring(name.length));
+        const value = JSON.parse(dataset[key]);
+
+        return { ...obj, [attr]: value };
       }
 
       return obj;
     }, {});
 
     this.element = element;
-    this.settings = Object.assign({ text }, DEFAULTS, attrOptions, options);
+    this.settings = Object.assign({ text }, DEFAULT_OPTIONS, attributeOptions, options);
     this.text = text;
     this.isRunning = false;
 
