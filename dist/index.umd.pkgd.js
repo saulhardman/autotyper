@@ -358,7 +358,7 @@ var name = "autotyper";
 
 
 
-var version = "0.3.1";
+var version = "0.4.0";
 
 function random(min, max) {
   return Math.floor(Math.random() * (max - (min + 1))) + min;
@@ -370,7 +370,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var DEFAULTS = {
+var DEFAULT_OPTIONS = {
   interval: [200, 300],
   autoStart: true,
   loop: false
@@ -384,18 +384,23 @@ var autotyper = {
     var text = element.innerHTML;
     var dataset = element.dataset;
 
-    var attrOptions = Object.keys(dataset).reduce(function (obj, key) {
-      if (key.indexOf(name) !== -1) {
-        var attr = camelCase(key.substring(name.length));
+    var attributeOptions = Object.keys(dataset).reduce(function (obj, key) {
+      if (key === 'autotyper') {
+        var value = JSON.parse(dataset[key]);
 
-        return _extends({}, obj, _defineProperty({}, attr, JSON.parse(dataset[key])));
+        return Object.assign(obj, value);
+      } else if (key.indexOf(name) !== -1) {
+        var attr = camelCase(key.substring(name.length));
+        var _value = JSON.parse(dataset[key]);
+
+        return _extends({}, obj, _defineProperty({}, attr, _value));
       }
 
       return obj;
     }, {});
 
     this.element = element;
-    this.settings = Object.assign({ text: text }, DEFAULTS, attrOptions, options);
+    this.settings = Object.assign({ text: text }, DEFAULT_OPTIONS, attributeOptions, options);
     this.text = text;
     this.isRunning = false;
 
