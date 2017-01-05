@@ -6,19 +6,45 @@ A simple JavaScript plugin that automatically types out text.
 
 #### Yarn
 
-`yarn add --save autotyper`
+`yarn add autotyper`
 
 #### NPM
 
 `npm install --save autotyper`
 
+### Download
+
+The plugin is available in formats that support all of the major environments (ES, CommonJS, AMD, and UMD). Take a look at the [`dist/`](https://github.com/saulhardman/autotyper/tree/master/dist) directory to see them all.
+
+- Latest version, bundled (UMD): [index.umd.pkgd.js](https://unpkg.com/autotyper/index.umd.pkgd.js)
+- Latest version, bundled and minified (UMD): [index.umd.pkgd.min.js](https://unpkg.com/autotyper/index.umd.pkgd.min.js)
+
 #### CDN
 
-A bundled and minified UMD version of the plugin is available on [unpkg](https://unpkg.com/):
+All versions and formats of the module are available via [unpkg](https://unpkg.com/).
 
-Versioned releases: `https://unpkg.com/autotyper@x.x.x/index.umd.pkgd.min.js`
+This is an example of using the UMD format served via the CDN:
 
-Latest release: `https://unpkg.com/autotyper/index.umd.pkgd.min.js`
+```html
+<!-- Use a specific release (replace `x.x.x` with a version number) -->
+<script src="https://unpkg.com/autotyper@x.x.x/index.umd.pkgd.min.js"></script>
+<!-- Use the latest minor or patch release (stay up to date safely) -->
+<script src="https://unpkg.com/autotyper@0/index.umd.pkgd.min.js"></script>
+<!-- DANGER: Use the latest major release (could introduce breaking changes) -->
+<script src="https://unpkg.com/autotyper/index.umd.pkgd.min.js"></script>
+
+<script>
+  // autotyper is then available within the global scope
+  // e.g. as `autotyper` or more explicitly `window.autotyper`
+  const myAutotyper = Object.create(window.autotyper);
+  const myElement = document.getElementById('my-element');
+  const myOptions = {
+    text: 'Look at my autotyper typing!',
+  };
+  
+  myAutotyper.init(myElement, myOptions);
+</script>
+```
 
 ### Usage
 
@@ -56,6 +82,8 @@ All of these (and more) can be interacted with live on [CodePen](https://codepen
 const example = Object.create(autotyper);
 
 example.init(document.querySelector('.js-element'), { autoStart: false });
+
+example.on('start', () => console.log('It started!'));
 
 // somewhere later in your code...
 
