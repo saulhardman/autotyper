@@ -18,7 +18,7 @@
   ],
   "author": "Saul Hardman <hello@iamsaul.co.uk>",
   "homepage": "https://github.com/saulhardman/autotyper/",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "repository": "https://github.com/saulhardman/autotyper.git",
   "dependencies": {
     "camel-case": "^3.0.0",

@@ -3,6 +3,7 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var camelCase = _interopDefault(require('camel-case'));
+var Emitter = _interopDefault(require('component-emitter'));
 
 var name = "autotyper";
 
@@ -12,7 +13,7 @@ var name = "autotyper";
 
 
 
-var version = "0.2.1";
+var version = "0.3.0";
 
 function random(min, max) {
   return Math.floor(Math.random() * (max - (min + 1))) + min;
@@ -57,7 +58,7 @@ var autotyper = {
       this.start();
     }
 
-    // this.$element.trigger("autotyper:init", this);
+    this.emit('init');
 
     return this;
   },
@@ -85,7 +86,7 @@ var autotyper = {
 
     this.tick();
 
-    // this.$element.trigger('autotyper:start', this);
+    this.emit('start');
 
     return this;
   },
@@ -99,7 +100,7 @@ var autotyper = {
 
     this.setText(this.settings.text.substring(0, this.letterCount += 1));
 
-    // this.$element.trigger('autotyper:type', this);
+    this.emit('type');
 
     if (this.letterCount > this.letterTotal) {
       if (this.settings.loop) {
@@ -120,7 +121,7 @@ var autotyper = {
 
     this.isRunning = false;
 
-    // this.$element.trigger('autotyper:stop', this);
+    this.emit('stop');
 
     return this;
   },
@@ -134,15 +135,20 @@ var autotyper = {
       this.stop();
     }
 
-    // this.$element.removeData(this.name)
-    //              .trigger('autotyper:destroy', this);
+    this.emit('destroy');
 
     this.element = null;
   },
-  tick: function tick(interval) {
+  tick: function tick() {
+    var _this = this;
+
+    var interval = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.interval();
+
     clearTimeout(this.timeout);
 
-    this.timeout = setTimeout(this.type.bind(this), interval || this.interval());
+    this.timeout = setTimeout(function () {
+      return _this.type();
+    }, interval);
 
     return this;
   },
@@ -158,7 +164,7 @@ var autotyper = {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
-    // this.$element.trigger('autotyper:loop', this);
+    this.emit('loop');
 
     return this;
   },
@@ -178,5 +184,7 @@ var autotyper = {
     return this.settings.interval;
   }
 };
+
+Emitter(autotyper);
 
 module.exports = autotyper;
