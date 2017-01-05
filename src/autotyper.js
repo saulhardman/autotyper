@@ -1,8 +1,7 @@
-import camelCase from 'camel-case';
 import Emitter from 'component-emitter';
 
-import { name, version } from '../package.json';
-import random from './random';
+import { name as packageName, version } from '../package.json';
+import { parseOptionNameFromAttributeName, random } from './utils';
 
 const DEFAULT_OPTIONS = {
   interval: [200, 300],
@@ -20,11 +19,11 @@ const autotyper = {
         const value = JSON.parse(dataset[key]);
 
         return Object.assign(obj, value);
-      } else if (key.indexOf(name) !== -1) {
-        const attr = camelCase(key.substring(name.length));
+      } else if (key.indexOf(packageName) !== -1) {
+        const name = parseOptionNameFromAttributeName(key, packageName);
         const value = JSON.parse(dataset[key]);
 
-        return { ...obj, [attr]: value };
+        return { ...obj, [name]: value };
       }
 
       return obj;

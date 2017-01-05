@@ -21,7 +21,6 @@
   "version": "0.4.0",
   "repository": "https://github.com/saulhardman/autotyper.git",
   "dependencies": {
-    "camel-case": "^3.0.0",
     "component-emitter": "^1.2.1"
   },
   "devDependencies": {
@@ -29,6 +28,7 @@
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "babel-preset-es2015": "^6.18.0",
+    "camel-case": "^3.0.0",
     "del": "^2.2.2",
     "eslint": "^3.12.2",
     "eslint-config-airbnb-base": "^11.0.0",
