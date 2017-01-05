@@ -48,7 +48,10 @@
   "scripts": {
     "start": "webpack-dev-server --hot --inline",
     "build": "node tools/build.js",
-    "lint": "eslint src/ tools/ *.js"
+    "lint": "eslint src/ tools/ *.js",
+    "test": "npm run lint",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist"
   },
   "license": "MIT"
 }
