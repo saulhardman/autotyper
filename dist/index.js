@@ -2,7 +2,6 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var camelCase = _interopDefault(require('camel-case'));
 var Emitter = _interopDefault(require('component-emitter'));
 
 var name = "autotyper";
@@ -13,9 +12,20 @@ var name = "autotyper";
 
 
 
-var version = "0.4.0";
+var version = "0.4.1";
+
+function lowerCaseFirstLetter(string) {
+  // e.g. AutoStart => autoStart
+  return "" + string.substring(0, 1).toLowerCase() + string.substring(1);
+}
+
+function parseOptionNameFromAttributeName(name, packageName) {
+  // e.g. autotyperAutoStart => autoStart
+  return lowerCaseFirstLetter(name.substring(packageName.length));
+}
 
 function random(min, max) {
+  // return a random number between min and max
   return Math.floor(Math.random() * (max - (min + 1))) + min;
 }
 
@@ -45,10 +55,10 @@ var autotyper = {
 
         return Object.assign(obj, value);
       } else if (key.indexOf(name) !== -1) {
-        var attr = camelCase(key.substring(name.length));
+        var name$$1 = parseOptionNameFromAttributeName(key, name);
         var _value = JSON.parse(dataset[key]);
 
-        return _extends({}, obj, _defineProperty({}, attr, _value));
+        return _extends({}, obj, _defineProperty({}, name$$1, _value));
       }
 
       return obj;

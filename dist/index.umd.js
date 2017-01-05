@@ -1,10 +1,9 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('camel-case'), require('component-emitter')) :
-	typeof define === 'function' && define.amd ? define(['camel-case', 'component-emitter'], factory) :
-	(global.autotyper = factory(global.camelCase,global.Emitter));
-}(this, (function (camelCase,Emitter) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('component-emitter')) :
+	typeof define === 'function' && define.amd ? define(['component-emitter'], factory) :
+	(global.autotyper = factory(global.Emitter));
+}(this, (function (Emitter) { 'use strict';
 
-camelCase = 'default' in camelCase ? camelCase['default'] : camelCase;
 Emitter = 'default' in Emitter ? Emitter['default'] : Emitter;
 
 var name = "autotyper";
@@ -15,9 +14,20 @@ var name = "autotyper";
 
 
 
-var version = "0.4.0";
+var version = "0.4.1";
+
+function lowerCaseFirstLetter(string) {
+  // e.g. AutoStart => autoStart
+  return "" + string.substring(0, 1).toLowerCase() + string.substring(1);
+}
+
+function parseOptionNameFromAttributeName(name, packageName) {
+  // e.g. autotyperAutoStart => autoStart
+  return lowerCaseFirstLetter(name.substring(packageName.length));
+}
 
 function random(min, max) {
+  // return a random number between min and max
   return Math.floor(Math.random() * (max - (min + 1))) + min;
 }
 
@@ -47,10 +57,10 @@ var autotyper = {
 
         return Object.assign(obj, value);
       } else if (key.indexOf(name) !== -1) {
-        var attr = camelCase(key.substring(name.length));
+        var name$$1 = parseOptionNameFromAttributeName(key, name);
         var _value = JSON.parse(dataset[key]);
 
-        return _extends({}, obj, _defineProperty({}, attr, _value));
+        return _extends({}, obj, _defineProperty({}, name$$1, _value));
       }
 
       return obj;
