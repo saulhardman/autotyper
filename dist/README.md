@@ -4,7 +4,7 @@ A simple JavaScript plugin that automatically types out text.
 
 ### Installation
 
-#### yarn
+#### Yarn
 
 `yarn add --save autotyper`
 
@@ -28,7 +28,7 @@ import autotyper from 'autotyper';
 // CommonJS
 const autotyper = require('autotyper');
 // AMD
-require(['autotyper'], function (autotyper) { // use autotyper here });
+require(['autotyper'], function (autotyper) { /* use autotyper here */ });
 // The UMD build can be used in both CommonJS and AMD environments
 // It falls back to assigning autotyper to the global scope where no module system is present
 // e.g. window.autotyper;
@@ -41,9 +41,11 @@ const example = Object.create(autotyper).init(document.querySelector('.js-elemen
 These are the options and their default values:
 
 ```js
-interval: [200, 300], // Number or an array of 2 Numbers to randomise between
-autoStart: true, // Boolean
-loop: false, // Boolean or Number
+{
+  interval: [200, 300], // Number or an array of 2 Numbers to randomise between
+  autoStart: true, // Boolean
+  loop: false, // Boolean or Number
+}
 ```
 
 ### Examples
