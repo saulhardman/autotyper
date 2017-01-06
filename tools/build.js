@@ -56,10 +56,18 @@ promise = promise.then(() => del(['dist/*']));
       replace({
         ENV: JSON.stringify('production'),
       }),
-      babel({
+      babel(Object.assign(pkg.babel, {
+        babelrc: false,
         exclude: 'node_modules/**',
         runtimeHelpers: true,
-      }),
+        presets: pkg.babel.presets.map((preset) => {
+          if (preset === 'es2015') {
+            return ['es2015', { modules: false }];
+          }
+
+          return preset;
+        }),
+      })),
       commonjs(),
       resolve(),
       (minify && uglify()),
