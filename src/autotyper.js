@@ -37,6 +37,12 @@ const autotyper = {
 
     if (this.settings.autoStart === true) {
       this.start();
+    } else {
+      const delay = parseInt(this.settings.autoStart, 10);
+
+      if (!isNaN(delay)) {
+        setTimeout(() => this.start(), delay);
+      }
     }
 
     this.emit('init');
