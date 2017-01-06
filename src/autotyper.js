@@ -7,8 +7,8 @@ const DEFAULT_OPTIONS = {
   interval: [200, 300],
   autoStart: true,
   loop: false,
+  emptyText: '\u00A0',
 };
-const NONE_BREAKING_SPACE = '\u00A0';
 
 const autotyper = {
   version,
@@ -32,7 +32,7 @@ const autotyper = {
 
     this.element = element;
     this.settings = Object.assign({ text }, DEFAULT_OPTIONS, attributeOptions, options);
-    this.text = text;
+    this.originalText = text;
     this.isRunning = false;
 
     if (this.settings.autoStart === true) {
@@ -58,7 +58,7 @@ const autotyper = {
 
     this.isRunning = true;
 
-    this.setText(NONE_BREAKING_SPACE);
+    this.setText(this.settings.emptyText);
 
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
@@ -113,7 +113,7 @@ const autotyper = {
     return this;
   },
   reset() {
-    this.setText(this.text);
+    this.setText(this.originalText);
 
     return this;
   },
