@@ -69,8 +69,8 @@ These are the options and their default values:
 ```js
 {
   interval: [200, 300], // Number or an array of 2 Numbers to randomise between
-  autoStart: true, // Boolean
-  loop: false, // Boolean or Number
+  autoStart: true, // Boolean or Number of milliseconds to delay start by
+  loop: false, // Boolean or Number of loops
 }
 ```
 

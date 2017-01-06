@@ -12,7 +12,7 @@ var name = "autotyper";
 
 
 
-var version = "0.5.1";
+var version = "0.6.0";
 
 function lowerCaseFirstLetter(string) {
   // e.g. AutoStart => autoStart
@@ -40,10 +40,13 @@ var DEFAULT_OPTIONS = {
   autoStart: true,
   loop: false
 };
+var NONE_BREAKING_SPACE = '\xA0';
 
 var autotyper = {
   version: version,
   init: function init(element) {
+    var _this = this;
+
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     var text = element.innerHTML;
@@ -71,6 +74,14 @@ var autotyper = {
 
     if (this.settings.autoStart === true) {
       this.start();
+    } else {
+      var delay = parseInt(this.settings.autoStart, 10);
+
+      if (!isNaN(delay)) {
+        setTimeout(function () {
+          return _this.start();
+        }, delay);
+      }
     }
 
     this.emit('init');
@@ -86,7 +97,7 @@ var autotyper = {
 
     this.isRunning = true;
 
-    this.setText('');
+    this.setText(NONE_BREAKING_SPACE);
 
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
@@ -155,14 +166,14 @@ var autotyper = {
     this.element = null;
   },
   tick: function tick() {
-    var _this = this;
+    var _this2 = this;
 
     var interval = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.interval();
 
     clearTimeout(this.timeout);
 
     this.timeout = setTimeout(function () {
-      return _this.type();
+      return _this2.type();
     }, interval);
 
     return this;
