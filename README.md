@@ -2,19 +2,19 @@
 
 > A simple JavaScript plugin that automatically types out text.
 
-[![npm](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper)[![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
+[![npm](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
 
 ### Installation
 
 #### Yarn
 
-```js
+```
 yarn add autotyper
 ```
 
 #### NPM
 
-```js
+```
 npm install --save autotyper
 ```
 
@@ -81,7 +81,7 @@ If you're not using a module bundler or npm as your package manager then the fol
 
 #### Bower
 
-```js
+```
 bower install autotyper=https://unpkg.com/autotyper/index.umd.pkgd.js
 ```
 
