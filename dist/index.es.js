@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.6.0";
+var version = "0.7.0";
 
 function lowerCaseFirstLetter(string) {
   // e.g. AutoStart => autoStart
@@ -34,9 +34,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var DEFAULT_OPTIONS = {
   interval: [200, 300],
   autoStart: true,
-  loop: false
+  loop: false,
+  emptyText: '\xA0'
 };
-var NONE_BREAKING_SPACE = '\xA0';
 
 var autotyper = {
   version: version,
@@ -65,7 +65,7 @@ var autotyper = {
 
     this.element = element;
     this.settings = Object.assign({ text: text }, DEFAULT_OPTIONS, attributeOptions, options);
-    this.text = text;
+    this.originalText = text;
     this.isRunning = false;
 
     if (this.settings.autoStart === true) {
@@ -93,7 +93,7 @@ var autotyper = {
 
     this.isRunning = true;
 
-    this.setText(NONE_BREAKING_SPACE);
+    this.setText(this.settings.emptyText);
 
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
@@ -148,7 +148,7 @@ var autotyper = {
     return this;
   },
   reset: function reset() {
-    this.setText(this.text);
+    this.setText(this.originalText);
 
     return this;
   },
