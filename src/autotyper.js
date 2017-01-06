@@ -8,6 +8,7 @@ const DEFAULT_OPTIONS = {
   autoStart: true,
   loop: false,
 };
+const NONE_BREAKING_SPACE = '\u00A0';
 
 const autotyper = {
   version,
@@ -51,7 +52,7 @@ const autotyper = {
 
     this.isRunning = true;
 
-    this.setText('');
+    this.setText(NONE_BREAKING_SPACE);
 
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;

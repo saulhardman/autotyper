@@ -24,22 +24,30 @@
     </style>
   </head>
   <body>
-    <p id="js-example"
+    <p id="js-example-1"
          data-autotyper='{ "autoStart": false }'
          data-autotyper-interval="[50, 500]"
          data-autotyper-text='"This is some text being typed out automatically!"'>
       This also acts as the no-JavaScript fallback.
     </p>
 
+    <p id="js-example-2">This also acts as the no-JavaScript fallback.</p>
+
     <script src="<%= htmlWebpackPlugin.options.name %>.js"></script>
-    <script>
-      const example = Object.create(autotyper);
+    <script data-id="example-1">
+      const example1 = Object.create(autotyper);
 
-      example.init(document.getElementById('js-example'));
+      example1.init(document.getElementById('js-example-1'));
 
-      example.on('start', () => console.log('It started!'));
+      example1.on('start', () => console.log('It started!'));
 
-      setTimeout(() => example.start(), 2000);
+      setTimeout(() => example1.start(), 2000);
+    </script>
+
+    <script data-id="example-2">
+      const example2 = Object.create(autotyper);
+
+      example2.init(document.getElementById('js-example-2'));
     </script>
   </body>
 </html>
