@@ -1,6 +1,8 @@
 # Autotyper
 
-A simple JavaScript plugin that automatically types out text.
+> A simple JavaScript plugin that automatically types out text.
+
+[![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
 
 ### Installation
 
