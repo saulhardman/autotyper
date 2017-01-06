@@ -3,6 +3,29 @@ import Emitter from 'component-emitter';
 import { name as packageName, version } from '../package.json';
 import { parseOptionNameFromAttributeName, random } from './utils';
 
+function uppercaseFirstLetter(string) {
+  // e.g. text => Text
+  return `${string.substring(0, 1).toLowerCase()}${string.substring(1)}`;
+}
+
+function fromParamCaseToCamelCase(string) {
+  return string.split('-').map((s, i) => {
+    if (i === 0) {
+      return s;
+    }
+
+    return uppercaseFirstLetter(s);
+  }).join('');
+}
+
+const OPTION_NAMES_PARAM_CASE = [
+  'text',
+  'interval',
+  'auto-start',
+  'loop',
+  'empty-text',
+];
+
 const DEFAULT_OPTIONS = {
   interval: [200, 300],
   autoStart: true,
@@ -14,20 +37,19 @@ const autotyper = {
   version,
   init(element, options = {}) {
     const text = element.innerHTML;
-    const { dataset } = element;
-    const attributeOptions = Object.keys(dataset).reduce((obj, key) => {
-      if (key === 'autotyper') {
-        const value = JSON.parse(dataset[key]);
+    const attributeOptions = OPTION_NAMES_PARAM_CASE.reduce((obj, optionName) => {
+      const value = element.getAttribute(`data-${packageName}-${optionName}`);
+      const name = fromParamCaseToCamelCase(optionName);
 
-        return Object.assign(obj, value);
-      } else if (key.indexOf(packageName) !== -1) {
-        const name = parseOptionNameFromAttributeName(key, packageName);
-        const value = JSON.parse(dataset[key]);
-
-        return { ...obj, [name]: value };
+      if (value === null) {
+        return obj;
       }
 
-      return obj;
+      if (optionName === packageName) {
+        return Object.assign(obj, value);
+      }
+
+      return { ...obj, [name]: JSON.parse(value) };
     }, {});
 
     this.element = element;
@@ -163,5 +185,7 @@ const autotyper = {
 };
 
 Emitter(autotyper);
+
+export { DEFAULT_OPTIONS };
 
 export default autotyper;
