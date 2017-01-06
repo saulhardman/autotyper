@@ -1,7 +1,5 @@
-import autotyper from './autotyper';
-
-export { autotyper as default };
+export { default } from './autotyper';
 
 if (ENV === 'development') {
-  module.exports = autotyper;
+  module.exports = require('./autotyper').default; // eslint-disable-line global-require
 }

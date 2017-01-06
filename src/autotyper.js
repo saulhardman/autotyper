@@ -1,24 +1,10 @@
 import Emitter from 'component-emitter';
 
 import { name as packageName, version } from '../package.json';
-import { parseOptionNameFromAttributeName, random } from './utils';
+import randomNumber from './random-number';
+import dataAttributesToObject from './data-attributes-to-object';
 
-function uppercaseFirstLetter(string) {
-  // e.g. text => Text
-  return `${string.substring(0, 1).toLowerCase()}${string.substring(1)}`;
-}
-
-function fromParamCaseToCamelCase(string) {
-  return string.split('-').map((s, i) => {
-    if (i === 0) {
-      return s;
-    }
-
-    return uppercaseFirstLetter(s);
-  }).join('');
-}
-
-const OPTION_NAMES_PARAM_CASE = [
+const ATTRIBUTE_OPTION_NAMES = [
   'text',
   'interval',
   'auto-start',
@@ -37,20 +23,10 @@ const autotyper = {
   version,
   init(element, options = {}) {
     const text = element.innerHTML;
-    const attributeOptions = OPTION_NAMES_PARAM_CASE.reduce((obj, optionName) => {
-      const value = element.getAttribute(`data-${packageName}-${optionName}`);
-      const name = fromParamCaseToCamelCase(optionName);
-
-      if (value === null) {
-        return obj;
-      }
-
-      if (optionName === packageName) {
-        return Object.assign(obj, value);
-      }
-
-      return { ...obj, [name]: JSON.parse(value) };
-    }, {});
+    const attributeOptions = Object.assign(
+      dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, packageName),
+      JSON.parse(element.getAttribute(`data-${packageName}`))
+    );
 
     this.element = element;
     this.settings = Object.assign({ text }, DEFAULT_OPTIONS, attributeOptions, options);
@@ -176,7 +152,7 @@ const autotyper = {
       if (this.settings.interval.length === 2) {
         const [min, max] = this.settings.interval;
 
-        return random(min, max);
+        return randomNumber(min, max);
       }
     }
 
