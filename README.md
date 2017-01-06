@@ -2,21 +2,92 @@
 
 > A simple JavaScript plugin that automatically types out text.
 
-[![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
+[![npm](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper)[![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
 
 ### Installation
 
 #### Yarn
 
-`yarn add autotyper`
+```js
+yarn add autotyper
+```
 
 #### NPM
 
-`npm install --save autotyper`
+```js
+npm install --save autotyper
+```
 
-### Download
+### Usage
 
-The plugin is available in formats that support all of the major environments (ES, CommonJS, AMD, and UMD). Take a look at the [`dist/`](https://github.com/saulhardman/autotyper/tree/master/dist) directory to see them all.
+```js
+// ES Modules
+import autotyper from 'autotyper';
+// CommonJS
+const autotyper = require('autotyper');
+// AMD
+require(['autotyper'], function (autotyper) { /* use `autotyper` here */ });
+// The UMD build can be used in both CommonJS and AMD environments
+// It falls back to assigning autotyper to the global scope where no module system is present
+// e.g. window.autotyper;
+
+const example = Object.create(autotyper)
+
+example.init(document.querySelector('.js-element'));
+```
+
+### Options
+
+These are the options and their default values:
+
+```js
+{
+  text: element.innerHTML, // String representing the text to be typed out, defaults to the element's `innerHTML`
+  interval: [200, 300], // Number or an array of 2 Numbers to randomise between (in milliseconds)
+  autoStart: true, // Boolean or Number of milliseconds to delay start by
+  loop: false, // Boolean or Number of loops
+  emptyText: '\u00A0', // String to set the text to when the element is empty, defaults to the unicode literal 'no-break space' to preserve element height
+}
+```
+
+#### HTML Data Attributes
+
+Options can be passed via HTML data attributes. Either as individual properties or a single options object. The attribute names should be:
+
+- prefixed with 'autotyper'
+- in param case
+
+The attribute values should be JSON formatted strings.
+
+```html
+<!-- Options passed as a single JSON formatted object -->
+<p data-autotyper='{ "text": "This is the text that is typed." }'>
+  This is some example text.
+</p>
+
+<!-- The `autoStart` option being passed as an individual value -->
+<p data-autotyper-auto-start="2000">
+  This is some different example text.
+</p>
+```
+
+### Examples
+
+Some examples of autotyper in action can be found on [CodePen](https://codepen.io/saulhardman/pen/vgYwmO).
+
+### Alternative Installation
+
+If you're not using a module bundler or npm as your package manager then the following methods are available to you.
+
+#### Bower
+
+```js
+bower install autotyper=https://unpkg.com/autotyper/index.umd.pkgd.js
+```
+
+#### Download
+
+The latest UMD build is available for download:
 
 - Latest version, bundled (UMD): [index.umd.pkgd.js](https://unpkg.com/autotyper/index.umd.pkgd.js)
 - Latest version, bundled and minified (UMD): [index.umd.pkgd.min.js](https://unpkg.com/autotyper/index.umd.pkgd.min.js)
@@ -39,7 +110,7 @@ This is an example of using the UMD format served via the CDN:
   // autotyper is then available within the global scope
   // e.g. as `autotyper` or more explicitly `window.autotyper`
   const myAutotyper = Object.create(window.autotyper);
-  const myElement = document.getElementById('my-element');
+  const myElement = document.getElementById('js-element');
   const myOptions = {
     text: 'Look at my autotyper typing!',
   };
@@ -48,57 +119,11 @@ This is an example of using the UMD format served via the CDN:
 </script>
 ```
 
-### Usage
-
-```js
-// ES Modules
-import autotyper from 'autotyper';
-// CommonJS
-const autotyper = require('autotyper');
-// AMD
-require(['autotyper'], function (autotyper) { /* use autotyper here */ });
-// The UMD build can be used in both CommonJS and AMD environments
-// It falls back to assigning autotyper to the global scope where no module system is present
-// e.g. window.autotyper;
-
-const example = Object.create(autotyper).init(document.querySelector('.js-element'));
-```
-
-### Options
-
-These are the options and their default values:
-
-```js
-{
-  text: element.innerHTML, // String representing the text to be typed out, defaults to the element's `innerHTML`
-  interval: [200, 300], // Number or an array of 2 Numbers to randomise between (in milliseconds)
-  autoStart: true, // Boolean or Number of milliseconds to delay start by
-  loop: false, // Boolean or Number of loops
-  emptyText: '\u00A0', // String to set the text to when the element is empty, defaults to the unicode literal 'no-break space' to preserve element height
-}
-```
-
-### Examples
-
-All of these (and more) can be interacted with live on [CodePen](https://codepen.io/saulhardman/pen/vgYwmO).
-
-```js
-const example = Object.create(autotyper);
-
-example.init(document.querySelector('.js-element'), { autoStart: false });
-
-example.on('start', () => console.log('It started!'));
-
-// somewhere later in your code...
-
-example.start();
-```
-
 ### API
 
-As `autotyper` is just a plain old JavaScript object the entire API is there for you to see.
+As `autotyper` is just a plain old JavaScript object the entire API is exposed.
 
-That being said, these are the functions that you probably pay attention to most:
+Here are the functions that you will probably pay attention to most:
 
 #### init(element, options)
 #### start()
@@ -108,6 +133,8 @@ That being said, these are the functions that you probably pay attention to most
 #### setText(text)
 
 ### Events
+
+The `autotyper` object is an [event emitter](https://github.com/component/emitter) and emits the following events:
 
 #### init
 
