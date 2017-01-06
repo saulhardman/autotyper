@@ -156,8 +156,6 @@ const autotyper = {
 
         return random(min, max);
       }
-
-      // throw new Error('Error: `interval` must be either an array containing 2 Numbers or a Number.');
     }
 
     return this.settings.interval;

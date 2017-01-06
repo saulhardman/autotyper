@@ -1,5 +1,7 @@
 {
-  "extends": ["airbnb-base"],
+  "extends": [
+    "airbnb-base"
+  ],
   "plugins": [
     "import"
   ],
@@ -15,13 +17,8 @@
     "ENV": true
   },
   "rules": {
-    "quotes": [2, "single"],
-    "max-len": 0,
-    "no-param-reassign": [2, { "props": false }],
-    "arrow-parens": [2, "always"],
-    "no-restricted-properties": [0, { "object": "Math", "property": "pow" }],
-    "arrow-body-style": 0,
-    "comma-dangle": [2, {
+    "arrow-parens": ["error", "always"],
+    "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
       "imports": "always-multiline",
