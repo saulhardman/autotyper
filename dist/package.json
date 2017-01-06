@@ -17,10 +17,33 @@
   ],
   "author": "Saul Hardman <hello@iamsaul.co.uk>",
   "homepage": "https://github.com/saulhardman/autotyper/",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "repository": "https://github.com/saulhardman/autotyper.git",
   "dependencies": {
     "component-emitter": "^1.2.1"
+  },
+  "babel": {
+    "presets": [
+      [
+        "es2015",
+        {
+          "modules": false
+        }
+      ]
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ],
+    "babelrc": false,
+    "exclude": "node_modules/**",
+    "runtimeHelpers": true
+  },
+  "ava": {
+    "require": [
+      "babel-register",
+      "./test/helpers/setup-browser-env.js"
+    ],
+    "babel": "inherit"
   },
   "license": "MIT"
 }

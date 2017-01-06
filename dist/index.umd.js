@@ -14,28 +14,56 @@ var name = "autotyper";
 
 
 
-var version = "0.7.0";
+var version = "0.8.0";
 
-function lowerCaseFirstLetter(string) {
-  // e.g. AutoStart => autoStart
-  return "" + string.substring(0, 1).toLowerCase() + string.substring(1);
-}
-
-function parseOptionNameFromAttributeName(name, packageName) {
-  // e.g. autotyperAutoStart => autoStart
-  return lowerCaseFirstLetter(name.substring(packageName.length));
-}
-
-function random(min, max) {
+function randomNumber(min, max) {
   // return a random number between min and max
   return Math.floor(Math.random() * (max - (min + 1))) + min;
 }
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+function upperCaseFirstLetter(string) {
+  // e.g. text => Text
+  return "" + string.substring(0, 1).toLowerCase() + string.substring(1);
+}
+
+function paramCaseToCamelCase(string) {
+  return string.split('-').map(function (s, i) {
+    if (i === 0) {
+      return s;
+    }
+
+    return upperCaseFirstLetter(s);
+  }).join('');
+}
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function attributeName(name, namespace) {
+  if (namespace) {
+    return 'data-' + namespace + '-' + name;
+  }
+
+  return 'data-' + name;
+}
+
+function dataAttributesToObject(element, names, namespace) {
+  return names.reduce(function (obj, name) {
+    var value = element.getAttribute(attributeName(name, namespace));
+    var propertyName = paramCaseToCamelCase(name);
+
+    if (value === null) {
+      return obj;
+    }
+
+    return _extends({}, obj, _defineProperty({}, propertyName, JSON.parse(value)));
+  }, {});
+}
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var ATTRIBUTE_OPTION_NAMES = ['text', 'interval', 'auto-start', 'loop', 'empty-text'];
 
 var DEFAULT_OPTIONS = {
   interval: [200, 300],
@@ -52,22 +80,7 @@ var autotyper = {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     var text = element.innerHTML;
-    var dataset = element.dataset;
-
-    var attributeOptions = Object.keys(dataset).reduce(function (obj, key) {
-      if (key === 'autotyper') {
-        var value = JSON.parse(dataset[key]);
-
-        return Object.assign(obj, value);
-      } else if (key.indexOf(name) !== -1) {
-        var name$$1 = parseOptionNameFromAttributeName(key, name);
-        var _value = JSON.parse(dataset[key]);
-
-        return _extends({}, obj, _defineProperty({}, name$$1, _value));
-      }
-
-      return obj;
-    }, {});
+    var attributeOptions = Object.assign(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute('data-' + name)));
 
     this.element = element;
     this.settings = Object.assign({ text: text }, DEFAULT_OPTIONS, attributeOptions, options);
@@ -203,10 +216,8 @@ var autotyper = {
             min = _settings$interval[0],
             max = _settings$interval[1];
 
-        return random(min, max);
+        return randomNumber(min, max);
       }
-
-      // throw new Error('Error: `interval` must be either an array containing 2 Numbers or a Number.');
     }
 
     return this.settings.interval;
