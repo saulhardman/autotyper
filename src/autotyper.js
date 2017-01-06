@@ -122,6 +122,8 @@ const autotyper = {
 
     this.emit('destroy');
 
+    this.off();
+
     this.element = null;
   },
   tick(interval = this.interval()) {
