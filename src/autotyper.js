@@ -4,6 +4,22 @@ import { name as packageName, version } from '../package.json';
 import randomNumber from './random-number';
 import dataAttributesToObject from './data-attributes-to-object';
 
+const INIT_EVENT = 'init';
+const START_EVENT = 'start';
+const TYPE_EVENT = 'type';
+const LOOP_EVENT = 'loop';
+const STOP_EVENT = 'stop';
+const DESTROY_EVENT = 'destroy';
+
+export const EVENTS = [
+  INIT_EVENT,
+  START_EVENT,
+  TYPE_EVENT,
+  LOOP_EVENT,
+  STOP_EVENT,
+  DESTROY_EVENT,
+];
+
 const ATTRIBUTE_OPTION_NAMES = [
   'text',
   'interval',
@@ -12,7 +28,7 @@ const ATTRIBUTE_OPTION_NAMES = [
   'empty-text',
 ];
 
-const DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = {
   interval: [200, 300],
   autoStart: true,
   loop: false,
@@ -43,7 +59,7 @@ const autotyper = {
       }
     }
 
-    this.emit('init');
+    this.emit(INIT_EVENT);
 
     return this;
   },
@@ -71,7 +87,7 @@ const autotyper = {
 
     this.tick();
 
-    this.emit('start');
+    this.emit(START_EVENT);
 
     return this;
   },
@@ -85,7 +101,7 @@ const autotyper = {
 
     this.setText(this.settings.text.substring(0, this.letterCount += 1));
 
-    this.emit('type');
+    this.emit(TYPE_EVENT);
 
     if (this.letterCount > this.letterTotal) {
       if (this.settings.loop) {
@@ -106,7 +122,7 @@ const autotyper = {
 
     this.isRunning = false;
 
-    this.emit('stop');
+    this.emit(STOP_EVENT);
 
     return this;
   },
@@ -120,7 +136,7 @@ const autotyper = {
       this.stop();
     }
 
-    this.emit('destroy');
+    this.emit(DESTROY_EVENT);
 
     this.off();
 
@@ -145,7 +161,7 @@ const autotyper = {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
-    this.emit('loop');
+    this.emit(LOOP_EVENT);
 
     return this;
   },
@@ -163,7 +179,5 @@ const autotyper = {
 };
 
 Emitter(autotyper);
-
-export { DEFAULT_OPTIONS };
 
 export default autotyper;
