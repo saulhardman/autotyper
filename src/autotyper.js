@@ -1,8 +1,8 @@
 import Emitter from 'component-emitter';
 
 import { name as packageName, version } from '../package.json';
-import randomNumber from './random-number';
 import dataAttributesToObject from './data-attributes-to-object';
+import interval from './interval';
 
 const INIT_EVENT = 'init';
 const START_EVENT = 'start';
@@ -85,7 +85,7 @@ const autotyper = {
       this.loopCount = 0;
     }
 
-    this.tick();
+    this.tick(interval(this.settings.interval));
 
     this.emit(START_EVENT);
 
@@ -97,7 +97,7 @@ const autotyper = {
     return this;
   },
   type() {
-    this.tick();
+    this.tick(interval(this.settings.interval));
 
     this.setText(this.settings.text.substring(0, this.letterCount += 1));
 
@@ -142,10 +142,10 @@ const autotyper = {
 
     this.element = null;
   },
-  tick(interval = this.interval()) {
+  tick(duration) {
     clearTimeout(this.timeout);
 
-    this.timeout = setTimeout(() => this.type(), interval);
+    this.timeout = setTimeout(() => this.type(), duration);
 
     return this;
   },
@@ -164,17 +164,6 @@ const autotyper = {
     this.emit(LOOP_EVENT);
 
     return this;
-  },
-  interval() {
-    if (Array.isArray(this.settings.interval)) {
-      if (this.settings.interval.length === 2) {
-        const [min, max] = this.settings.interval;
-
-        return randomNumber(min, max);
-      }
-    }
-
-    return this.settings.interval;
   },
 };
 
