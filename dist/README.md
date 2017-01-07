@@ -2,19 +2,19 @@
 
 > A simple JavaScript plugin that automatically types out text.
 
-[![npm](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper)[![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
+[![npm](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
 
 ### Installation
 
 #### Yarn
 
-```js
+```
 yarn add autotyper
 ```
 
 #### NPM
 
-```js
+```
 npm install --save autotyper
 ```
 
@@ -46,6 +46,7 @@ These are the options and their default values:
   interval: [200, 300], // Number or an array of 2 Numbers to randomise between (in milliseconds)
   autoStart: true, // Boolean or Number of milliseconds to delay start by
   loop: false, // Boolean or Number of loops
+  loopInterval: interval // Number or an array of 2 Numbers to randomise between (in milliseconds), defaults to `interval`
   emptyText: '\u00A0', // String to set the text to when the element is empty, defaults to the unicode literal 'no-break space' to preserve element height
 }
 ```
@@ -81,7 +82,7 @@ If you're not using a module bundler or npm as your package manager then the fol
 
 #### Bower
 
-```js
+```
 bower install autotyper=https://unpkg.com/autotyper/index.umd.pkgd.js
 ```
 

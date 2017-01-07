@@ -17,7 +17,7 @@
   ],
   "author": "Saul Hardman <hello@iamsaul.co.uk>",
   "homepage": "https://github.com/saulhardman/autotyper/",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "repository": "https://github.com/saulhardman/autotyper.git",
   "dependencies": {
     "component-emitter": "^1.2.1"
@@ -32,7 +32,12 @@
       ]
     ],
     "plugins": [
-      "transform-object-rest-spread"
+      [
+        "transform-object-rest-spread",
+        {
+          "useBuiltIns": true
+        }
+      ]
     ],
     "babelrc": false,
     "exclude": "node_modules/**",

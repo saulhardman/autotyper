@@ -10,16 +10,11 @@ var name = "autotyper";
 
 
 
-var version = "0.8.1";
-
-function randomNumber(min, max) {
-  // return a random number between min and max
-  return Math.floor(Math.random() * (max - (min + 1))) + min;
-}
+var version = "0.9.0";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
-  return "" + string.substring(0, 1).toLowerCase() + string.substring(1);
+  return "" + string.substring(0, 1).toUpperCase() + string.substring(1);
 }
 
 function paramCaseToCamelCase(string) {
@@ -31,8 +26,6 @@ function paramCaseToCamelCase(string) {
     return upperCaseFirstLetter(s);
   }).join('');
 }
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -53,13 +46,41 @@ function dataAttributesToObject(element, names, namespace) {
       return obj;
     }
 
-    return _extends({}, obj, _defineProperty({}, propertyName, JSON.parse(value)));
+    return Object.assign({}, obj, _defineProperty({}, propertyName, JSON.parse(value)));
   }, {});
+}
+
+function randomNumber(min, max) {
+  // return a random number between min and max
+  return Math.floor(Math.random() * (max - (min + 1))) + min;
 }
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var ATTRIBUTE_OPTION_NAMES = ['text', 'interval', 'auto-start', 'loop', 'empty-text'];
+var interval = function (interval) {
+  if (Array.isArray(interval)) {
+    if (interval.length === 2) {
+      var _interval = _slicedToArray(interval, 2),
+          min = _interval[0],
+          max = _interval[1];
+
+      return randomNumber(min, max);
+    }
+  }
+
+  return interval;
+};
+
+var INIT_EVENT = 'init';
+var START_EVENT = 'start';
+var TYPE_EVENT = 'type';
+var LOOP_EVENT = 'loop';
+var STOP_EVENT = 'stop';
+var DESTROY_EVENT = 'destroy';
+
+
+
+var ATTRIBUTE_OPTION_NAMES = ['text', 'interval', 'auto-start', 'loop', 'loop-interval', 'empty-text'];
 
 var DEFAULT_OPTIONS = {
   interval: [200, 300],
@@ -95,7 +116,7 @@ var autotyper = {
       }
     }
 
-    this.emit('init');
+    this.emit(INIT_EVENT);
 
     return this;
   },
@@ -121,9 +142,9 @@ var autotyper = {
       this.loopCount = 0;
     }
 
-    this.tick();
+    this.tick(interval(this.settings.interval));
 
-    this.emit('start');
+    this.emit(START_EVENT);
 
     return this;
   },
@@ -133,11 +154,11 @@ var autotyper = {
     return this;
   },
   type: function type() {
-    this.tick();
+    this.tick(interval(this.settings.interval));
 
     this.setText(this.settings.text.substring(0, this.letterCount += 1));
 
-    this.emit('type');
+    this.emit(TYPE_EVENT);
 
     if (this.letterCount > this.letterTotal) {
       if (this.settings.loop) {
@@ -158,7 +179,7 @@ var autotyper = {
 
     this.isRunning = false;
 
-    this.emit('stop');
+    this.emit(STOP_EVENT);
 
     return this;
   },
@@ -172,27 +193,29 @@ var autotyper = {
       this.stop();
     }
 
-    this.emit('destroy');
+    this.emit(DESTROY_EVENT);
 
     this.off();
 
     this.element = null;
   },
-  tick: function tick() {
+  tick: function tick(duration) {
     var _this2 = this;
-
-    var interval = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.interval();
 
     clearTimeout(this.timeout);
 
+    if (duration === 0) {
+      return this.type();
+    }
+
     this.timeout = setTimeout(function () {
       return _this2.type();
-    }, interval);
+    }, duration);
 
     return this;
   },
   loop: function loop() {
-    this.tick(this.settings.loopInterval);
+    this.tick(interval(this.settings.loopInterval));
 
     if (this.loopCount === this.loopTotal) {
       return this.stop();
@@ -203,22 +226,9 @@ var autotyper = {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
-    this.emit('loop');
+    this.emit(LOOP_EVENT);
 
     return this;
-  },
-  interval: function interval() {
-    if (Array.isArray(this.settings.interval)) {
-      if (this.settings.interval.length === 2) {
-        var _settings$interval = _slicedToArray(this.settings.interval, 2),
-            min = _settings$interval[0],
-            max = _settings$interval[1];
-
-        return randomNumber(min, max);
-      }
-    }
-
-    return this.settings.interval;
   }
 };
 
