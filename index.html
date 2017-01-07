@@ -31,7 +31,11 @@
       This also acts as the no-JavaScript fallback.
     </p>
 
-    <p id="js-example-2">This also acts as the no-JavaScript fallback.</p>
+    <p id="js-example-2"
+       data-autotyper-interval="50"
+       data-autotyper-loop-interval="2000">
+      This also acts as the no-JavaScript fallback.
+    </p>
 
     <script src="<%= htmlWebpackPlugin.options.name %>.js"></script>
     <script data-id="example-1">
@@ -45,7 +49,7 @@
     <script data-id="example-2">
       const example2 = Object.create(autotyper);
 
-      example2.init(document.getElementById('js-example-2'));
+      example2.init(document.getElementById('js-example-2'), { loop: true });
     </script>
   </body>
 </html>
