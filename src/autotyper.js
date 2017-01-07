@@ -25,6 +25,7 @@ const ATTRIBUTE_OPTION_NAMES = [
   'interval',
   'auto-start',
   'loop',
+  'loop-interval',
   'empty-text',
 ];
 
@@ -145,12 +146,16 @@ const autotyper = {
   tick(duration) {
     clearTimeout(this.timeout);
 
+    if (duration === 0) {
+      return this.type();
+    }
+
     this.timeout = setTimeout(() => this.type(), duration);
 
     return this;
   },
   loop() {
-    this.tick(this.settings.loopInterval);
+    this.tick(interval(this.settings.loopInterval));
 
     if (this.loopCount === this.loopTotal) {
       return this.stop();
