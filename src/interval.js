@@ -1,13 +1,17 @@
 import randomNumber from './random-number';
 
 export default function (interval) {
-  if (Array.isArray(interval)) {
-    if (interval.length === 2) {
-      const [min, max] = interval;
+  let value;
 
-      return randomNumber(min, max);
-    }
+  if (Array.isArray(interval) && interval.length === 2) {
+    const [min, max] = interval;
+
+    value = randomNumber(min, max);
+  } else if (typeof interval === 'function') {
+    value = interval();
+  } else {
+    value = parseInt(interval, 10);
   }
 
-  return interval;
+  return value;
 }
