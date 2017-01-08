@@ -126,37 +126,37 @@ As `autotyper` is just a plain old JavaScript object the entire API is exposed.
 
 Here are the functions that you will probably pay attention to most:
 
-#### init(element, options)
-#### start()
-#### stop()
-#### reset()
-#### destroy()
-#### setText(text)
+#### autotyper.init(element, options)
+#### autotyper.start()
+#### autotyper.stop()
+#### autotyper.reset()
+#### autotyper.destroy()
+#### autotyper.setText(text)
 
 ### Events
 
 The `autotyper` object is an [event emitter](https://github.com/component/emitter) and emits the following events:
 
-#### init
+#### autotyper#init
 
 Emitted when the instance is initialised.
 
-#### start
+#### autotyper#start
 
 Emitted when the instance starts typing.
 
-#### type
+#### autotyper#type
 
 Emitted when the instance types a new character.
 
-#### stop
+#### autotyper#loop(loopCount)
+
+Emitted when the instance loops. The number of times the instance has looped is passed as the first argument.
+
+#### autotyper#stop
 
 Emitted when the instance stops typing.
 
-#### loop
-
-Emitted when the instance loops;
-
-#### destroy
+#### autotyper#destroy
 
 Emitted when the instance is destroyed.
