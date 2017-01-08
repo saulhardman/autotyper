@@ -4,6 +4,11 @@ import autotyper, { DEFAULT_OPTIONS, EVENTS } from '../src/autotyper';
 import objectToDataAttributes from './helpers/object-to-data-attributes';
 import { name as packageName } from '../package.json';
 
+// replicate default `loopInterval` assignment from `init()`
+Object.assign(DEFAULT_OPTIONS, {
+  loopInterval: DEFAULT_OPTIONS.interval,
+});
+
 test('it sets default options correctly', (t) => {
   autotyper.init();
 
@@ -16,6 +21,7 @@ test('it sets options correctly', (t) => {
     interval: 200,
     autoStart: false,
     loop: true,
+    loopInterval: 2000,
     emptyText: '',
   };
 
