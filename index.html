@@ -73,8 +73,16 @@
             return duration / text.length;
           },
         });
+      }());
+    </script>
 
-        example.on('type', (text) => console.log('text: ', text));
+    <script data-id="example-4">
+      (function () {
+        const example = Object.create(autotyper);
+
+        example.on('type', () => console.log(example.text));
+
+        example.init();
       }());
     </script>
   </body>

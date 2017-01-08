@@ -30,6 +30,7 @@ const ATTRIBUTE_OPTION_NAMES = [
 ];
 
 export const DEFAULT_OPTIONS = {
+  text: 'This is the default text.',
   interval: [200, 300],
   autoStart: true,
   loop: false,
@@ -38,16 +39,32 @@ export const DEFAULT_OPTIONS = {
 
 const autotyper = {
   version,
-  init(element, options = {}) {
-    const text = element.innerHTML.trim();
-    const attributeOptions = Object.assign(
-      dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, packageName),
-      JSON.parse(element.getAttribute(`data-${packageName}`))
-    );
+  init(...args) {
+    let element;
+    let options;
 
-    this.element = element;
-    this.settings = Object.assign({ text }, DEFAULT_OPTIONS, attributeOptions, options);
-    this.originalText = text;
+    if (args[0] instanceof window.HTMLElement) {
+      [element, options = {}] = args;
+    } else {
+      [options = {}] = args;
+    }
+
+    if (element) {
+      const text = element.innerHTML.trim() || DEFAULT_OPTIONS.text;
+      const attributeOptions = Object.assign(
+        dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, packageName),
+        JSON.parse(element.getAttribute(`data-${packageName}`))
+      );
+
+      this.element = element;
+      this.settings = Object.assign({}, DEFAULT_OPTIONS, { text }, attributeOptions, options);
+      this.originalText = text;
+    } else {
+      this.element = element;
+      this.settings = Object.assign({}, DEFAULT_OPTIONS, options);
+      this.originalText = this.settings.text;
+    }
+
     this.isRunning = false;
 
     if (this.settings.autoStart === true) {
@@ -91,7 +108,11 @@ const autotyper = {
     return this;
   },
   setText(text) {
-    this.element.innerHTML = text;
+    this.text = text;
+
+    if (this.element) {
+      this.element.innerHTML = text;
+    }
 
     return this;
   },

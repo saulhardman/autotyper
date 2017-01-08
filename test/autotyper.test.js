@@ -1,7 +1,40 @@
 import test from 'ava';
-import autotyper, { DEFAULT_OPTIONS, EVENTS } from '../src/autotyper';
 
-test('it works', (t) => {
+import autotyper, { DEFAULT_OPTIONS, EVENTS } from '../src/autotyper';
+import objectToDataAttributes from './helpers/object-to-data-attributes';
+import { name as packageName } from '../package.json';
+
+test('it sets default options correctly', (t) => {
+  autotyper.init();
+
+  t.deepEqual(autotyper.settings, DEFAULT_OPTIONS);
+});
+
+test('it sets options correctly', (t) => {
+  const options = {
+    text: 'Example text.',
+    interval: 200,
+    autoStart: false,
+    loop: true,
+    emptyText: '',
+  };
+
+  autotyper.init(options);
+
+  t.deepEqual(autotyper.settings, options);
+});
+
+test('it works with an element', (t) => {
+  document.body.innerHTML = `
+    <p id="js-example"></p>
+  `;
+
+  autotyper.init(document.getElementById('js-example'));
+
+  t.deepEqual(autotyper.settings, DEFAULT_OPTIONS);
+});
+
+test('it sets `text` to the HTML content of an element', (t) => {
   const text = 'Example text.';
 
   document.body.innerHTML = `
@@ -10,17 +43,40 @@ test('it works', (t) => {
 
   autotyper.init(document.getElementById('js-example'));
 
-  t.deepEqual(autotyper.settings, Object.assign(DEFAULT_OPTIONS, { text }));
+  t.is(autotyper.settings.text, text);
+});
+
+test('it receives an options object via a single HTML data attribute', (t) => {
+  const text = 'This text will not be used.';
+
+  document.body.innerHTML = `
+    <p id="js-example" data-${packageName}='${JSON.stringify(DEFAULT_OPTIONS)}'>${text}</p>
+  `;
+
+  autotyper.init(document.getElementById('js-example'));
+
+  t.deepEqual(autotyper.settings, DEFAULT_OPTIONS);
+});
+
+test('it receives individual options via HTML data attributes', (t) => {
+  const text = 'This text will not be used.';
+
+  document.body.innerHTML = `
+    <p id="js-example" ${objectToDataAttributes(DEFAULT_OPTIONS, packageName)}>${text}</p>
+  `;
+
+  autotyper.init(document.getElementById('js-example'));
+
+  t.deepEqual(autotyper.settings, DEFAULT_OPTIONS);
 });
 
 test('it removes all event listeners on `destroy()`', (t) => {
-  const text = 'Example text.';
   const callback = () => {};
 
   t.plan(EVENTS.length);
 
   document.body.innerHTML = `
-    <p id="js-example">${text}</p>
+    <p id="js-example"></p>
   `;
 
   autotyper.init(document.getElementById('js-example'));
@@ -33,12 +89,10 @@ test('it removes all event listeners on `destroy()`', (t) => {
 });
 
 test('emits events via `emit()`', (t) => {
-  const text = 'Example text.';
-
   t.plan(EVENTS.length);
 
   document.body.innerHTML = `
-    <p id="js-example">${text}</p>
+    <p id="js-example"></p>
   `;
 
   autotyper.init(document.getElementById('js-example'));
@@ -49,14 +103,13 @@ test('emits events via `emit()`', (t) => {
 });
 
 test('it emits events from respective functions', (t) => {
-  const text = 'Example text.';
   const autoStart = false;
   const loop = true;
 
   t.plan(EVENTS.length);
 
   document.body.innerHTML = `
-    <p id="js-example">${text}</p>
+    <p id="js-example"></p>
   `;
 
   EVENTS.forEach((event) => autotyper.on(event, () => t.pass()));
