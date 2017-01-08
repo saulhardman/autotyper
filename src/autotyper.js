@@ -174,7 +174,7 @@ const autotyper = {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
-    this.emit(LOOP_EVENT);
+    this.emit(LOOP_EVENT, this.loopCount);
 
     return this;
   },
