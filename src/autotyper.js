@@ -116,7 +116,7 @@ const autotyper = {
 
     this.setText(text);
 
-    this.emit(TYPE_EVENT);
+    this.emit(TYPE_EVENT, text);
 
     this.letterCount += 1;
 
