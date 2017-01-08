@@ -73,8 +73,6 @@ const autotyper = {
 
     this.isRunning = true;
 
-    this.setText(this.settings.emptyText);
-
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
@@ -98,11 +96,9 @@ const autotyper = {
     return this;
   },
   type() {
+    let text;
+
     this.tick(interval(this.settings.interval));
-
-    this.setText(this.settings.text.substring(0, this.letterCount += 1));
-
-    this.emit(TYPE_EVENT);
 
     if (this.letterCount > this.letterTotal) {
       if (this.settings.loop) {
@@ -111,6 +107,18 @@ const autotyper = {
 
       return this.stop();
     }
+
+    if (this.letterCount === 0) {
+      text = this.settings.emptyText;
+    } else {
+      text = this.settings.text.substring(0, this.letterCount);
+    }
+
+    this.setText(text);
+
+    this.emit(TYPE_EVENT);
+
+    this.letterCount += 1;
 
     return this;
   },
