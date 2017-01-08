@@ -55,6 +55,8 @@
         const example = Object.create(autotyper);
 
         example.init(document.getElementById('js-example-2'), { loop: true });
+
+        example.on('loop', (loopCount) => console.log('loopCount: ', loopCount));
       }());
     </script>
 
