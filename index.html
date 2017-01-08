@@ -73,6 +73,8 @@
             return duration / text.length;
           },
         });
+
+        example.on('type', (text) => console.log('text: ', text));
       }());
     </script>
   </body>
