@@ -145,9 +145,9 @@ Emitted when the instance is initialised.
 
 Emitted when the instance starts typing.
 
-#### autotyper#type
+#### autotyper#type(text)
 
-Emitted when the instance types a new character.
+Emitted when the instance types a new character. The current text value is passed as the first argument.
 
 #### autotyper#loop(loopCount)
 

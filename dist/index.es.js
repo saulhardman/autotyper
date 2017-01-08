@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.10.0";
+var version = "0.11.0";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
@@ -89,6 +89,7 @@ var DESTROY_EVENT = 'destroy';
 var ATTRIBUTE_OPTION_NAMES = ['text', 'interval', 'auto-start', 'loop', 'loop-interval', 'empty-text'];
 
 var DEFAULT_OPTIONS = {
+  text: 'This is the default text.',
   interval: [200, 300],
   autoStart: true,
   loop: false,
@@ -97,17 +98,38 @@ var DEFAULT_OPTIONS = {
 
 var autotyper = {
   version: version,
-  init: function init(element) {
+  init: function init() {
     var _this = this;
 
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var element = void 0;
+    var options = void 0;
 
-    var text = element.innerHTML.trim();
-    var attributeOptions = Object.assign(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute('data-' + name)));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
 
-    this.element = element;
-    this.settings = Object.assign({ text: text }, DEFAULT_OPTIONS, attributeOptions, options);
-    this.originalText = text;
+    if (args[0] instanceof window.HTMLElement) {
+      element = args[0];
+      var _args$ = args[1];
+      options = _args$ === undefined ? {} : _args$;
+    } else {
+      var _args$2 = args[0];
+      options = _args$2 === undefined ? {} : _args$2;
+    }
+
+    if (element) {
+      var text = element.innerHTML.trim() || DEFAULT_OPTIONS.text;
+      var attributeOptions = Object.assign(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute('data-' + name)));
+
+      this.element = element;
+      this.settings = Object.assign({}, DEFAULT_OPTIONS, { text: text }, attributeOptions, options);
+      this.originalText = text;
+    } else {
+      this.element = element;
+      this.settings = Object.assign({}, DEFAULT_OPTIONS, options);
+      this.originalText = this.settings.text;
+    }
+
     this.isRunning = false;
 
     if (this.settings.autoStart === true) {
@@ -153,7 +175,11 @@ var autotyper = {
     return this;
   },
   setText: function setText(text) {
-    this.element.innerHTML = text;
+    this.text = text;
+
+    if (this.element) {
+      this.element.innerHTML = text;
+    }
 
     return this;
   },
