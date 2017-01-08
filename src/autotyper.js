@@ -50,14 +50,20 @@ const autotyper = {
     }
 
     if (element) {
-      const text = element.innerHTML.trim() || DEFAULT_OPTIONS.text;
+      const text = element.innerHTML.trim();
       const attributeOptions = Object.assign(
         dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, packageName),
         JSON.parse(element.getAttribute(`data-${packageName}`))
       );
 
       this.element = element;
-      this.settings = Object.assign({}, DEFAULT_OPTIONS, { text }, attributeOptions, options);
+      this.settings = Object.assign(
+        {},
+        DEFAULT_OPTIONS,
+        (text && { text }),
+        attributeOptions,
+        options
+      );
       this.originalText = text;
     } else {
       this.element = element;
