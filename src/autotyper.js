@@ -39,7 +39,7 @@ export const DEFAULT_OPTIONS = {
 const autotyper = {
   version,
   init(element, options = {}) {
-    const text = element.innerHTML;
+    const text = element.innerHTML.trim();
     const attributeOptions = Object.assign(
       dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, packageName),
       JSON.parse(element.getAttribute(`data-${packageName}`))
