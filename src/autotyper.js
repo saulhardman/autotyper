@@ -65,6 +65,8 @@ const autotyper = {
       this.originalText = this.settings.text;
     }
 
+    this.settings.loopInterval = this.settings.loopInterval || this.settings.interval;
+
     this.isRunning = false;
 
     if (this.settings.autoStart === true) {
