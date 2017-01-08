@@ -126,3 +126,57 @@ test('it emits events from respective functions', (t) => {
 
   OTHER_EVENTS.forEach((event) => autotyper[event]());
 });
+
+test('it sets `originalText` to `element.innerHTML`', (t) => {
+  const text = 'Example text.';
+
+  document.body.innerHTML = `
+    <p id="js-example">${text}</p>
+  `;
+
+  const element = document.getElementById('js-example');
+
+  autotyper.init(element);
+
+  t.is(autotyper.originalText, text);
+});
+
+test('it sets `settings.text` to default value if undefined and HTML element is empty', (t) => {
+  document.body.innerHTML = `
+    <p id="js-example"></p>
+  `;
+
+  const element = document.getElementById('js-example');
+
+  autotyper.init(element);
+
+  t.is(autotyper.settings.text, DEFAULT_OPTIONS.text);
+});
+
+test('it returns HTML element to original state on `reset()` and `destroy()`', (t) => {
+  const text = 'Example text.';
+  const interval = 50;
+
+  t.plan(2);
+
+  return new Promise((resolve) => {
+    document.body.innerHTML = `
+      <p id="js-example">${text}</p>
+    `;
+
+    const element = document.getElementById('js-example');
+
+    autotyper.init(element, { interval });
+
+    setTimeout(() => {
+      t.not(autotyper.text, text);
+
+      autotyper.reset()
+               .destroy();
+
+      t.is(element.innerHTML, text);
+
+      resolve();
+    }, 200);
+  });
+});
