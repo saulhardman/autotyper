@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.11.0";
+var version = "0.11.1";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
@@ -118,17 +118,19 @@ var autotyper = {
     }
 
     if (element) {
-      var text = element.innerHTML.trim() || DEFAULT_OPTIONS.text;
+      var text = element.innerHTML.trim();
       var attributeOptions = Object.assign(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute('data-' + name)));
 
       this.element = element;
-      this.settings = Object.assign({}, DEFAULT_OPTIONS, { text: text }, attributeOptions, options);
+      this.settings = Object.assign({}, DEFAULT_OPTIONS, text && { text: text }, attributeOptions, options);
       this.originalText = text;
     } else {
       this.element = element;
       this.settings = Object.assign({}, DEFAULT_OPTIONS, options);
       this.originalText = this.settings.text;
     }
+
+    this.settings.loopInterval = this.settings.loopInterval || this.settings.interval;
 
     this.isRunning = false;
 
