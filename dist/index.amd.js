@@ -10,7 +10,7 @@ var name = "autotyper";
 
 
 
-var version = "0.9.0";
+var version = "0.10.0";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
@@ -51,24 +51,32 @@ function dataAttributesToObject(element, names, namespace) {
 }
 
 function randomNumber(min, max) {
-  // return a random number between min and max
-  return Math.floor(Math.random() * (max - (min + 1))) + min;
+  // return a random number between min and max (inclusive of min and max)
+  var minimum = Math.min(min, max);
+  var maximum = Math.max(min, max);
+  var multiplier = maximum - minimum + 1;
+
+  return Math.floor(Math.random() * multiplier) + minimum;
 }
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var interval = function (interval) {
-  if (Array.isArray(interval)) {
-    if (interval.length === 2) {
-      var _interval = _slicedToArray(interval, 2),
-          min = _interval[0],
-          max = _interval[1];
+  var value = void 0;
 
-      return randomNumber(min, max);
-    }
+  if (Array.isArray(interval) && interval.length === 2) {
+    var _interval = _slicedToArray(interval, 2),
+        min = _interval[0],
+        max = _interval[1];
+
+    value = randomNumber(min, max);
+  } else if (typeof interval === 'function') {
+    value = interval();
+  } else {
+    value = parseInt(interval, 10);
   }
 
-  return interval;
+  return value;
 };
 
 var INIT_EVENT = 'init';
@@ -96,7 +104,7 @@ var autotyper = {
 
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var text = element.innerHTML;
+    var text = element.innerHTML.trim();
     var attributeOptions = Object.assign(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute('data-' + name)));
 
     this.element = element;
@@ -129,8 +137,6 @@ var autotyper = {
 
     this.isRunning = true;
 
-    this.setText(this.settings.emptyText);
-
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
@@ -154,11 +160,9 @@ var autotyper = {
     return this;
   },
   type: function type() {
+    var text = void 0;
+
     this.tick(interval(this.settings.interval));
-
-    this.setText(this.settings.text.substring(0, this.letterCount += 1));
-
-    this.emit(TYPE_EVENT);
 
     if (this.letterCount > this.letterTotal) {
       if (this.settings.loop) {
@@ -167,6 +171,18 @@ var autotyper = {
 
       return this.stop();
     }
+
+    if (this.letterCount === 0) {
+      text = this.settings.emptyText;
+    } else {
+      text = this.settings.text.substring(0, this.letterCount);
+    }
+
+    this.setText(text);
+
+    this.emit(TYPE_EVENT, text);
+
+    this.letterCount += 1;
 
     return this;
   },
@@ -226,7 +242,7 @@ var autotyper = {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
-    this.emit(LOOP_EVENT);
+    this.emit(LOOP_EVENT, this.loopCount);
 
     return this;
   }
