@@ -32,24 +32,46 @@
     </p>
 
     <p id="js-example-2"
-       data-autotyper-interval="50"
+       data-autotyper-interval="200"
        data-autotyper-loop-interval="2000">
-      This also acts as the no-JavaScript fallback.
+      Looping example.
     </p>
+
+    <p id="js-example-3">This example passes a function for `interval`.</p>
 
     <script src="<%= htmlWebpackPlugin.options.name %>.js"></script>
     <script data-id="example-1">
-      const example1 = Object.create(autotyper);
+      (function () {
+        const example = Object.create(autotyper);
 
-      example1.init(document.getElementById('js-example-1'));
+        example.init(document.getElementById('js-example-1'));
 
-      example1.on('start', () => console.log('It started!'));
+        example.on('start', () => console.log('It started!'));
+      }());
     </script>
 
     <script data-id="example-2">
-      const example2 = Object.create(autotyper);
+      (function () {
+        const example = Object.create(autotyper);
 
-      example2.init(document.getElementById('js-example-2'), { loop: true });
+        example.init(document.getElementById('js-example-2'), { loop: true });
+      }());
+    </script>
+
+    <script data-id="example-3">
+      (function () {
+        const example = Object.create(autotyper);
+        const element = document.getElementById('js-example-3');
+        const text = element.innerHTML;
+
+        example.init(element, {
+          interval: () => {
+            const duration = 500;
+
+            return duration / text.length;
+          },
+        });
+      }());
     </script>
   </body>
 </html>
