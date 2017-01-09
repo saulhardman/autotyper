@@ -68,7 +68,7 @@ promise = promise.then(() => del(['dist/*']));
       resolve(),
       (minify && uglify()),
     ],
-  }).then((b) => b.write({
+  }).then(b => b.write({
     dest: `dist/${getFilename(format, bundle, minify)}`,
     format,
     sourceMap: minify,
@@ -87,4 +87,4 @@ promise = promise.then(() => {
   fs.writeFileSync('dist/README.md', fs.readFileSync('README.md', 'utf-8'), 'utf-8');
 });
 
-promise.catch((err) => console.error(err.stack)); // eslint-disable-line no-console
+promise.catch(err => console.error(err.stack)); // eslint-disable-line no-console

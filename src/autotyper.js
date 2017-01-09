@@ -59,7 +59,7 @@ const autotyper = {
       const text = element.innerHTML.trim();
       const attributeOptions = Object.assign(
         dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, packageName),
-        JSON.parse(element.getAttribute(`data-${packageName}`))
+        JSON.parse(element.getAttribute(`data-${packageName}`)),
       );
 
       this.element = element;
@@ -68,7 +68,7 @@ const autotyper = {
         DEFAULT_OPTIONS,
         (text && { text }),
         attributeOptions,
-        options
+        options,
       );
       this.originalText = text;
     } else {
