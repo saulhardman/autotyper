@@ -1,5 +1,5 @@
 export { default } from './autotyper';
 
-if (ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   module.exports = require('./autotyper').default; // eslint-disable-line global-require
 }

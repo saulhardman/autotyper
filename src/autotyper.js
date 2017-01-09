@@ -43,7 +43,13 @@ const autotyper = {
     let element;
     let options;
 
-    if (args[0] instanceof window.HTMLElement) {
+    if (process.env.NODE_ENV === 'test') {
+      if (args[0] instanceof window.HTMLElement) {
+        [element, options = {}] = args;
+      } else {
+        [options = {}] = args;
+      }
+    } else if (args[0] instanceof HTMLElement) {
       [element, options = {}] = args;
     } else {
       [options = {}] = args;

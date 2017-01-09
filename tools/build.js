@@ -4,7 +4,6 @@ const { rollup } = require('rollup');
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const resolve = require('rollup-plugin-node-resolve');
-const replace = require('rollup-plugin-replace');
 const json = require('rollup-plugin-json');
 const uglify = require('rollup-plugin-uglify');
 const camelCase = require('camel-case');
@@ -52,9 +51,6 @@ promise = promise.then(() => del(['dist/*']));
       json({
         exclude: 'node_modules/**',
         preferConst: true,
-      }),
-      replace({
-        ENV: JSON.stringify('production'),
       }),
       babel(Object.assign(pkg.babel, {
         babelrc: false,

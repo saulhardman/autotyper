@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const WebpackHtmlPlugin = require('html-webpack-plugin');
 const titleCase = require('title-case');
 
@@ -24,9 +23,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.DefinePlugin({
-      ENV: JSON.stringify('development'),
-    }),
     new WebpackHtmlPlugin({
       name,
       title: titleCase(name),
