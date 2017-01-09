@@ -6,11 +6,11 @@ const { name } = require('./package.json');
 
 module.exports = {
   entry: {
-    app: ['./src/index.js'],
+    [name]: './src/index.js',
   },
   output: {
-    filename: `${name}.js`,
-    library: name,
+    filename: '[name].js',
+    library: '[name]',
     libraryTarget: 'umd',
     umdNamedDefine: true,
   },
