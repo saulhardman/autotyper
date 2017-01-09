@@ -13,7 +13,7 @@ const pkg = require('../package.json');
 function getFilename(format, bundle, minify) {
   const parts = ['index'];
 
-  if (format !== 'cjs') {
+  if (!bundle && format !== 'cjs') {
     parts.push(format);
   }
 
