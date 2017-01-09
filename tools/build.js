@@ -52,18 +52,12 @@ promise = promise.then(() => del(['dist/*']));
         exclude: 'node_modules/**',
         preferConst: true,
       }),
-      babel(Object.assign(pkg.babel, {
+      babel({
         babelrc: false,
         exclude: 'node_modules/**',
-        runtimeHelpers: true,
-        presets: pkg.babel.presets.map((preset) => {
-          if (preset === 'es2015') {
-            return ['es2015', { modules: false }];
-          }
-
-          return preset;
-        }),
-      })),
+        presets: [['env', { modules: false }]],
+        plugins: [...pkg.babel.plugins, 'external-helpers'],
+      }),
       commonjs(),
       resolve(),
       (minify && uglify()),
