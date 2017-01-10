@@ -24,6 +24,7 @@ const defaultFormats = [
   { format: 'cjs' },
   { format: 'amd' },
   { format: 'umd' },
+  { format: 'umd', minify: true },
 ];
 const defaultGlobals = {
   autotyper: 'autotyper',
@@ -77,11 +78,20 @@ function build(packageName, formats) {
         }),
         commonjs(),
         resolve(),
+        (!minify && format !== 'es' && uglify({
+          mangle: false,
+          compress: false,
+          output: {
+            beautify: true,
+            indent_level: 2,
+          },
+        })),
         (minify && uglify()),
       ],
     }).then(b => b.write({
       dest: `${packageDistDir}/${getFilename(format, minify)}`,
       format,
+      indent: '  ',
       sourceMap: minify,
       moduleName: format === 'umd' ? camelCase(name) : undefined,
       globals: defaultGlobals,
@@ -95,20 +105,14 @@ function build(packageName, formats) {
   return promise;
 }
 
-build(corePackageName, [
-  ...defaultFormats,
-  { format: 'umd', minify: true },
-]).then(() => {
+build(corePackageName, defaultFormats).then(() => {
   const builds = auxilliaryPackageNames.map(packageName => (
-    build(packageName, [...defaultFormats, { format: 'umd', minify: true }])
+    build(packageName, defaultFormats)
   ));
 
   return Promise.all(builds);
 }).then(() => {
-  [
-    corePackageName,
-    ...auxilliaryPackageNames,
-  ].forEach((name) => {
+  [corePackageName, ...auxilliaryPackageNames].forEach((name) => {
     const filename = path.join(packagesDir, name, distDir, 'index.min.js');
     const filesize = gzipSize.sync(fs.readFileSync(filename, 'utf8'));
 

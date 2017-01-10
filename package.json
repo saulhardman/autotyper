@@ -21,6 +21,7 @@
     "html-webpack-plugin": "^2.25.0",
     "lerna": "2.0.0-beta.32",
     "lodash.without": "^4.4.0",
+    "npm-run-all": "^4.0.0",
     "pretty-bytes": "^4.0.2",
     "rollup": "^0.40.0",
     "rollup-plugin-babel": "^2.7.1",
@@ -28,6 +29,7 @@
     "rollup-plugin-json": "^2.1.0",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-uglify": "^1.0.1",
+    "simple-git": "^1.65.0",
     "title-case": "^2.1.0",
     "webpack": "^2.2.0-rc.3",
     "webpack-dev-server": "^2.2.0-rc.0"
@@ -37,7 +39,12 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --inline",
     "test": "cross-env NODE_ENV=test ava",
     "lint": "eslint .",
-    "build": "cross-env NODE_ENV=production node scripts/build.js"
+    "build": "cross-env NODE_ENV=production node scripts/build.js",
+    "commit": "node scripts/commit.js",
+    "push": "git push --follow-tags",
+    "version": "lerna publish --skip-git --skip-npm",
+    "publish": "lerna exec -- npm publish",
+    "release": "npm-run-all lint test version build commit publish push"
   },
   "babel": {
     "presets": [
