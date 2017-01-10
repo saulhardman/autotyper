@@ -1,0 +1,30 @@
+{
+  "name": "jquery.autotyper",
+  "description": "A jQuery plugin for autotyper.",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "browser": "dist/index.min.js",
+  "keywords": [
+    "automatic",
+    "auto",
+    "type",
+    "typer",
+    "autotyper",
+    "es2015",
+    "es6",
+    "es",
+    "jquery-plugin",
+    "jquery"
+  ],
+  "author": "Saul Hardman <hello@iamsaul.co.uk>",
+  "homepage": "https://github.com/saulhardman/autotyper/",
+  "version": "0.11.1",
+  "repository": "https://github.com/saulhardman/autotyper/tree/master/packages/jquery.autotyper",
+  "dependencies": {
+    "autotyper": "^0.11.1",
+    "jquery": "^3.1.1"
+  },
+  "license": "MIT",
+  "files": ["dist"]
+}

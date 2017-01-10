@@ -1,6 +1,6 @@
 import Emitter from 'component-emitter';
 
-import { name as packageName, version } from '../package.json';
+import { name as NAME, version as VERSION } from '../package.json';
 import dataAttributesToObject from './data-attributes-to-object';
 import interval from './interval';
 
@@ -11,7 +11,7 @@ const LOOP_EVENT = 'loop';
 const STOP_EVENT = 'stop';
 const DESTROY_EVENT = 'destroy';
 
-export const EVENTS = [
+const EVENTS = [
   INIT_EVENT,
   START_EVENT,
   TYPE_EVENT,
@@ -29,7 +29,7 @@ const ATTRIBUTE_OPTION_NAMES = [
   'empty-text',
 ];
 
-export const DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS = {
   text: 'This is the default text.',
   interval: [200, 300],
   autoStart: true,
@@ -38,7 +38,6 @@ export const DEFAULT_OPTIONS = {
 };
 
 const autotyper = {
-  version,
   init(...args) {
     let element;
     let options;
@@ -58,8 +57,8 @@ const autotyper = {
     if (element) {
       const text = element.innerHTML.trim();
       const attributeOptions = Object.assign(
-        dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, packageName),
-        JSON.parse(element.getAttribute(`data-${packageName}`)),
+        dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, NAME),
+        JSON.parse(element.getAttribute(`data-${NAME}`)),
       );
 
       this.element = element;
@@ -217,4 +216,10 @@ const autotyper = {
 
 Emitter(autotyper);
 
-export default autotyper;
+export {
+  autotyper as default,
+  NAME,
+  DEFAULT_OPTIONS,
+  EVENTS,
+  VERSION,
+};

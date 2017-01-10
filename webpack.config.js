@@ -1,12 +1,21 @@
+const fs = require('fs');
+const path = require('path');
 const WebpackHtmlPlugin = require('html-webpack-plugin');
 const titleCase = require('title-case');
 
 const { name } = require('./package.json');
 
+const packagesDir = path.join(__dirname, 'packages');
+const packageNames = fs.readdirSync(packagesDir);
+
+const entry = packageNames.reduce((obj, packageName) => (
+  Object.assign(obj, {
+    [packageName]: path.join(__dirname, `packages/${packageName}/src/index.js`),
+  })
+), {});
+
 module.exports = {
-  entry: {
-    [name]: './src/index.js',
-  },
+  entry,
   output: {
     filename: '[name].js',
     library: '[name]',
@@ -26,8 +35,9 @@ module.exports = {
     new WebpackHtmlPlugin({
       name,
       title: titleCase(name),
-      template: 'index.html',
+      template: path.join(__dirname, 'index.html'),
       inject: false,
+      packageNames,
     }),
   ],
   devtool: 'source-map',

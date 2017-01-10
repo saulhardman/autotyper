@@ -1,9 +1,7 @@
 {
+  "root": true,
   "extends": [
     "airbnb-base"
-  ],
-  "plugins": [
-    "import"
   ],
   "parserOptions": {
     "ecmaVersion": 2017,
@@ -11,9 +9,6 @@
   },
   "env": {
     "browser": true,
-    "es6": true
-  },
-  "globals": {
-    "ENV": true
+    "node": true
   }
 }

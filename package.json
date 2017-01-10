@@ -1,28 +1,5 @@
 {
   "private": true,
-  "name": "autotyper",
-  "description": "A simple JavaScript plugin that automatically types text.",
-  "main": "index.js",
-  "module": "index.es.js",
-  "jsnext:main": "index.es.js",
-  "browser": "index.umd.pkgd.min.js",
-  "keywords": [
-    "automatic",
-    "auto",
-    "type",
-    "typer",
-    "autotyper",
-    "es2015",
-    "es6",
-    "es"
-  ],
-  "author": "Saul Hardman <hello@iamsaul.co.uk>",
-  "homepage": "https://github.com/saulhardman/autotyper/",
-  "version": "0.11.1",
-  "repository": "https://github.com/saulhardman/autotyper.git",
-  "dependencies": {
-    "component-emitter": "^1.2.1"
-  },
   "devDependencies": {
     "ava": "^0.17.0",
     "babel-core": "^6.21.0",
@@ -38,8 +15,13 @@
     "del": "^2.2.2",
     "eslint": "^3.12.2",
     "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-plugin-ava": "^4.0.0",
     "eslint-plugin-import": "^2.2.0",
+    "gzip-size": "^3.0.0",
     "html-webpack-plugin": "^2.25.0",
+    "lerna": "2.0.0-beta.32",
+    "lodash.without": "^4.4.0",
+    "pretty-bytes": "^4.0.2",
     "rollup": "^0.40.0",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^7.0.0",
@@ -50,13 +32,12 @@
     "webpack": "^2.2.0-rc.3",
     "webpack-dev-server": "^2.2.0-rc.0"
   },
+  "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --inline",
-    "build": "cross-env NODE_ENV=production node tools/build.js",
-    "lint": "eslint src/ tools/ *.js",
-    "preversion": "npm run lint && npm run test",
-    "version": "npm run build && git add -A dist",
-    "test": "cross-env NODE_ENV=test ava"
+    "test": "cross-env NODE_ENV=test ava",
+    "lint": "eslint .",
+    "build": "cross-env NODE_ENV=production node scripts/build.js"
   },
   "babel": {
     "presets": [
@@ -74,6 +55,5 @@
       "./test/helpers/setup-browser-env.js"
     ],
     "babel": "inherit"
-  },
-  "license": "MIT"
+  }
 }

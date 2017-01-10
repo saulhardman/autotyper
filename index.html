@@ -39,7 +39,13 @@
 
     <p id="js-example-3">This example passes a function for `interval`.</p>
 
-    <script src="<%= htmlWebpackPlugin.options.name %>.js"></script>
+    <p class="js-example-5" data-autotyper-auto-start="false"></p>
+    <p class="js-example-5" data-autotyper-auto-start="false"></p>
+
+    <% htmlWebpackPlugin.options.packageNames.forEach((packageName) => { %>
+      <script src="<%= packageName %>.js"></script>
+    <% }) %>
+
     <script data-id="example-1">
       (function () {
         const example = Object.create(autotyper);
@@ -84,6 +90,28 @@
 
         example.init();
       }());
+    </script>
+
+    <script data-id="example-5">
+      // jQuery Plugin
+      (function ($) {
+        $('.js-example-5').autotyper({
+          text: 'This is the jQuery Plugin in action!',
+          interval: [50, 100],
+        });
+
+        $('.js-example-5').on('autotyper:start', function () {
+          const example = $(this).data('autotyper');
+
+          console.log('jQuery instance started!', example);
+        });
+
+        $('.js-example-5').on('autotyper:destroy', () => console.log('jQuery instance destroyed!'));
+
+        setTimeout(() => $('.js-example-5').autotyper('start'), 1000);
+
+        setTimeout(() => $('.js-example-5').autotyper('destroy'), 2000);
+      }(window.$ || window.jQuery));
     </script>
   </body>
 </html>

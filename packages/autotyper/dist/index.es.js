@@ -1,10 +1,4 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('component-emitter')) :
-	typeof define === 'function' && define.amd ? define(['component-emitter'], factory) :
-	(global.autotyper = factory(global.Emitter));
-}(this, (function (Emitter) { 'use strict';
-
-Emitter = 'default' in Emitter ? Emitter['default'] : Emitter;
+import Emitter from 'component-emitter';
 
 var name = "autotyper";
 
@@ -31,7 +25,92 @@ function paramCaseToCamelCase(string) {
   }).join('');
 }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
 
 function attributeName(name, namespace) {
   if (namespace) {
@@ -50,7 +129,7 @@ function dataAttributesToObject(element, names, namespace) {
       return obj;
     }
 
-    return Object.assign({}, obj, _defineProperty({}, propertyName, JSON.parse(value)));
+    return _extends({}, obj, defineProperty({}, propertyName, JSON.parse(value)));
   }, {});
 }
 
@@ -63,13 +142,11 @@ function randomNumber(min, max) {
   return Math.floor(Math.random() * multiplier) + minimum;
 }
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var interval = function (interval) {
   var value = void 0;
 
   if (Array.isArray(interval) && interval.length === 2) {
-    var _interval = _slicedToArray(interval, 2),
+    var _interval = slicedToArray(interval, 2),
         min = _interval[0],
         max = _interval[1];
 
@@ -90,7 +167,7 @@ var LOOP_EVENT = 'loop';
 var STOP_EVENT = 'stop';
 var DESTROY_EVENT = 'destroy';
 
-
+var EVENTS = [INIT_EVENT, START_EVENT, TYPE_EVENT, LOOP_EVENT, STOP_EVENT, DESTROY_EVENT];
 
 var ATTRIBUTE_OPTION_NAMES = ['text', 'interval', 'auto-start', 'loop', 'loop-interval', 'empty-text'];
 
@@ -103,7 +180,6 @@ var DEFAULT_OPTIONS = {
 };
 
 var autotyper = {
-  version: version,
   init: function init() {
     var _this = this;
 
@@ -114,25 +190,29 @@ var autotyper = {
       args[_key] = arguments[_key];
     }
 
-    if (args[0] instanceof window.HTMLElement) {
-      element = args[0];
-      var _args$ = args[1];
-      options = _args$ === undefined ? {} : _args$;
+    if (args[0] instanceof HTMLElement) {
+      var _args3 = slicedToArray(args, 2);
+
+      element = _args3[0];
+      var _args3$ = _args3[1];
+      options = _args3$ === undefined ? {} : _args3$;
     } else {
-      var _args$2 = args[0];
-      options = _args$2 === undefined ? {} : _args$2;
+      var _args4 = slicedToArray(args, 1);
+
+      var _args4$ = _args4[0];
+      options = _args4$ === undefined ? {} : _args4$;
     }
 
     if (element) {
       var text = element.innerHTML.trim();
-      var attributeOptions = Object.assign(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute('data-' + name)));
+      var attributeOptions = _extends(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute('data-' + name)));
 
       this.element = element;
-      this.settings = Object.assign({}, DEFAULT_OPTIONS, text && { text: text }, attributeOptions, options);
+      this.settings = _extends({}, DEFAULT_OPTIONS, text && { text: text }, attributeOptions, options);
       this.originalText = text;
     } else {
       this.element = element;
-      this.settings = Object.assign({}, DEFAULT_OPTIONS, options);
+      this.settings = _extends({}, DEFAULT_OPTIONS, options);
       this.originalText = this.settings.text;
     }
 
@@ -282,6 +362,4 @@ var autotyper = {
 
 Emitter(autotyper);
 
-return autotyper;
-
-})));
+export { name as NAME, DEFAULT_OPTIONS, EVENTS, version as VERSION };export default autotyper;

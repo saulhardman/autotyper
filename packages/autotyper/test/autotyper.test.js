@@ -87,11 +87,11 @@ test('it removes all event listeners on `destroy()`', (t) => {
 
   autotyper.init(document.getElementById('js-example'));
 
-  EVENTS.forEach((event) => autotyper.on(event, callback));
+  EVENTS.forEach(event => autotyper.on(event, callback));
 
   autotyper.destroy();
 
-  EVENTS.forEach((event) => t.false(autotyper.hasListeners(event)));
+  EVENTS.forEach(event => t.false(autotyper.hasListeners(event)));
 });
 
 test('emits events via `emit()`', (t) => {
@@ -103,9 +103,9 @@ test('emits events via `emit()`', (t) => {
 
   autotyper.init(document.getElementById('js-example'));
 
-  EVENTS.forEach((event) => autotyper.on(event, () => t.pass()));
+  EVENTS.forEach(event => autotyper.on(event, () => t.pass()));
 
-  EVENTS.forEach((event) => autotyper.emit(event));
+  EVENTS.forEach(event => autotyper.emit(event));
 });
 
 test('it emits events from respective functions', (t) => {
@@ -118,13 +118,13 @@ test('it emits events from respective functions', (t) => {
     <p id="js-example"></p>
   `;
 
-  EVENTS.forEach((event) => autotyper.on(event, () => t.pass()));
+  EVENTS.forEach(event => autotyper.on(event, () => t.pass()));
 
   const [INIT_EVENT, ...OTHER_EVENTS] = EVENTS;
 
   autotyper[INIT_EVENT](document.getElementById('js-example'), { autoStart, loop });
 
-  OTHER_EVENTS.forEach((event) => autotyper[event]());
+  OTHER_EVENTS.forEach(event => autotyper[event]());
 });
 
 test('it sets `originalText` to `element.innerHTML`', (t) => {
