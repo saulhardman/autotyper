@@ -41,10 +41,9 @@
     "lint": "eslint .",
     "build": "cross-env NODE_ENV=production node scripts/build.js",
     "commit": "node scripts/commit.js",
-    "push": "git push --follow-tags",
     "version": "lerna publish --skip-git --skip-npm",
     "publish": "lerna exec -- npm publish",
-    "release": "npm-run-all lint test build version build commit publish push"
+    "release": "npm-run-all lint test version build commit"
   },
   "babel": {
     "presets": [

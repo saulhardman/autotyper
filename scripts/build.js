@@ -110,10 +110,10 @@ build(corePackageName).then(() => {
 
   return Promise.all(builds);
 }).then(() => {
-  const readmeSrc = path.join(__dirname, '../README.md');
-  const readmeDest = path.join(packagesDir, corePackageName, 'README.md');
+  const readmeSrc = path.join(packagesDir, corePackageName, 'README.md');
+  const readmeDest = path.join(__dirname, '../README.md');
 
-  return fs.writeFileSync(readmeDest, fs.readFileSync(readmeSrc, 'utf-8'), 'utf-8');
+  return fs.writeFileSync(readmeSrc, fs.readFileSync(readmeDest, 'utf-8'), 'utf-8');
 }).then(() => {
   [corePackageName, ...auxilliaryPackageNames].forEach((name) => {
     const filename = path.join(packagesDir, name, distDir, 'index.min.js');
