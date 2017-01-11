@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.11.1";
+var version = "0.12.0";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
@@ -160,22 +160,30 @@ var interval = function (interval) {
   return value;
 };
 
-var INIT_EVENT = 'init';
-var START_EVENT = 'start';
-var TYPE_EVENT = 'type';
-var LOOP_EVENT = 'loop';
-var STOP_EVENT = 'stop';
-var DESTROY_EVENT = 'destroy';
+var INIT = 'init';
+var START = 'start';
+var TYPE = 'type';
+var LOOP = 'loop';
+var STOP = 'stop';
+var DESTROY = 'destroy';
 
-var EVENTS = [INIT_EVENT, START_EVENT, TYPE_EVENT, LOOP_EVENT, STOP_EVENT, DESTROY_EVENT];
+var EVENTS = {
+  INIT: INIT,
+  START: START,
+  TYPE: TYPE,
+  LOOP: LOOP,
+  STOP: STOP,
+  DESTROY: DESTROY
+};
 
 var ATTRIBUTE_OPTION_NAMES = ['text', 'interval', 'auto-start', 'loop', 'loop-interval', 'empty-text'];
 
-var DEFAULT_OPTIONS = {
+var DEFAULTS = {
   text: 'This is the default text.',
   interval: [200, 300],
   autoStart: true,
   loop: false,
+  // loopInterval: DEFAULTS.interval,
   emptyText: '\xA0'
 };
 
@@ -208,11 +216,11 @@ var autotyper = {
       var attributeOptions = _extends(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute('data-' + name)));
 
       this.element = element;
-      this.settings = _extends({}, DEFAULT_OPTIONS, text && { text: text }, attributeOptions, options);
+      this.settings = _extends({}, DEFAULTS, text && { text: text }, attributeOptions, options);
       this.originalText = text;
     } else {
       this.element = element;
-      this.settings = _extends({}, DEFAULT_OPTIONS, options);
+      this.settings = _extends({}, DEFAULTS, options);
       this.originalText = this.settings.text;
     }
 
@@ -232,7 +240,7 @@ var autotyper = {
       }
     }
 
-    this.emit(INIT_EVENT);
+    this.emit(INIT);
 
     return this;
   },
@@ -258,7 +266,7 @@ var autotyper = {
 
     this.tick(interval(this.settings.interval));
 
-    this.emit(START_EVENT);
+    this.emit(START);
 
     return this;
   },
@@ -292,7 +300,7 @@ var autotyper = {
 
     this.setText(text);
 
-    this.emit(TYPE_EVENT, text);
+    this.emit(TYPE, text);
 
     this.letterCount += 1;
 
@@ -307,11 +315,11 @@ var autotyper = {
 
     this.isRunning = false;
 
-    this.emit(STOP_EVENT);
+    this.emit(STOP);
 
     return this;
   },
-  reset: function reset() {
+  resetText: function resetText() {
     this.setText(this.originalText);
 
     return this;
@@ -321,7 +329,7 @@ var autotyper = {
       this.stop();
     }
 
-    this.emit(DESTROY_EVENT);
+    this.emit(DESTROY);
 
     this.off();
 
@@ -354,7 +362,7 @@ var autotyper = {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
-    this.emit(LOOP_EVENT, this.loopCount);
+    this.emit(LOOP, this.loopCount);
 
     return this;
   }
@@ -362,4 +370,4 @@ var autotyper = {
 
 Emitter(autotyper);
 
-export { name as NAME, DEFAULT_OPTIONS, EVENTS, version as VERSION };export default autotyper;
+export { name as NAME, DEFAULTS, EVENTS, version as VERSION };export default autotyper;
