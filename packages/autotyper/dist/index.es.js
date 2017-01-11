@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.12.0";
+var version = "0.12.1";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text

@@ -158,12 +158,19 @@ All versions and formats of the module are available via [unpkg](https://unpkg.c
 #### Arguments
 
 [**`element`**] ***(HTMLElement)***: The element to type in.
+
 [**`options={}`**] ***(Object)***: The options object.
+  
 [**`options.text=element.innerHTML|'This is the default text.'`**] ***(string)***: The text to type.
+
 [**`options.interval=[200, 300]`**] ***(number|number[min, max]|function)***: The number of milliseconds between each keystroke or a min and max number of milliseconds to randomise between or a function that returns a number of milliseconds.
+
 [**`options.autoStart=true`**] ***(boolean|number)***: Specify whether to `start()` automatically or the number of milliseconds to delay.
+
 [**`options.loop=false`**] ***(boolean|number)***: Specify whether to loop or the number of times to loop.
+
 [**`options.loopInterval=options.interval`**] ***(number|number[min, max]|function)***: The number of milliseconds between each loop or a min and max number of milliseconds to randomise between or a function that returns a number of milliseconds.
+
 [**`options.emptyText='\u00A0'`**] ***(string)***: The string that is set when the text is empty.
 
 #### Returns
