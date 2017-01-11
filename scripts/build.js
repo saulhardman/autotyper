@@ -48,10 +48,10 @@ function getFilename(format, minify) {
   return parts.join('.');
 }
 
-function build(packageName, formats) {
+function build(packageName, formats = defaultFormats) {
   const packageDir = path.join(packagesDir, packageName);
   const packageFile = path.join(packageDir, 'package.json');
-  const { name, dependencies } = require(packageFile);
+  const { name, dependencies, peerDependencies = {} } = require(packageFile);
   const packageDistDir = path.join(packageDir, distDir);
   const entry = path.join(packageDir, 'src/index.js');
 
@@ -64,7 +64,7 @@ function build(packageName, formats) {
   formats.forEach(({ format, minify = false }) => {
     promise = promise.then(() => rollup({
       entry,
-      external: (minify) ? ['jquery'] : Object.keys(dependencies),
+      external: (minify) ? ['jquery'] : [...Object.keys(dependencies), ...Object.keys(peerDependencies)],
       plugins: [
         json({
           exclude: 'node_modules/**',
@@ -105,12 +105,15 @@ function build(packageName, formats) {
   return promise;
 }
 
-build(corePackageName, defaultFormats).then(() => {
-  const builds = auxilliaryPackageNames.map(packageName => (
-    build(packageName, defaultFormats)
-  ));
+build(corePackageName).then(() => {
+  const builds = auxilliaryPackageNames.map(packageName => build(packageName));
 
   return Promise.all(builds);
+}).then(() => {
+  const readmeSrc = path.join(__dirname, '../README.md');
+  const readmeDest = path.join(packagesDir, corePackageName, 'README.md');
+
+  return fs.writeFileSync(readmeDest, fs.readFileSync(readmeSrc, 'utf-8'), 'utf-8');
 }).then(() => {
   [corePackageName, ...auxilliaryPackageNames].forEach((name) => {
     const filename = path.join(packagesDir, name, distDir, 'index.min.js');

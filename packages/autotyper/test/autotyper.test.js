@@ -1,18 +1,20 @@
 import test from 'ava';
 
-import autotyper, { DEFAULT_OPTIONS, EVENTS } from '../src/autotyper';
+import autotyper, { DEFAULTS, EVENTS } from '../src/autotyper';
 import objectToDataAttributes from './helpers/object-to-data-attributes';
 import { name as packageName } from '../package.json';
 
+const EVENT_NAMES = Object.keys(EVENTS).map(name => EVENTS[name]);
+
 // replicate default `loopInterval` assignment from `init()`
-Object.assign(DEFAULT_OPTIONS, {
-  loopInterval: DEFAULT_OPTIONS.interval,
+Object.assign(DEFAULTS, {
+  loopInterval: DEFAULTS.interval,
 });
 
 test('it sets default options correctly', (t) => {
   autotyper.init();
 
-  t.deepEqual(autotyper.settings, DEFAULT_OPTIONS);
+  t.deepEqual(autotyper.settings, DEFAULTS);
 });
 
 test('it sets options correctly', (t) => {
@@ -37,7 +39,7 @@ test('it works with an element', (t) => {
 
   autotyper.init(document.getElementById('js-example'));
 
-  t.deepEqual(autotyper.settings, DEFAULT_OPTIONS);
+  t.deepEqual(autotyper.settings, DEFAULTS);
 });
 
 test('it sets `text` to the HTML content of an element', (t) => {
@@ -56,30 +58,30 @@ test('it receives an options object via a single HTML data attribute', (t) => {
   const text = 'This text will not be used.';
 
   document.body.innerHTML = `
-    <p id="js-example" data-${packageName}='${JSON.stringify(DEFAULT_OPTIONS)}'>${text}</p>
+    <p id="js-example" data-${packageName}='${JSON.stringify(DEFAULTS)}'>${text}</p>
   `;
 
   autotyper.init(document.getElementById('js-example'));
 
-  t.deepEqual(autotyper.settings, DEFAULT_OPTIONS);
+  t.deepEqual(autotyper.settings, DEFAULTS);
 });
 
 test('it receives individual options via HTML data attributes', (t) => {
   const text = 'This text will not be used.';
 
   document.body.innerHTML = `
-    <p id="js-example" ${objectToDataAttributes(DEFAULT_OPTIONS, packageName)}>${text}</p>
+    <p id="js-example" ${objectToDataAttributes(DEFAULTS, packageName)}>${text}</p>
   `;
 
   autotyper.init(document.getElementById('js-example'));
 
-  t.deepEqual(autotyper.settings, DEFAULT_OPTIONS);
+  t.deepEqual(autotyper.settings, DEFAULTS);
 });
 
 test('it removes all event listeners on `destroy()`', (t) => {
   const callback = () => {};
 
-  t.plan(EVENTS.length);
+  t.plan(EVENT_NAMES.length);
 
   document.body.innerHTML = `
     <p id="js-example"></p>
@@ -87,15 +89,15 @@ test('it removes all event listeners on `destroy()`', (t) => {
 
   autotyper.init(document.getElementById('js-example'));
 
-  EVENTS.forEach(event => autotyper.on(event, callback));
+  EVENT_NAMES.forEach(event => autotyper.on(event, callback));
 
   autotyper.destroy();
 
-  EVENTS.forEach(event => t.false(autotyper.hasListeners(event)));
+  EVENT_NAMES.forEach(event => t.false(autotyper.hasListeners(event)));
 });
 
 test('emits events via `emit()`', (t) => {
-  t.plan(EVENTS.length);
+  t.plan(EVENT_NAMES.length);
 
   document.body.innerHTML = `
     <p id="js-example"></p>
@@ -103,24 +105,24 @@ test('emits events via `emit()`', (t) => {
 
   autotyper.init(document.getElementById('js-example'));
 
-  EVENTS.forEach(event => autotyper.on(event, () => t.pass()));
+  EVENT_NAMES.forEach(event => autotyper.on(event, () => t.pass()));
 
-  EVENTS.forEach(event => autotyper.emit(event));
+  EVENT_NAMES.forEach(event => autotyper.emit(event));
 });
 
 test('it emits events from respective functions', (t) => {
   const autoStart = false;
   const loop = true;
 
-  t.plan(EVENTS.length);
+  t.plan(EVENT_NAMES.length);
 
   document.body.innerHTML = `
     <p id="js-example"></p>
   `;
 
-  EVENTS.forEach(event => autotyper.on(event, () => t.pass()));
+  EVENT_NAMES.forEach(event => autotyper.on(event, () => t.pass()));
 
-  const [INIT_EVENT, ...OTHER_EVENTS] = EVENTS;
+  const [INIT_EVENT, ...OTHER_EVENTS] = EVENT_NAMES;
 
   autotyper[INIT_EVENT](document.getElementById('js-example'), { autoStart, loop });
 
@@ -150,10 +152,10 @@ test('it sets `settings.text` to default value if undefined and HTML element is 
 
   autotyper.init(element);
 
-  t.is(autotyper.settings.text, DEFAULT_OPTIONS.text);
+  t.is(autotyper.settings.text, DEFAULTS.text);
 });
 
-test('it returns HTML element to original state on `reset()` and `destroy()`', (t) => {
+test('it returns HTML element to original state on `resetText()` and `destroy()`', (t) => {
   const text = 'Example text.';
   const interval = 50;
 
@@ -171,7 +173,7 @@ test('it returns HTML element to original state on `reset()` and `destroy()`', (
     setTimeout(() => {
       t.not(autotyper.text, text);
 
-      autotyper.reset()
+      autotyper.resetText()
                .destroy();
 
       t.is(element.innerHTML, text);

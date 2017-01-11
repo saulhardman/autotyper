@@ -1,17 +1,14 @@
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('autotyper'), require('jquery')) :
-  typeof define === 'function' && define.amd ? define(['autotyper', 'jquery'], factory) :
-  (global.jqueryAutotyper = factory(global.autotyper,global.jQuery));
-}(this, (function (autotyper,jQuery) { 'use strict';
-
-var autotyper__default = 'default' in autotyper ? autotyper['default'] : autotyper;
-jQuery = 'default' in jQuery ? jQuery['default'] : jQuery;
+import autotyper, { DEFAULTS, EVENTS, NAME, VERSION } from 'autotyper';
+import jQuery from 'jquery';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
+
+var DESTROY = EVENTS.DESTROY;
+
 
 jQuery.fn.autotyper = function plugin() {
   var _this = this;
@@ -34,18 +31,26 @@ jQuery.fn.autotyper = function plugin() {
 
       _this.each(function init() {
         var $this = jQuery(this);
-        var instance = Object.create(autotyper__default);
+        var instance = Object.create(autotyper);
 
-        $this.data(autotyper.NAME, instance);
+        $this.data(NAME, instance);
 
-        autotyper.EVENTS.forEach(function (event) {
+        Object.keys(EVENTS).map(function (name) {
+          return EVENTS[name];
+        }).forEach(function (event) {
           instance.on(event, function () {
             for (var _len2 = arguments.length, eventArgs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
               eventArgs[_key2] = arguments[_key2];
             }
 
-            $this.trigger.apply($this, [autotyper.NAME + ':' + event].concat(eventArgs));
+            $this.trigger.apply($this, [NAME + ':' + event].concat(eventArgs));
           });
+        });
+
+        instance.on(DESTROY, function () {
+          instance.off(DESTROY);
+
+          $this.off(NAME);
         });
 
         instance.init(this, options);
@@ -56,13 +61,14 @@ jQuery.fn.autotyper = function plugin() {
       var functionName = arg;
 
       _this.each(function callFunction() {
-        var instance = jQuery(this).data(autotyper.NAME);
+        var $this = jQuery(this);
+        var instance = $this.data(NAME);
 
         if ((typeof instance === 'undefined' ? 'undefined' : _typeof(instance)) === 'object' && typeof instance[functionName] === 'function') {
           instance[functionName](functionArgs);
 
-          if (functionName === autotyper__default.destroy.name) {
-            jQuery.removeData(this, autotyper.NAME);
+          if (functionName === autotyper.destroy.name) {
+            jQuery.removeData(this, NAME);
           }
         }
       });
@@ -72,6 +78,13 @@ jQuery.fn.autotyper = function plugin() {
   return this;
 };
 
-return autotyper__default;
+jQuery.autotyper = autotyper;
 
-})));
+jQuery.extend(jQuery.autotyper, {
+  NAME: NAME,
+  DEFAULTS: DEFAULTS,
+  EVENTS: EVENTS,
+  VERSION: VERSION
+});
+
+export default autotyper;

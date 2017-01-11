@@ -1,7 +1,7 @@
 export {
   default,
   NAME,
-  DEFAULT_OPTIONS,
+  DEFAULTS,
   EVENTS,
   VERSION,
 } from './autotyper';

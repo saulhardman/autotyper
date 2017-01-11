@@ -106,12 +106,20 @@
           console.log('jQuery instance started!', example);
         });
 
+        $('.js-example-5').on('autotyper:type', function (e, text) {
+          console.log('jQuery instance is typing!', text);
+        });
+
         $('.js-example-5').on('autotyper:destroy', () => console.log('jQuery instance destroyed!'));
 
         setTimeout(() => $('.js-example-5').autotyper('start'), 1000);
 
         setTimeout(() => $('.js-example-5').autotyper('destroy'), 2000);
       }(window.$ || window.jQuery));
+    </script>
+
+    <script>
+      console.log($.autotyper);
     </script>
   </body>
 </html>

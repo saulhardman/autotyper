@@ -1,5 +1,12 @@
-import autotyper, { NAME, EVENTS } from 'autotyper';
+import autotyper, {
+  NAME,
+  DEFAULTS,
+  EVENTS,
+  VERSION,
+} from 'autotyper';
 import jQuery from 'jquery';
+
+const { DESTROY } = EVENTS;
 
 jQuery.fn.autotyper = function plugin(...args) {
   const [arg, ...functionArgs] = args;
@@ -17,10 +24,16 @@ jQuery.fn.autotyper = function plugin(...args) {
 
       $this.data(NAME, instance);
 
-      EVENTS.forEach((event) => {
+      Object.keys(EVENTS).map(name => EVENTS[name]).forEach((event) => {
         instance.on(event, (...eventArgs) => {
           $this.trigger(`${NAME}:${event}`, ...eventArgs);
         });
+      });
+
+      instance.on(DESTROY, () => {
+        instance.off(DESTROY);
+
+        $this.off(NAME);
       });
 
       instance.init(this, options);
@@ -29,7 +42,8 @@ jQuery.fn.autotyper = function plugin(...args) {
     const functionName = arg;
 
     this.each(function callFunction() {
-      const instance = jQuery(this).data(NAME);
+      const $this = jQuery(this);
+      const instance = $this.data(NAME);
 
       if (typeof instance === 'object' && typeof instance[functionName] === 'function') {
         instance[functionName](functionArgs);
@@ -43,6 +57,15 @@ jQuery.fn.autotyper = function plugin(...args) {
 
   return this;
 };
+
+jQuery.autotyper = autotyper;
+
+jQuery.extend(jQuery.autotyper, {
+  NAME,
+  DEFAULTS,
+  EVENTS,
+  VERSION,
+});
 
 if (process.env.NODE_ENV === 'development') {
   window.$ = jQuery;

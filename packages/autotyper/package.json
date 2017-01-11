@@ -1,6 +1,6 @@
 {
   "name": "autotyper",
-  "description": "A simple JavaScript plugin that automatically types text.",
+  "description": "A simple, lightweight JavaScript package for automatically typing text.",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",

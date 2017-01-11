@@ -1,57 +1,94 @@
-# Autotyper
+# autotyper
 
-> A simple JavaScript plugin that automatically types out text.
+> ⌨️ A simple, lightweight JavaScript package for automatically typing text.
 
 [![npm](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
 
-### Installation
+- Has a file size of 2.03 kB, minified and gzipped.
+- Can be used with or without an `HTMLElement`.
+- Provides configurable [options](#options).
+- Emits [events](#events) for triggering custom functionality.
+- Also has a standalone [jQuery plugin](https://github.com/saulhardman/autotyper/tree/master/packages/autotyper-jquery).
 
-#### Yarn
+See it in action on [CodePen](https://codepen.io/collection/Drkmyk)!
+
+## Installation
+
+### Yarn
 
 ```
 yarn add autotyper
 ```
 
-#### NPM
+### NPM
 
 ```
 npm install --save autotyper
 ```
 
-### Usage
+## Usage
+
+With an `HTMLElement`:
 
 ```js
-// ES Modules
 import autotyper from 'autotyper';
-// CommonJS
-const autotyper = require('autotyper');
-// AMD
-require(['autotyper'], function (autotyper) { /* use `autotyper` here */ });
-// The UMD build can be used in both CommonJS and AMD environments
-// It falls back to assigning autotyper to the global scope where no module system is present
-// e.g. window.autotyper;
 
-const example = Object.create(autotyper)
+const example = Object.create(autotyper);
+const element = document.querySelector('.js-element');
+const options = {
+  text: 'Hello World.',
+};
 
-example.init(document.querySelector('.js-element'));
+example.init(element, options);
 ```
 
-### Options
-
-These are the options and their default values:
+Without an `HTMLElement`:
 
 ```js
-{
-  text: element.innerHTML, // String representing the text to be typed out, defaults to the element's `innerHTML`
-  interval: [200, 300], // Number or an array of 2 Numbers to randomise between (in milliseconds)
-  autoStart: true, // Boolean or Number of milliseconds to delay start by
-  loop: false, // Boolean or Number of loops
-  loopInterval: interval // Number or an array of 2 Numbers to randomise between (in milliseconds), defaults to `interval`
-  emptyText: '\u00A0', // String to set the text to when the element is empty, defaults to the unicode literal 'no-break space' to preserve element height
-}
+import autotyper from 'autotyper';
+
+const example = Object.create(autotyper).init({
+  text: 'Look, Mom, no element!',
+});
+
+// `example.text` updates when a new character is typed
+
+// listen for the 'type' event
+example.on('type', (text) => {
+  // do something with `text`
+});
 ```
 
-#### HTML Data Attributes
+### CommonJS
+
+```js
+const autotyper = require('autotyper').default;
+```
+
+### AMD
+
+```js
+require(['autotyper'], function (autotyper) {
+  // use `autotyper.default` here
+});
+```
+
+## Options
+
+```js
+const defaults = {
+  text: element.innerHTML || 'This is the default text.',
+  interval: [200, 300],
+  autoStart: true,
+  loop: false,
+  loopInterval: options.interval,
+  emptyText: '\u00A0',
+};
+```
+
+See the [API](#api) for more information.
+
+#### Pass Options with HTML Data Attributes
 
 Options can be passed via HTML data attributes. Either as individual properties or a single options object. The attribute names should be:
 
@@ -72,91 +109,125 @@ The attribute values should be JSON formatted strings.
 </p>
 ```
 
-### Examples
+## Browser Support
 
-Some examples of autotyper in action can be found on [CodePen](https://codepen.io/saulhardman/pen/vgYwmO).
+`autotyper` is written and compiled in a way that it *should* support the majority of browsers, old and new. However, these are the browsers for which we offer **official** support. Should you find a bug in the package, don't hesitate to submit an issue and we'll assist you as best we can.
 
-### Alternative Installation
+![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/39.1.1/edge/edge_32x32.png) | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/39.1.1/firefox/firefox_32x32.png) | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/39.1.1/chrome/chrome_32x32.png) | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/39.1.1/safari/safari_32x32.png) | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/39.1.1/opera/opera_32x32.png)
+--- | --- | --- | --- | ---
+Edge | Firefox | Chrome | Safari | Opera
+Last 2 versions | last 2 versions | last 2 versions | last 2 versions | last 2 versions 
 
-If you're not using a module bundler or npm as your package manager then the following methods are available to you.
+## Alternative Installation
 
-#### Bower
+If you're not using a module bundler or `npm` as your package manager then the following methods are available to you.
+
+### Bower
 
 ```
-bower install autotyper=https://unpkg.com/autotyper/index.umd.pkgd.js
+bower install autotyper=https://unpkg.com/autotyper/dist/index.min.js
 ```
 
-#### Download
+### Download
 
-The latest UMD build is available for download:
+The latest version of the UMD build (bundled and minified) is available for download:
 
-- Latest version, bundled (UMD): [index.umd.pkgd.js](https://unpkg.com/autotyper/index.umd.pkgd.js)
-- Latest version, bundled and minified (UMD): [index.umd.pkgd.min.js](https://unpkg.com/autotyper/index.umd.pkgd.min.js)
+- [index.min.js](https://unpkg.com/autotyper/dist/index.min.js)
 
-#### CDN
+### CDN
 
-All versions and formats of the module are available via [unpkg](https://unpkg.com/).
-
-This is an example of using the UMD format served via the CDN:
+All versions and formats of the module are available via [unpkg](https://unpkg.com/):
 
 ```html
 <!-- Use a specific release (replace `x.x.x` with a version number) -->
-<script src="https://unpkg.com/autotyper@x.x.x/index.umd.pkgd.min.js"></script>
-<!-- Use the latest minor or patch release (stay up to date safely) -->
-<script src="https://unpkg.com/autotyper@0/index.umd.pkgd.min.js"></script>
+<script src="https://unpkg.com/autotyper@x.x.x/dist/index.min.js"></script>
+<!-- Use the latest minor or patch release (replace `x` with a version number) -->
+<script src="https://unpkg.com/autotyper@x/dist/index.min.js"></script>
 <!-- DANGER: Use the latest major release (could introduce breaking changes) -->
-<script src="https://unpkg.com/autotyper/index.umd.pkgd.min.js"></script>
+<script src="https://unpkg.com/autotyper/dist/index.min.js"></script>
 
 <script>
-  // autotyper is then available within the global scope
-  // e.g. as `autotyper` or more explicitly `window.autotyper`
-  const myAutotyper = Object.create(window.autotyper);
-  const myElement = document.getElementById('js-element');
-  const myOptions = {
-    text: 'Look at my autotyper typing!',
-  };
-  
-  myAutotyper.init(myElement, myOptions);
+  // Package available via `window.autotyper.default`
 </script>
 ```
 
-### API
+## API
 
-As `autotyper` is just a plain old JavaScript object the entire API is exposed.
+### autotyper.init([element, ][options])
 
-Here are the functions that you will probably pay attention to most:
+#### Arguments
 
-#### autotyper.init(element, options)
-#### autotyper.start()
-#### autotyper.stop()
-#### autotyper.reset()
-#### autotyper.destroy()
-#### autotyper.setText(text)
+[**`element`**] ***(HTMLElement)***: The element to type in.
+[**`options={}`**] ***(Object)***: The options object.
+[**`options.text=element.innerHTML|'This is the default text.'`**] ***(string)***: The text to type.
+[**`options.interval=[200, 300]`**] ***(number|number[min, max]|function)***: The number of milliseconds between each keystroke or a min and max number of milliseconds to randomise between or a function that returns a number of milliseconds.
+[**`options.autoStart=true`**] ***(boolean|number)***: Specify whether to `start()` automatically or the number of milliseconds to delay.
+[**`options.loop=false`**] ***(boolean|number)***: Specify whether to loop or the number of times to loop.
+[**`options.loopInterval=options.interval`**] ***(number|number[min, max]|function)***: The number of milliseconds between each loop or a min and max number of milliseconds to randomise between or a function that returns a number of milliseconds.
+[**`options.emptyText='\u00A0'`**] ***(string)***: The string that is set when the text is empty.
 
-### Events
+#### Returns
 
-The `autotyper` object is an [event emitter](https://github.com/component/emitter) and emits the following events:
+***(Object)***: Returns the `autotyper` instance.
 
-#### autotyper#init
+### autotyper.start()
 
-Emitted when the instance is initialised.
+#### Returns
 
-#### autotyper#start
+***(Object)***: Returns the `autotyper` instance.
 
-Emitted when the instance starts typing.
+### autotyper.stop()
 
-#### autotyper#type(text)
+#### Returns
 
-Emitted when the instance types a new character. The current text value is passed as the first argument.
+***(Object)***: Returns the `autotyper` instance.
 
-#### autotyper#loop(loopCount)
+### autotyper.destroy()
 
-Emitted when the instance loops. The number of times the instance has looped is passed as the first argument.
+#### Returns
 
-#### autotyper#stop
+***(Object)***: Returns the `autotyper` instance.
 
-Emitted when the instance stops typing.
+### autotyper.setText(text)
 
-#### autotyper#destroy
+#### Arguments
 
-Emitted when the instance is destroyed.
+**text** ***(string)***: The text to assign
+
+#### Returns
+
+***(Object)***: Returns the `autotyper` instance
+
+### autotyper.resetText()
+
+#### Returns
+
+***(Object)***: Returns the `autotyper` instance.
+
+## Events
+
+`autotyper` is an [event emitter](https://github.com/component/emitter). You can bind to the following events using `autotyper.on(eventName, callback)`:
+
+### autotyper#init
+
+### autotyper#start
+
+### autotyper#type(text)
+
+#### Arguments
+
+**text** ***(string)***: The current text value.
+
+### autotyper#loop(loopCount)
+
+#### Arguments
+
+**loopCount** ***(number)***: The number of times the instance has looped.
+
+### autotyper#stop
+
+### autotyper#destroy
+
+## License
+
+MIT © [Saul Hardman](http://saulhardman.com)
