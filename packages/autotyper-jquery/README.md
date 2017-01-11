@@ -6,9 +6,13 @@ For more information see the [core package](https://github.com/saulhardman/autot
 
 ## Installation
 
+### Yarn
+
 ```
 yarn add jquery autotyper-query
 ```
+
+### NPM
 
 ```
 npm install --save jquery autotyper-jquery
