@@ -5,6 +5,7 @@ import objectToDataAttributes from './helpers/object-to-data-attributes';
 import { name as packageName } from '../package.json';
 
 const EVENT_NAMES = Object.keys(EVENTS).map(name => EVENTS[name]);
+const { INIT } = EVENTS;
 
 // replicate default `loopInterval` assignment from `init()`
 Object.assign(DEFAULTS, {
@@ -113,6 +114,7 @@ test('emits events via `emit()`', (t) => {
 test('it emits events from respective functions', (t) => {
   const autoStart = false;
   const loop = true;
+  const options = { autoStart, loop };
 
   t.plan(EVENT_NAMES.length);
 
@@ -120,13 +122,23 @@ test('it emits events from respective functions', (t) => {
     <p id="js-example"></p>
   `;
 
-  EVENT_NAMES.forEach(event => autotyper.on(event, () => t.pass()));
+  const element = document.getElementById('js-example');
 
-  const [INIT_EVENT, ...OTHER_EVENTS] = EVENT_NAMES;
+  EVENT_NAMES.forEach((event) => {
+    let args = [];
 
-  autotyper[INIT_EVENT](document.getElementById('js-example'), { autoStart, loop });
+    autotyper.on(event, () => {
+      autotyper.off(event);
 
-  OTHER_EVENTS.forEach(event => autotyper[event]());
+      t.pass();
+    });
+
+    if (event === INIT) {
+      args = [element, options];
+    }
+
+    autotyper[event](...args);
+  });
 });
 
 test('it sets `originalText` to `element.innerHTML`', (t) => {
