@@ -115,7 +115,7 @@ const autotyper = {
       this.loopCount = 0;
     }
 
-    this.tick(interval(this.settings.interval));
+    this.type();
 
     this.emit(START);
 
