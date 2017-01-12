@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.12.1";
+var version = "0.12.2";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
@@ -264,7 +264,7 @@ var autotyper = {
       this.loopCount = 0;
     }
 
-    this.tick(interval(this.settings.interval));
+    this.type();
 
     this.emit(START);
 

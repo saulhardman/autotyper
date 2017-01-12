@@ -12,7 +12,7 @@ var Emitter = _interopDefault(require("component-emitter"));
 
 var name = "autotyper";
 
-var version = "0.12.1";
+var version = "0.12.2";
 
 function upperCaseFirstLetter(string) {
   return "" + string.substring(0, 1).toUpperCase() + string.substring(1);
@@ -216,7 +216,7 @@ var autotyper = {
       }
       this.loopCount = 0;
     }
-    this.tick(interval(this.settings.interval));
+    this.type();
     this.emit(START);
     return this;
   },
