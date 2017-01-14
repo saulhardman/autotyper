@@ -115,9 +115,9 @@ const autotyper = {
       this.loopCount = 0;
     }
 
-    this.type();
-
     this.emit(START);
+
+    this.type();
 
     return this;
   },
