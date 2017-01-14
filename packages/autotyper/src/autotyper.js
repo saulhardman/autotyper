@@ -20,7 +20,7 @@ const EVENTS = {
   DESTROY,
 };
 
-const ATTRIBUTE_OPTION_NAMES = [
+const DATA_ATTRIBUTES = [
   'text',
   'interval',
   'auto-start',
@@ -57,8 +57,8 @@ const autotyper = {
 
     if (element) {
       const text = element.innerHTML.trim();
-      const attributeOptions = Object.assign(
-        dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, NAME),
+      const dataOptions = Object.assign(
+        dataAttributesToObject(element, DATA_ATTRIBUTES, NAME),
         JSON.parse(element.getAttribute(`data-${NAME}`)),
       );
 
@@ -67,7 +67,7 @@ const autotyper = {
         {},
         DEFAULTS,
         (text && { text }),
-        attributeOptions,
+        dataOptions,
         options,
       );
       this.originalText = text;
@@ -219,8 +219,9 @@ Emitter(autotyper);
 
 export {
   autotyper as default,
-  NAME,
+  DATA_ATTRIBUTES,
   DEFAULTS,
   EVENTS,
+  NAME,
   VERSION,
 };
