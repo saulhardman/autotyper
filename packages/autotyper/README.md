@@ -8,7 +8,7 @@
 - Can be used with or without an `HTMLElement`.
 - Provides configurable [options](#options).
 - Emits [events](#events) for triggering custom functionality.
-- Also has a standalone [jQuery plugin](https://github.com/saulhardman/autotyper/tree/master/packages/autotyper-jquery).
+- Also has a standalone [jQuery plugin](tree/master/packages/autotyper-jquery).
 
 See it in action on [CodePen](https://codepen.io/collection/Drkmyk)!
 
