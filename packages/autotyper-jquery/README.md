@@ -12,7 +12,7 @@ For more information see the [core package](https://github.com/saulhardman/autot
 yarn add jquery autotyper-query
 ```
 
-### NPM
+### npm
 
 ```
 npm install --save jquery autotyper-jquery

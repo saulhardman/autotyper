@@ -20,7 +20,7 @@ See it in action on [CodePen](https://codepen.io/collection/Drkmyk)!
 yarn add autotyper
 ```
 
-### NPM
+### npm
 
 ```
 npm install --save autotyper
