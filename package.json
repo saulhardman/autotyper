@@ -38,13 +38,12 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --inline",
-    "test": "cross-env NODE_ENV=test ava",
-    "lint": "eslint .",
+    "test": "eslint . && cross-env NODE_ENV=test ava",
     "build": "cross-env NODE_ENV=production node scripts/build.js",
     "commit": "node scripts/commit.js",
     "version": "lerna publish --skip-git --skip-npm",
     "publish": "lerna exec -- npm publish",
-    "release": "npm-run-all lint test version build commit"
+    "release": "npm-run-all test version build commit"
   },
   "babel": {
     "presets": [

@@ -22,6 +22,7 @@
   "dependencies": {
     "component-emitter": "^1.2.1"
   },
+  "devDependencies": {},
   "license": "MIT",
   "files": [
     "dist"
