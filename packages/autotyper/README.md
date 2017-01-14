@@ -99,7 +99,7 @@ The attribute values should be JSON formatted strings.
 
 ```html
 <!-- Options passed as a single JSON formatted object -->
-<p data-autotyper='{ "text": "This is the text that is typed." }'>
+<p data-autotyper-options='{ "text": "This is the text that is typed." }'>
   This is some example text.
 </p>
 

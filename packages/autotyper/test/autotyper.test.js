@@ -59,7 +59,7 @@ test('it receives an options object via a single HTML data attribute', (t) => {
   const text = 'This text will not be used.';
 
   document.body.innerHTML = `
-    <p id="js-example" data-${packageName}='${JSON.stringify(DEFAULTS)}'>${text}</p>
+    <p id="js-example" data-${packageName}-options='${JSON.stringify(DEFAULTS)}'>${text}</p>
   `;
 
   autotyper.init(document.getElementById('js-example'));

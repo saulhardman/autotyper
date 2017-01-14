@@ -59,7 +59,7 @@ const autotyper = {
       const text = element.innerHTML.trim();
       const dataOptions = Object.assign(
         dataAttributesToObject(element, DATA_ATTRIBUTES, NAME),
-        JSON.parse(element.getAttribute(`data-${NAME}`)),
+        JSON.parse(element.getAttribute(`data-${NAME}-options`)),
       );
 
       this.element = element;
