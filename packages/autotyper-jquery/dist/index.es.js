@@ -9,6 +9,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var DESTROY = EVENTS.DESTROY;
 
+var EVENT_NAMES = Object.keys(EVENTS).map(function (name) {
+  return EVENTS[name];
+});
 
 jQuery.fn.autotyper = function plugin() {
   var _this = this;
@@ -35,9 +38,7 @@ jQuery.fn.autotyper = function plugin() {
 
         $this.data(NAME, instance);
 
-        Object.keys(EVENTS).map(function (name) {
-          return EVENTS[name];
-        }).forEach(function (event) {
+        EVENT_NAMES.forEach(function (event) {
           instance.on(event, function () {
             for (var _len2 = arguments.length, eventArgs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
               eventArgs[_key2] = arguments[_key2];
@@ -62,7 +63,7 @@ jQuery.fn.autotyper = function plugin() {
 
       _this.each(function callFunction() {
         var $this = jQuery(this);
-        var instance = $this.data(NAME);
+        var instance = $this.data(NAME + '-instance');
 
         if ((typeof instance === 'undefined' ? 'undefined' : _typeof(instance)) === 'object' && typeof instance[functionName] === 'function') {
           instance[functionName](functionArgs);
@@ -81,10 +82,10 @@ jQuery.fn.autotyper = function plugin() {
 jQuery.autotyper = autotyper;
 
 jQuery.extend(jQuery.autotyper, {
-  NAME: NAME,
   DEFAULTS: DEFAULTS,
   EVENTS: EVENTS,
-  VERSION: VERSION
+  VERSION: VERSION,
+  NAME: NAME
 });
 
 export default autotyper;

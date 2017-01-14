@@ -19,10 +19,10 @@
   ],
   "author": "Saul Hardman <hello@iamsaul.co.uk>",
   "homepage": "https://github.com/saulhardman/autotyper/",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "repository": "https://github.com/saulhardman/autotyper/tree/master/packages/autotyper-jquery",
   "dependencies": {
-    "autotyper": "^0.12.2"
+    "autotyper": "^0.13.0"
   },
   "peerDependencies": {
     "jquery": "^3.1.1"

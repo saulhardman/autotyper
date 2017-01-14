@@ -4,7 +4,7 @@
   "use strict";
   Emitter = "default" in Emitter ? Emitter["default"] : Emitter;
   var name = "autotyper";
-  var version = "0.12.2";
+  var version = "0.13.0";
   function upperCaseFirstLetter(string) {
     return "" + string.substring(0, 1).toUpperCase() + string.substring(1);
   }
@@ -121,7 +121,7 @@
     STOP: STOP,
     DESTROY: DESTROY
   };
-  var ATTRIBUTE_OPTION_NAMES = [ "text", "interval", "auto-start", "loop", "loop-interval", "empty-text" ];
+  var DATA_ATTRIBUTES = [ "text", "interval", "auto-start", "loop", "loop-interval", "empty-text" ];
   var DEFAULTS = {
     text: "This is the default text.",
     interval: [ 200, 300 ],
@@ -149,11 +149,11 @@
       }
       if (element) {
         var text = element.innerHTML.trim();
-        var attributeOptions = _extends(dataAttributesToObject(element, ATTRIBUTE_OPTION_NAMES, name), JSON.parse(element.getAttribute("data-" + name)));
+        var dataOptions = _extends(dataAttributesToObject(element, DATA_ATTRIBUTES, name), JSON.parse(element.getAttribute("data-" + name + "-options")));
         this.element = element;
         this.settings = _extends({}, DEFAULTS, text && {
           text: text
-        }, attributeOptions, options);
+        }, dataOptions, options);
         this.originalText = text;
       } else {
         this.element = element;
@@ -189,8 +189,8 @@
         }
         this.loopCount = 0;
       }
-      this.type();
       this.emit(START);
+      this.type();
       return this;
     },
     setText: function setText(text) {
@@ -265,9 +265,10 @@
   };
   Emitter(autotyper);
   exports["default"] = autotyper;
-  exports.NAME = name;
+  exports.DATA_ATTRIBUTES = DATA_ATTRIBUTES;
   exports.DEFAULTS = DEFAULTS;
   exports.EVENTS = EVENTS;
+  exports.NAME = name;
   exports.VERSION = version;
   Object.defineProperty(exports, "__esModule", {
     value: true
