@@ -4,7 +4,7 @@
   "use strict";
   Emitter = "default" in Emitter ? Emitter["default"] : Emitter;
   var name = "autotyper";
-  var version = "0.13.0";
+  var version = "0.13.1";
   function upperCaseFirstLetter(string) {
     return "" + string.substring(0, 1).toUpperCase() + string.substring(1);
   }

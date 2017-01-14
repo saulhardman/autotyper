@@ -49,7 +49,7 @@
         var functionName = arg;
         _this.each(function callFunction() {
           var $this = jQuery(this);
-          var instance = $this.data(autotyper.NAME + "-instance");
+          var instance = $this.data(autotyper.NAME);
           if ((typeof instance === "undefined" ? "undefined" : _typeof(instance)) === "object" && typeof instance[functionName] === "function") {
             instance[functionName](functionArgs);
             if (functionName === autotyper__default.destroy.name) {
