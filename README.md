@@ -2,7 +2,7 @@
 
 > ⌨️ A simple, lightweight JavaScript package for automatically typing text.
 
-[![npm](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)
+[![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper)[![Dependency Status: devDependencies](https://david-dm.org/saulhardman/autotyper/dev-status.svg)](https://david-dm.org/saulhardman/autotyper/?type=dev)[![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
 
 - Has a file size of 2.03 kB, minified and gzipped.
 - Can be used with or without an `HTMLElement`.
