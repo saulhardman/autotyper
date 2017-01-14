@@ -44,7 +44,7 @@ jQuery.fn.autotyper = function plugin(...args) {
 
     this.each(function callFunction() {
       const $this = jQuery(this);
-      const instance = $this.data(`${NAME}-instance`);
+      const instance = $this.data(NAME);
 
       if (typeof instance === 'object' && typeof instance[functionName] === 'function') {
         instance[functionName](functionArgs);
