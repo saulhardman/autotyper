@@ -72,7 +72,6 @@ const autotyper = {
       );
       this.originalText = text;
     } else {
-      this.element = element;
       this.settings = Object.assign({}, DEFAULTS, options);
       this.originalText = this.settings.text;
     }
@@ -80,6 +79,8 @@ const autotyper = {
     this.settings.loopInterval = this.settings.loopInterval || this.settings.interval;
 
     this.isRunning = false;
+
+    this.emit(INIT);
 
     if (this.settings.autoStart === true) {
       this.start();
@@ -90,8 +91,6 @@ const autotyper = {
         setTimeout(() => this.start(), delay);
       }
     }
-
-    this.emit(INIT);
 
     return this;
   },
