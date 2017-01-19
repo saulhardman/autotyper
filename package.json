@@ -43,7 +43,7 @@
     "commit": "node scripts/commit.js",
     "version": "lerna publish --skip-git --skip-npm",
     "publish": "lerna exec -- npm publish",
-    "release": "npm-run-all test version build commit"
+    "release": "npm-run-all build test version build commit"
   },
   "babel": {
     "presets": [
