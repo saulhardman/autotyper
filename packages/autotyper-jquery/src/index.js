@@ -9,6 +9,24 @@ import jQuery from 'jquery';
 const { DESTROY } = EVENTS;
 const EVENT_NAMES = Object.keys(EVENTS).map(name => EVENTS[name]);
 
+const jAutotyper = Object.create(autotyper);
+
+Object.assign(jAutotyper, {
+  parseArguments(args) {
+    const [firstArg, secondArg] = args;
+
+    if (args.length === 0) {
+      return args;
+    }
+
+    if (firstArg instanceof jQuery) {
+      return [firstArg[0], secondArg];
+    }
+
+    return [null, secondArg];
+  },
+});
+
 jQuery.fn.autotyper = function plugin(...args) {
   const [arg, ...functionArgs] = args;
 
@@ -16,30 +34,7 @@ jQuery.fn.autotyper = function plugin(...args) {
     return this;
   }
 
-  if (typeof arg === 'undefined' || typeof arg === 'object') {
-    const options = arg;
-
-    this.each(function init() {
-      const $this = jQuery(this);
-      const instance = Object.create(autotyper);
-
-      $this.data(NAME, instance);
-
-      EVENT_NAMES.forEach((event) => {
-        instance.on(event, (...eventArgs) => {
-          $this.trigger(`${NAME}:${event}`, ...eventArgs);
-        });
-      });
-
-      instance.on(DESTROY, () => {
-        instance.off(DESTROY);
-
-        $this.off(NAME);
-      });
-
-      instance.init(this, options);
-    });
-  } else if (typeof arg === 'string') {
+  if (typeof arg === 'string') {
     const functionName = arg;
 
     this.each(function callFunction() {
@@ -48,18 +43,39 @@ jQuery.fn.autotyper = function plugin(...args) {
 
       if (typeof instance === 'object' && typeof instance[functionName] === 'function') {
         instance[functionName](functionArgs);
-
-        if (functionName === autotyper.destroy.name) {
-          jQuery.removeData(this, NAME);
-        }
       }
     });
+
+    return this;
   }
+
+  const options = arg;
+
+  this.each(function init() {
+    const $this = jQuery(this);
+    const instance = Object.create(jAutotyper);
+
+    $this.data(NAME, instance);
+
+    EVENT_NAMES.forEach((event) => {
+      instance.on(event, (...eventArgs) => {
+        $this.trigger(`${NAME}:${event}`, ...eventArgs);
+
+        if (event === DESTROY) {
+          $this.off(NAME);
+
+          jQuery.removeData($this[0], NAME);
+        }
+      });
+    });
+
+    instance.init($this, options);
+  });
 
   return this;
 };
 
-jQuery.autotyper = autotyper;
+jQuery.autotyper = options => Object.create(jAutotyper).init(options);
 
 jQuery.extend(jQuery.autotyper, {
   DEFAULTS,
