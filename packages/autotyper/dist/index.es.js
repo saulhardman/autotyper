@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.13.1";
+var version = "0.13.2";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
@@ -191,25 +191,16 @@ var autotyper = {
   init: function init() {
     var _this = this;
 
-    var element = void 0;
-    var options = void 0;
-
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    if (args[0] instanceof HTMLElement) {
-      var _args3 = slicedToArray(args, 2);
-
-      element = _args3[0];
-      var _args3$ = _args3[1];
-      options = _args3$ === undefined ? {} : _args3$;
-    } else {
-      var _args4 = slicedToArray(args, 1);
-
-      var _args4$ = _args4[0];
-      options = _args4$ === undefined ? {} : _args4$;
-    }
+    var _parseArguments = this.parseArguments(args),
+        _parseArguments2 = slicedToArray(_parseArguments, 2),
+        _parseArguments2$ = _parseArguments2[0],
+        element = _parseArguments2$ === undefined ? null : _parseArguments2$,
+        _parseArguments2$2 = _parseArguments2[1],
+        options = _parseArguments2$2 === undefined ? {} : _parseArguments2$2;
 
     if (element) {
       var text = element.innerHTML.trim();
@@ -219,7 +210,6 @@ var autotyper = {
       this.settings = _extends({}, DEFAULTS, text && { text: text }, dataOptions, options);
       this.originalText = text;
     } else {
-      this.element = element;
       this.settings = _extends({}, DEFAULTS, options);
       this.originalText = this.settings.text;
     }
@@ -227,6 +217,8 @@ var autotyper = {
     this.settings.loopInterval = this.settings.loopInterval || this.settings.interval;
 
     this.isRunning = false;
+
+    this.emit(INIT);
 
     if (this.settings.autoStart === true) {
       this.start();
@@ -240,9 +232,21 @@ var autotyper = {
       }
     }
 
-    this.emit(INIT);
-
     return this;
+  },
+  parseArguments: function parseArguments(args) {
+    if (args.length === 0) {
+      return args;
+    }
+
+    var _args = slicedToArray(args, 1),
+        firstArg = _args[0];
+
+    if (firstArg instanceof HTMLElement) {
+      return args;
+    }
+
+    return [null, firstArg];
   },
   start: function start() {
     if (this.isRunning) {

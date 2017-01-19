@@ -7,9 +7,66 @@ define([ "autotyper", "jquery" ], function(autotyper, jQuery) {
   } : function(obj) {
     return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
   };
+  var _extends = Object.assign || function(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  var slicedToArray = function() {
+    function sliceIterator(arr, i) {
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+      var _e = undefined;
+      try {
+        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i["return"]) _i["return"]();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+      return _arr;
+    }
+    return function(arr, i) {
+      if (Array.isArray(arr)) {
+        return arr;
+      } else if (Symbol.iterator in Object(arr)) {
+        return sliceIterator(arr, i);
+      } else {
+        throw new TypeError("Invalid attempt to destructure non-iterable instance");
+      }
+    };
+  }();
   var DESTROY = autotyper.EVENTS.DESTROY;
   var EVENT_NAMES = Object.keys(autotyper.EVENTS).map(function(name) {
     return autotyper.EVENTS[name];
+  });
+  var jAutotyper = Object.create(autotyper__default);
+  _extends(jAutotyper, {
+    parseArguments: function parseArguments(args) {
+      var _args = slicedToArray(args, 2), firstArg = _args[0], secondArg = _args[1];
+      if (args.length === 0) {
+        return args;
+      }
+      if (firstArg instanceof jQuery) {
+        return [ firstArg[0], secondArg ];
+      }
+      return [ null, secondArg ];
+    }
   });
   jQuery.fn.autotyper = function plugin() {
     var _this = this;
@@ -20,46 +77,46 @@ define([ "autotyper", "jquery" ], function(autotyper, jQuery) {
     if (this.length === 0) {
       return this;
     }
-    if (typeof arg === "undefined" || (typeof arg === "undefined" ? "undefined" : _typeof(arg)) === "object") {
-      (function() {
-        var options = arg;
-        _this.each(function init() {
-          var $this = jQuery(this);
-          var instance = Object.create(autotyper__default);
-          $this.data(autotyper.NAME, instance);
-          EVENT_NAMES.forEach(function(event) {
-            instance.on(event, function() {
-              for (var _len2 = arguments.length, eventArgs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                eventArgs[_key2] = arguments[_key2];
-              }
-              $this.trigger.apply($this, [ autotyper.NAME + ":" + event ].concat(eventArgs));
-            });
-          });
-          instance.on(DESTROY, function() {
-            instance.off(DESTROY);
-            $this.off(autotyper.NAME);
-          });
-          instance.init(this, options);
-        });
-      })();
-    } else if (typeof arg === "string") {
-      (function() {
+    if (typeof arg === "string") {
+      var _ret = function() {
         var functionName = arg;
         _this.each(function callFunction() {
           var $this = jQuery(this);
           var instance = $this.data(autotyper.NAME);
           if ((typeof instance === "undefined" ? "undefined" : _typeof(instance)) === "object" && typeof instance[functionName] === "function") {
             instance[functionName](functionArgs);
-            if (functionName === autotyper__default.destroy.name) {
-              jQuery.removeData(this, autotyper.NAME);
-            }
           }
         });
-      })();
+        return {
+          v: _this
+        };
+      }();
+      if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
     }
+    var options = arg;
+    this.each(function init() {
+      var $this = jQuery(this);
+      var instance = Object.create(jAutotyper);
+      $this.data(autotyper.NAME, instance);
+      EVENT_NAMES.forEach(function(event) {
+        instance.on(event, function() {
+          for (var _len2 = arguments.length, eventArgs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            eventArgs[_key2] = arguments[_key2];
+          }
+          $this.trigger.apply($this, [ autotyper.NAME + "." + event ].concat(eventArgs));
+          if (event === DESTROY) {
+            $this.off(autotyper.NAME);
+            jQuery.removeData($this[0], autotyper.NAME);
+          }
+        });
+      });
+      instance.init($this, options);
+    });
     return this;
   };
-  jQuery.autotyper = autotyper__default;
+  jQuery.autotyper = function(options) {
+    return Object.create(jAutotyper).init(options);
+  };
   jQuery.extend(jQuery.autotyper, {
     DEFAULTS: autotyper.DEFAULTS,
     EVENTS: autotyper.EVENTS,
