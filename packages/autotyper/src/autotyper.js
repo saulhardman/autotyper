@@ -40,20 +40,10 @@ const DEFAULTS = {
 
 const autotyper = {
   init(...args) {
-    let element;
-    let options;
-
-    if (process.env.NODE_ENV === 'test') {
-      if (args[0] instanceof window.HTMLElement) {
-        [element, options = {}] = args;
-      } else {
-        [options = {}] = args;
-      }
-    } else if (args[0] instanceof HTMLElement) {
-      [element, options = {}] = args;
-    } else {
-      [options = {}] = args;
-    }
+    const [
+      element = null,
+      options = {},
+    ] = this.parseArguments(args);
 
     if (element) {
       const text = element.innerHTML.trim();
@@ -93,6 +83,27 @@ const autotyper = {
     }
 
     return this;
+  },
+  parseArguments(args) {
+    if (args.length === 0) {
+      return args;
+    }
+
+    const [firstArg] = args;
+
+    if (process.env.NODE_ENV === 'test') {
+      if (firstArg instanceof window.HTMLElement) {
+        return args;
+      }
+
+      return [null, firstArg];
+    }
+
+    if (firstArg instanceof HTMLElement) {
+      return args;
+    }
+
+    return [null, firstArg];
   },
   start() {
     if (this.isRunning) {
