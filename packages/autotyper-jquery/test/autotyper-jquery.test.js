@@ -58,7 +58,7 @@ test('it proxies events to jQuery', (t) => {
   t.plan(EVENT_NAMES.length);
 
   EVENT_NAMES.forEach((event) => {
-    element.one(`${NAME}:${event}`, () => t.pass());
+    element.one(`${NAME}.${event}`, () => t.pass());
   });
 
   element.autotyper(options);

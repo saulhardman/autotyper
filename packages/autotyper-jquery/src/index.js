@@ -59,7 +59,7 @@ jQuery.fn.autotyper = function plugin(...args) {
 
     EVENT_NAMES.forEach((event) => {
       instance.on(event, (...eventArgs) => {
-        $this.trigger(`${NAME}:${event}`, ...eventArgs);
+        $this.trigger(`${NAME}.${event}`, ...eventArgs);
 
         if (event === DESTROY) {
           $this.off(NAME);
