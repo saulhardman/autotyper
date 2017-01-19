@@ -32,7 +32,7 @@ $example.autotyper({
   autoStart: false,
 });
 
-$example.on('autotyper:type', (e, text) => {
+$example.on('autotyper.type', (e, text) => {
   // do something with `text`
 });
 
