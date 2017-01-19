@@ -4,13 +4,13 @@
 
 [![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper) [![Dependency Status: devDependencies](https://david-dm.org/saulhardman/autotyper/dev-status.svg)](https://david-dm.org/saulhardman/autotyper/?type=dev) [![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
 
-- ⚖ Has a file size of 2.03 kB, minified and gzipped.
+- ⚖ Has a file size of 2.08 kB, minified and gzipped.
 - 🔎 Text can be read directly from an element (SEO friendly).
 - 🔧 Can be used with or without an `HTMLElement`.
 - ⚙ Provides configurable [options](#options).
 - 📡 Emits [events](#events) for triggering custom functionality.
-- 💵 Available as a standalone [jQuery plugin](tree/master/packages/autotyper-jquery).
 - 🤖 Has good test coverage.
+- 💵 Available as a standalone [jQuery plugin](tree/master/packages/autotyper-jquery).
 
 See it in action on [CodePen](https://codepen.io/collection/Drkmyk)!
 
