@@ -42,7 +42,6 @@
     "build": "cross-env NODE_ENV=production node scripts/build.js",
     "commit": "node scripts/commit.js",
     "version": "lerna publish --skip-git --skip-npm --force-publish=*",
-    "publish": "lerna exec -- npm publish",
     "release": "npm-run-all build test version build commit"
   },
   "babel": {
