@@ -12,7 +12,7 @@ var Emitter = _interopDefault(require("component-emitter"));
 
 var name = "autotyper";
 
-var version = "0.13.2";
+var version = "0.13.3";
 
 function upperCaseFirstLetter(string) {
   return "" + string.substring(0, 1).toUpperCase() + string.substring(1);

@@ -2,7 +2,7 @@ define([ "exports", "component-emitter" ], function(exports, Emitter) {
   "use strict";
   Emitter = "default" in Emitter ? Emitter["default"] : Emitter;
   var name = "autotyper";
-  var version = "0.13.2";
+  var version = "0.13.3";
   function upperCaseFirstLetter(string) {
     return "" + string.substring(0, 1).toUpperCase() + string.substring(1);
   }
