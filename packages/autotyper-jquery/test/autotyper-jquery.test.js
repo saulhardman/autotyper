@@ -87,3 +87,28 @@ test('it can call functions via the jQuery plugin', (t) => {
 test('it works without an element', (t) => {
   t.deepEqual(jQuery.autotyper().settings, DEFAULTS);
 });
+
+test('instance no longer accessible after `destroy()`', (t) => {
+  const { element } = t.context;
+
+  element.autotyper();
+
+  element.autotyper('destroy');
+
+  t.is(element.data('autotyper'), undefined);
+});
+
+test('jQuery event listeners are removed on `destroy()`', (t) => {
+  const { element } = t.context;
+  const event = `${NAME}.start`;
+
+  element.autotyper();
+
+  element.on(event, () => t.fail());
+
+  element.autotyper('destroy');
+
+  element.trigger(event);
+
+  t.pass();
+});
