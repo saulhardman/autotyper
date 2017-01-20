@@ -8,11 +8,6 @@ const EVENT_NAMES = Object.keys(EVENTS).map(event => EVENTS[event]);
 const { DESTROY, STOP } = EVENTS;
 const ASYNC_TIMEOUT = 5000;
 
-// replicate default `loopInterval` assignment from `init()`
-Object.assign(DEFAULTS, {
-  loopInterval: DEFAULTS.interval,
-});
-
 test.beforeEach((t) => {
   const text = 'Example text.';
 

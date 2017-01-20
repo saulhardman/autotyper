@@ -34,7 +34,7 @@ const DEFAULTS = {
   interval: [200, 300],
   autoStart: true,
   loop: false,
-  // loopInterval: DEFAULTS.interval,
+  loopInterval: 0,
   emptyText: '\u00A0',
 };
 
@@ -65,8 +65,6 @@ const autotyper = {
       this.settings = Object.assign({}, DEFAULTS, options);
       this.originalText = this.settings.text;
     }
-
-    this.settings.loopInterval = this.settings.loopInterval || this.settings.interval;
 
     this.isRunning = false;
 
