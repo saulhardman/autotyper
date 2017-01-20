@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.13.3";
+var version = "0.13.4";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
@@ -183,11 +183,11 @@ var DEFAULTS = {
   interval: [200, 300],
   autoStart: true,
   loop: false,
-  // loopInterval: DEFAULTS.interval,
+  loopInterval: 0,
   emptyText: '\xA0'
 };
 
-var autotyper = {
+var autotyper = _extends(new Emitter(), {
   init: function init() {
     var _this = this;
 
@@ -213,8 +213,6 @@ var autotyper = {
       this.settings = _extends({}, DEFAULTS, options);
       this.originalText = this.settings.text;
     }
-
-    this.settings.loopInterval = this.settings.loopInterval || this.settings.interval;
 
     this.isRunning = false;
 
@@ -344,10 +342,6 @@ var autotyper = {
 
     clearTimeout(this.timeout);
 
-    if (duration === 0) {
-      return this.type();
-    }
-
     this.timeout = setTimeout(function () {
       return _this2.type();
     }, duration);
@@ -370,8 +364,6 @@ var autotyper = {
 
     return this;
   }
-};
-
-Emitter(autotyper);
+});
 
 export { DATA_ATTRIBUTES, DEFAULTS, EVENTS, name as NAME, version as VERSION };export default autotyper;

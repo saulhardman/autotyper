@@ -12,7 +12,7 @@ var Emitter = _interopDefault(require("component-emitter"));
 
 var name = "autotyper";
 
-var version = "0.13.3";
+var version = "0.13.4";
 
 function upperCaseFirstLetter(string) {
   return "" + string.substring(0, 1).toUpperCase() + string.substring(1);
@@ -153,10 +153,11 @@ var DEFAULTS = {
   interval: [ 200, 300 ],
   autoStart: true,
   loop: false,
+  loopInterval: 0,
   emptyText: " "
 };
 
-var autotyper = {
+var autotyper = _extends(new Emitter(), {
   init: function init() {
     var _this = this;
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -175,7 +176,6 @@ var autotyper = {
       this.settings = _extends({}, DEFAULTS, options);
       this.originalText = this.settings.text;
     }
-    this.settings.loopInterval = this.settings.loopInterval || this.settings.interval;
     this.isRunning = false;
     this.emit(INIT);
     if (this.settings.autoStart === true) {
@@ -268,9 +268,6 @@ var autotyper = {
   tick: function tick(duration) {
     var _this2 = this;
     clearTimeout(this.timeout);
-    if (duration === 0) {
-      return this.type();
-    }
     this.timeout = setTimeout(function() {
       return _this2.type();
     }, duration);
@@ -287,9 +284,7 @@ var autotyper = {
     this.emit(LOOP, this.loopCount);
     return this;
   }
-};
-
-Emitter(autotyper);
+});
 
 exports["default"] = autotyper;
 
