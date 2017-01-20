@@ -46,8 +46,15 @@
       <script src="<%= packageName %>.js"></script>
     <% }) %>
 
+    <script>
+      /* eslint-disable no-console */
+
+      const autotyper = window.autotyper.default;
+    </script>
+
     <script data-id="example-1">
-      (function () {
+
+      (function example1() {
         const example = Object.create(autotyper);
 
         example.init(document.getElementById('js-example-1'));
@@ -57,17 +64,17 @@
     </script>
 
     <script data-id="example-2">
-      (function () {
+      (function example2() {
         const example = Object.create(autotyper);
 
         example.init(document.getElementById('js-example-2'), { loop: 1 });
 
-        example.on('loop', (loopCount) => console.log('loopCount: ', loopCount));
+        example.on('loop', loopCount => console.log('loopCount: ', loopCount));
       }());
     </script>
 
     <script data-id="example-3">
-      (function () {
+      (function example3() {
         const example = Object.create(autotyper);
         const element = document.getElementById('js-example-3');
         const text = element.innerHTML;
@@ -83,7 +90,7 @@
     </script>
 
     <script data-id="example-4">
-      (function () {
+      (function example4() {
         const example = Object.create(autotyper);
 
         example.on('type', () => console.log(example.text));
@@ -94,19 +101,19 @@
 
     <script data-id="example-5">
       // jQuery Plugin
-      (function ($) {
+      (function example5($) {
         $('.js-example-5').autotyper({
           text: 'This is the jQuery Plugin in action!',
           interval: [50, 100],
         });
 
-        $('.js-example-5').on('autotyper:start', function () {
+        $('.js-example-5').on('autotyper:start', function onStart() {
           const example = $(this).data('autotyper');
 
           console.log('jQuery instance started!', example);
         });
 
-        $('.js-example-5').on('autotyper:type', function (e, text) {
+        $('.js-example-5').on('autotyper:type', (e, text) => {
           console.log('jQuery instance is typing!', text);
         });
 
@@ -116,10 +123,6 @@
 
         setTimeout(() => $('.js-example-5').autotyper('destroy'), 2000);
       }(window.$ || window.jQuery));
-    </script>
-
-    <script>
-      console.log($.autotyper);
     </script>
   </body>
 </html>
