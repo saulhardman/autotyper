@@ -38,7 +38,7 @@ const DEFAULTS = {
   emptyText: '\u00A0',
 };
 
-const autotyper = {
+const autotyper = Object.assign(new Emitter(), {
   init(...args) {
     const [
       element = null,
@@ -217,9 +217,7 @@ const autotyper = {
 
     return this;
   },
-};
-
-Emitter(autotyper);
+});
 
 export {
   autotyper as default,
