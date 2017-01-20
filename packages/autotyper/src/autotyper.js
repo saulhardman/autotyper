@@ -197,10 +197,6 @@ const autotyper = {
   tick(duration) {
     clearTimeout(this.timeout);
 
-    if (duration === 0) {
-      return this.type();
-    }
-
     this.timeout = setTimeout(() => this.type(), duration);
 
     return this;
