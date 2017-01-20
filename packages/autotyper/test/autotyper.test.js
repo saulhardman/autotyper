@@ -1,24 +1,51 @@
 import test from 'ava';
 
-import autotyper, { DEFAULTS, EVENTS } from '../src/autotyper';
+import autotyper, { DEFAULTS, EVENTS, NAME } from '../src/autotyper';
 import objectToDataAttributes from './helpers/object-to-data-attributes';
-import { name as packageName } from '../package.json';
 
 const EVENT_NAMES = Object.keys(EVENTS).map(name => EVENTS[name]);
-const { INIT } = EVENTS;
+const { DESTROY, STOP } = EVENTS;
+const ASYNC_TIMEOUT = 10000;
 
 // replicate default `loopInterval` assignment from `init()`
 Object.assign(DEFAULTS, {
   loopInterval: DEFAULTS.interval,
 });
 
-test('it sets default options correctly', (t) => {
-  autotyper.init();
+test.beforeEach((t) => {
+  const instance = Object.create(autotyper);
 
-  t.deepEqual(autotyper.settings, DEFAULTS);
+  document.body.innerHTML = `
+    <p id="js-example"></p>
+  `;
+
+  const element = document.getElementById('js-example');
+
+  Object.assign(t.context, {
+    instance,
+    element,
+  });
+});
+
+test.afterEach((t) => {
+  const { context: { instance } } = t;
+
+  instance.destroy();
+
+  document.body.innerHTML = '';
+});
+
+test('it sets default options correctly', (t) => {
+  const { context: { instance } } = t;
+
+  instance.init();
+
+  t.deepEqual(instance.settings, DEFAULTS);
 });
 
 test('it sets options correctly', (t) => {
+  const { context: { instance } } = t;
+
   const options = {
     text: 'Example text.',
     interval: 200,
@@ -28,165 +55,156 @@ test('it sets options correctly', (t) => {
     emptyText: '',
   };
 
-  autotyper.init(options);
+  instance.init(options);
 
-  t.deepEqual(autotyper.settings, options);
+  t.deepEqual(instance.settings, options);
 });
 
 test('it works with an element', (t) => {
-  document.body.innerHTML = `
-    <p id="js-example"></p>
-  `;
+  const { context: { instance, element } } = t;
 
-  autotyper.init(document.getElementById('js-example'));
+  instance.init(element);
 
-  t.deepEqual(autotyper.settings, DEFAULTS);
+  t.deepEqual(instance.settings, DEFAULTS);
 });
 
 test('it sets `text` to the HTML content of an element', (t) => {
+  const { context: { instance, element } } = t;
   const text = 'Example text.';
 
-  document.body.innerHTML = `
-    <p id="js-example">${text}</p>
-  `;
+  element.innerHTML = text;
 
-  autotyper.init(document.getElementById('js-example'));
+  instance.init(element);
 
-  t.is(autotyper.settings.text, text);
+  t.is(instance.settings.text, text);
 });
 
 test('it receives an options object via a single HTML data attribute', (t) => {
+  const { context: { instance } } = t;
+
   const text = 'This text will not be used.';
 
   document.body.innerHTML = `
-    <p id="js-example" data-${packageName}-options='${JSON.stringify(DEFAULTS)}'>${text}</p>
+    <p id="js-example" data-${NAME}-options='${JSON.stringify(DEFAULTS)}'>${text}</p>
   `;
 
-  autotyper.init(document.getElementById('js-example'));
+  const element = document.getElementById('js-example');
 
-  t.deepEqual(autotyper.settings, DEFAULTS);
+  instance.init(element);
+
+  t.deepEqual(instance.settings, DEFAULTS);
 });
 
 test('it receives individual options via HTML data attributes', (t) => {
+  const { context: { instance } } = t;
+
   const text = 'This text will not be used.';
 
   document.body.innerHTML = `
-    <p id="js-example" ${objectToDataAttributes(DEFAULTS, packageName)}>${text}</p>
+    <p id="js-example" ${objectToDataAttributes(DEFAULTS, NAME)}>${text}</p>
   `;
 
-  autotyper.init(document.getElementById('js-example'));
+  const element = document.getElementById('js-example');
 
-  t.deepEqual(autotyper.settings, DEFAULTS);
+  instance.init(element);
+
+  t.deepEqual(instance.settings, DEFAULTS);
 });
 
 test('it removes all event listeners on `destroy()`', (t) => {
+  const { context: { instance } } = t;
+
   const callback = () => {};
 
   t.plan(EVENT_NAMES.length);
 
-  document.body.innerHTML = `
-    <p id="js-example"></p>
-  `;
+  instance.init();
 
-  autotyper.init(document.getElementById('js-example'));
+  EVENT_NAMES.forEach(event => instance.on(event, callback));
 
-  EVENT_NAMES.forEach(event => autotyper.on(event, callback));
+  instance.destroy();
 
-  autotyper.destroy();
-
-  EVENT_NAMES.forEach(event => t.false(autotyper.hasListeners(event)));
+  EVENT_NAMES.forEach(event => t.false(instance.hasListeners(event)));
 });
 
-test('emits events via `emit()`', (t) => {
+test('it emits events', (t) => {
+  const { context: { instance } } = t;
+
   t.plan(EVENT_NAMES.length);
 
-  document.body.innerHTML = `
-    <p id="js-example"></p>
-  `;
+  instance.init();
 
-  autotyper.init(document.getElementById('js-example'));
+  EVENT_NAMES.forEach(event => instance.on(event, () => t.pass()));
 
-  EVENT_NAMES.forEach(event => autotyper.on(event, () => t.pass()));
-
-  EVENT_NAMES.forEach(event => autotyper.emit(event));
+  EVENT_NAMES.forEach(event => instance.emit(event));
 });
 
 test('it emits events from respective functions', (t) => {
-  const autoStart = false;
-  const loop = true;
-  const options = { autoStart, loop };
+  const { context: { instance } } = t;
+  const options = { loop: 1, interval: 50 };
 
   t.plan(EVENT_NAMES.length);
 
-  document.body.innerHTML = `
-    <p id="js-example"></p>
-  `;
-
-  const element = document.getElementById('js-example');
-
   EVENT_NAMES.forEach((event) => {
-    let args = [];
-
-    autotyper.on(event, () => {
-      autotyper.off(event);
+    instance.on(event, () => {
+      instance.off(event);
 
       t.pass();
     });
+  });
 
-    if (event === INIT) {
-      args = [element, options];
-    }
+  instance.on(STOP, () => instance.destroy());
 
-    autotyper[event](...args);
+  instance.init(options);
+
+  return new Promise((resolve, reject) => {
+    instance.on(DESTROY, resolve);
+
+    setTimeout(reject, ASYNC_TIMEOUT);
   });
 });
 
 test('it sets `originalText` to `element.innerHTML`', (t) => {
+  const { context: { instance, element } } = t;
   const text = 'Example text.';
 
-  document.body.innerHTML = `
-    <p id="js-example">${text}</p>
-  `;
+  element.innerHTML = text;
 
-  const element = document.getElementById('js-example');
+  instance.init(element);
 
-  autotyper.init(element);
-
-  t.is(autotyper.originalText, text);
+  t.is(instance.originalText, text);
 });
 
 test('it sets `settings.text` to default value if undefined and HTML element is empty', (t) => {
-  document.body.innerHTML = `
-    <p id="js-example"></p>
-  `;
+  const { context: { instance, element } } = t;
 
-  const element = document.getElementById('js-example');
+  element.innerHTML = '';
 
-  autotyper.init(element);
+  instance.init(element);
 
-  t.is(autotyper.settings.text, DEFAULTS.text);
+  t.is(instance.settings.text, DEFAULTS.text);
 });
 
 test('it returns HTML element to original state on `resetText()` and `destroy()`', (t) => {
+  const { context: { instance, element } } = t;
   const text = 'Example text.';
-  const interval = 50;
+  const options = {
+    text: 'This is some text.',
+    interval: 50,
+  };
 
   t.plan(2);
 
+  element.innerHTML = text;
+
+  instance.init(element, options);
+
+  t.is(instance.settings.text, options.text);
+
   return new Promise((resolve) => {
-    document.body.innerHTML = `
-      <p id="js-example">${text}</p>
-    `;
-
-    const element = document.getElementById('js-example');
-
-    autotyper.init(element, { interval });
-
     setTimeout(() => {
-      t.not(autotyper.text, text);
-
-      autotyper.resetText()
-               .destroy();
+      instance.resetText()
+              .destroy();
 
       t.is(element.innerHTML, text);
 

@@ -28,7 +28,8 @@ test.beforeEach((t) => {
 test.afterEach((t) => {
   const { element } = t.context;
 
-  element.autotyper('destroy');
+  element.autotyper('destroy')
+         .remove();
 });
 
 test('autotyper extends jQuery', (t) => {
