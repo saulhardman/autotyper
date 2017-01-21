@@ -4,7 +4,7 @@
 
 [![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper) [![Dependency Status: devDependencies](https://david-dm.org/saulhardman/autotyper/dev-status.svg)](https://david-dm.org/saulhardman/autotyper/?type=dev) [![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
 
-[[https://github.com/saulhardman/autotyper/blob/master/media/terminal.gif|alt=autotyper%20terminal%20example]]
+![autotyper terminal example](https://github.com/saulhardman/autotyper/blob/master/media/terminal.gif)
 
 - ⚖ Has a file size of 2.06 kB, minified and gzipped.
 - 🔎 Text can be read directly from an element (SEO friendly).
