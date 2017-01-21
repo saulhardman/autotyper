@@ -42,8 +42,8 @@
     "test": "eslint . && cross-env NODE_ENV=test ava",
     "build": "cross-env NODE_ENV=production node scripts/build.js",
     "commit": "node scripts/commit.js",
-    "version": "lerna publish --skip-git --skip-npm --force-publish=*",
-    "release": "npm-run-all build test version build commit"
+    "lerna-version": "lerna publish --skip-git --skip-npm --force-publish=*",
+    "prepare-release": "npm-run-all build test lerna-version build commit"
   },
   "babel": {
     "presets": [
