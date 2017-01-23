@@ -84,8 +84,4 @@ jQuery.extend(jQuery.autotyper, {
   NAME,
 });
 
-if (process.env.NODE_ENV === 'development') {
-  window.$ = jQuery;
-}
-
 export default autotyper;

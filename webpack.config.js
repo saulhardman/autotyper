@@ -29,6 +29,10 @@ module.exports = {
         include: /src/,
         use: ['babel-loader'],
       },
+      {
+        test: require.resolve('jquery'),
+        loader: 'expose-loader?$!expose-loader?jQuery',
+      },
     ],
   },
   plugins: [
