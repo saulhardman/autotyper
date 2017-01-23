@@ -24,6 +24,7 @@
     "lerna": "^2.0.0-beta.32",
     "lodash.without": "^4.4.0",
     "npm-run-all": "^4.0.0",
+    "nyc": "^10.1.2",
     "pretty-bytes": "^4.0.2",
     "rollup": "^0.41.4",
     "rollup-plugin-babel": "^2.7.1",
@@ -39,7 +40,7 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --inline",
-    "test": "eslint . && cross-env NODE_ENV=test ava",
+    "test": "eslint . && cross-env NODE_ENV=test nyc ava",
     "build": "cross-env NODE_ENV=production node scripts/build.js",
     "commit": "node scripts/commit.js",
     "lerna-version": "lerna publish --skip-git --skip-npm --force-publish=*",
