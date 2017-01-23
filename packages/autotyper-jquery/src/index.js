@@ -84,4 +84,4 @@ jQuery.extend(jQuery.autotyper, {
   VERSION,
 });
 
-export default autotyper;
+export default jAutotyper;
