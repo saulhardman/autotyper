@@ -64,5 +64,10 @@
       "./test/helpers/setup-browser-env.js"
     ],
     "babel": "inherit"
+  },
+  "nyc": {
+    "include": [
+      "packages/**/src/*.js"
+    ]
   }
 }
