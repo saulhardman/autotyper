@@ -75,7 +75,7 @@ jQuery.fn.autotyper = function plugin(...args) {
   return this;
 };
 
-jQuery.autotyper = options => Object.create(jAutotyper).init(options);
+jQuery.autotyper = (...args) => Object.create(jAutotyper).init(...args);
 
 jQuery.extend(jQuery.autotyper, {
   DEFAULTS,
