@@ -11,6 +11,7 @@
     "babel-preset-env": "^1.1.7",
     "browser-env": "^2.0.19",
     "camel-case": "^3.0.0",
+    "coveralls": "^2.11.15",
     "cross-env": "^3.1.4",
     "del": "^2.2.2",
     "eslint": "^3.12.2",
