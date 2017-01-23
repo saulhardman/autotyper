@@ -13,17 +13,17 @@ const jAutotyper = Object.create(autotyper);
 
 jQuery.extend(jAutotyper, {
   parseArguments(args) {
-    const [firstArg, secondArg] = args;
-
     if (args.length === 0) {
       return args;
     }
+
+    const [firstArg, secondArg] = args;
 
     if (firstArg instanceof jQuery) {
       return [firstArg[0], secondArg];
     }
 
-    return [null, secondArg];
+    return [null, firstArg];
   },
 });
 
