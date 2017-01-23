@@ -2,7 +2,7 @@
 
 > ⌨️ A simple, lightweight JavaScript package for automatically typing text.
 
-[![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper) [![Dependency Status: devDependencies](https://david-dm.org/saulhardman/autotyper/dev-status.svg)](https://david-dm.org/saulhardman/autotyper/?type=dev) [![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
+[![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper) [![Coverage Status](https://coveralls.io/repos/github/saulhardman/autotyper/badge.svg?branch=master)](https://coveralls.io/github/saulhardman/autotyper?branch=master) [![Dependency Status: devDependencies](https://david-dm.org/saulhardman/autotyper/dev-status.svg)](https://david-dm.org/saulhardman/autotyper/?type=dev) [![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
 
 - ⚖ Has a file size of 2.06 kB, minified and gzipped.
 - 🔎 Text can be read directly from an element (SEO friendly).
