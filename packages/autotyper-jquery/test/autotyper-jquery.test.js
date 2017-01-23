@@ -40,71 +40,120 @@ test('autotyper extends jQuery', (t) => {
 test('the instance is accessible via jQuery element data', (t) => {
   const { element } = t.context;
 
-  element.autotyper();
-
-  const instance = element.data(NAME);
+  const instance = element.autotyper()
+                          .data(NAME);
 
   t.true(Object.isPrototypeOf.call(autotyper, instance));
 });
 
 test('it proxies events to jQuery', (t) => {
   const { element } = t.context;
-  const options = { loop: 1, interval: 50 };
+  const options = {
+    loop: 1,
+    interval: 50,
+  };
 
   t.plan(EVENT_NAMES.length);
 
-  EVENT_NAMES.forEach((event) => {
-    element.one(`${NAME}.${event}`, () => t.pass());
-  });
-
-  element.autotyper(options);
-
-  const instance = element.data(NAME);
-
-  instance.on(STOP, () => instance.destroy());
+  EVENT_NAMES.forEach(event => element.one(`${NAME}.${event}`, () => t.pass()));
 
   return new Promise((resolve, reject) => {
+    const instance = element.autotyper(options)
+                            .data(NAME);
+
+    instance.on(STOP, () => instance.destroy());
+
     instance.on(DESTROY, resolve);
 
     setTimeout(reject, ASYNC_TIMEOUT);
   });
 });
 
+test('it fails silently when no elements are found', (t) => {
+  try {
+    jQuery('.does-not-exist').autotyper();
+  } catch (e) {
+    t.fail();
+  }
+});
+
+test('it sets the defaults correctly when used with an element', (t) => {
+  document.body.innerHTML = `
+    <p class="js-example"></p>
+  `;
+
+  const element = jQuery(document.querySelector('.js-example'));
+
+  const instance = element.autotyper().data(NAME);
+
+  t.deepEqual(instance.settings, DEFAULTS);
+});
+
+test('it sets the defaults correctly when used without an element', (t) => {
+  const instance = jQuery.autotyper();
+
+  t.deepEqual(instance.settings, DEFAULTS);
+});
+
+test('it sets options correctly when used with an element', (t) => {
+  const { element } = t.context;
+  const options = {
+    text: 'Example text',
+    interval: 100,
+    autoStart: false,
+    loop: true,
+    loopInterval: 100,
+    emptyText: '>',
+  };
+
+  const { settings } = element.autotyper(options).data(NAME);
+
+  t.deepEqual(settings, options);
+});
+
+test('it sets options correctly when used without an element', (t) => {
+  const options = {
+    text: 'Example text',
+    interval: 100,
+    autoStart: false,
+    loop: true,
+    loopInterval: 100,
+    emptyText: '>',
+  };
+
+  const { settings } = jQuery.autotyper(options);
+
+  t.deepEqual(settings, options);
+});
+
 test('it can call functions via the jQuery plugin', (t) => {
   const { element } = t.context;
 
-  element.autotyper();
+  const instance = element.autotyper()
+                          .autotyper('stop')
+                          .data(NAME);
 
-  element.autotyper('stop');
-
-  t.false(element.data('autotyper').isRunning);
-});
-
-test('it works without an element', (t) => {
-  t.deepEqual(jQuery.autotyper().settings, DEFAULTS);
+  t.false(instance.isRunning);
 });
 
 test('instance no longer accessible after `destroy()`', (t) => {
   const { element } = t.context;
 
-  element.autotyper();
+  const instance = element.autotyper()
+                          .autotyper('destroy')
+                          .data(NAME);
 
-  element.autotyper('destroy');
-
-  t.is(element.data('autotyper'), undefined);
+  t.is(instance, undefined);
 });
 
 test('jQuery event listeners are removed on `destroy()`', (t) => {
   const { element } = t.context;
   const event = `${NAME}.start`;
 
-  element.autotyper();
-
-  element.on(event, () => t.fail());
-
-  element.autotyper('destroy');
-
-  element.trigger(event);
+  element.autotyper()
+         .on(event, () => t.fail())
+         .autotyper('destroy')
+         .trigger(event);
 
   t.pass();
 });
