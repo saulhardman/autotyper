@@ -80,8 +80,8 @@ jQuery.autotyper = (...args) => Object.create(jAutotyper).init(...args);
 jQuery.extend(jQuery.autotyper, {
   DEFAULTS,
   EVENTS,
-  VERSION,
   NAME,
+  VERSION,
 });
 
 export default autotyper;
