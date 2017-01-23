@@ -11,7 +11,7 @@ const EVENT_NAMES = Object.keys(EVENTS).map(name => EVENTS[name]);
 
 const jAutotyper = Object.create(autotyper);
 
-Object.assign(jAutotyper, {
+jQuery.extend(jAutotyper, {
   parseArguments(args) {
     const [firstArg, secondArg] = args;
 
