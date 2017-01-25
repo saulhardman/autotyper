@@ -143,6 +143,7 @@ const autotyper = Object.assign(new Emitter(), {
   },
   type() {
     let text;
+    let character;
 
     this.tick(interval(this.settings.interval));
 
@@ -159,16 +160,19 @@ const autotyper = Object.assign(new Emitter(), {
         this.letterCount += 1;
 
         text = this.settings.text.substring(0, this.letterCount);
+        character = this.settings.text.substring(this.letterCount - 1, this.letterCount);
       } else if (typeof this.settings.empty === 'string') {
         text = this.settings.empty;
+        character = this.settings.empty;
       }
     } else {
       text = this.settings.text.substring(0, this.letterCount);
+      character = this.settings.text.substring(this.letterCount - 1, this.letterCount);
     }
 
     this.text = text;
 
-    this.emit(TYPE, text);
+    this.emit(TYPE, text, character);
 
     this.letterCount += 1;
 
