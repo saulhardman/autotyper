@@ -2,16 +2,15 @@
 
 > ⌨️ A simple, lightweight JavaScript package for automatically typing text.
 
-[![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper) [![Dependency Status: devDependencies](https://david-dm.org/saulhardman/autotyper/dev-status.svg)](https://david-dm.org/saulhardman/autotyper/?type=dev) [![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
+[![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper) [![Coverage Status](https://coveralls.io/repos/github/saulhardman/autotyper/badge.svg?branch=master)](https://coveralls.io/github/saulhardman/autotyper?branch=master) [![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
 
 ![autotyper terminal example](https://github.com/saulhardman/autotyper/blob/master/media/terminal.gif)
 
-- ⚖ Has a file size of 2.06 kB, minified and gzipped.
+- ⚖ Has a file size of 2.15 kB, minified and gzipped.
 - 🔎 Text can be read directly from an element (SEO friendly).
 - 🔧 Can be used with or without an `HTMLElement`.
 - ⚙ Provides configurable [options](#options).
 - 📡 Emits [events](#events) for triggering custom functionality.
-- 🤖 Has good test coverage.
 - 💵 Available as a standalone [jQuery plugin](https://github.com/saulhardman/autotyper/tree/master/packages/autotyper-jquery).
 
 See it in action on [CodePen](https://codepen.io/collection/Drkmyk)!
@@ -85,8 +84,8 @@ const defaults = {
   interval: [200, 300],
   autoStart: true,
   loop: false,
-  loopInterval: options.interval,
-  emptyText: '\u00A0',
+  loopInterval: 0,
+  empty: '\u00A0',
 };
 ```
 
@@ -173,9 +172,9 @@ All versions and formats of the module are available via [unpkg](https://unpkg.c
 
 [**`options.loop=false`**] ***(boolean|number)***: Specify whether to loop or the number of times to loop.
 
-[**`options.loopInterval=options.interval`**] ***(number|number[min, max]|function)***: The number of milliseconds between each loop or a min and max number of milliseconds to randomise between or a function that returns a number of milliseconds.
+[**`options.loopInterval=0`**] ***(number|number[min, max]|function)***: The number of milliseconds between each loop or a min and max number of milliseconds to randomise between or a function that returns a number of milliseconds.
 
-[**`options.emptyText='\u00A0'`**] ***(string)***: The string that is set when the text is empty.
+[**`options.empty='\u00A0'`**] ***(string|boolean)***: The first character to type or a boolean specifying whether the first character should be empty.
 
 #### Returns
 
@@ -199,17 +198,19 @@ All versions and formats of the module are available via [unpkg](https://unpkg.c
 
 ***(Object)***: Returns the `autotyper` instance.
 
-### autotyper.setText(text)
-
-#### Arguments
-
-**text** ***(string)***: The text to assign
+### autotyper.reset()
 
 #### Returns
 
-***(Object)***: Returns the `autotyper` instance
+***(Object)***: Returns the `autotyper` instance.
 
-### autotyper.resetText()
+### autotyper.empty()
+
+#### Returns
+
+***(Object)***: Returns the `autotyper` instance.
+
+### autotyper.fill()
 
 #### Returns
 
@@ -223,11 +224,12 @@ All versions and formats of the module are available via [unpkg](https://unpkg.c
 
 ### autotyper#start
 
-### autotyper#type(text)
+### autotyper#type(text, character)
 
 #### Arguments
 
 **text** ***(string)***: The current text value.
+**character** ***(string)***: The character that was typed.
 
 ### autotyper#loop(loopCount)
 
