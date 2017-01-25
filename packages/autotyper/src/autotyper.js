@@ -75,6 +75,8 @@ const autotyper = Object.assign(new Emitter(), {
 
     this.isRunning = false;
 
+    this.reset();
+
     this.emit(INIT);
 
     if (this.settings.autoStart === true) {
@@ -110,15 +112,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return [null, firstArg];
   },
-  start() {
-    if (this.isRunning) {
-      return this;
-    }
-
-    clearTimeout(this.timeout);
-
-    this.isRunning = true;
-
+  reset() {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
@@ -130,13 +124,20 @@ const autotyper = Object.assign(new Emitter(), {
       this.loopCount = 0;
     }
 
+    return this;
+  },
+  start() {
+    if (this.isRunning) {
+      return this;
+    }
+
+    clearTimeout(this.timeout);
+
+    this.isRunning = true;
+
     this.emit(START);
 
     this.type();
-
-    return this;
-  },
-    }
 
     return this;
   },
@@ -213,7 +214,6 @@ const autotyper = Object.assign(new Emitter(), {
 
     this.loopCount += 1;
 
-    this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
     this.emit(LOOP, this.loopCount);
