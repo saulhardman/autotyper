@@ -27,20 +27,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
 
 
 
@@ -107,21 +93,21 @@ var EVENT_NAMES = Object.keys(EVENTS).map(function (name) {
 
 var jAutotyper = Object.create(autotyper);
 
-_extends(jAutotyper, {
+jQuery.extend(jAutotyper, {
   parseArguments: function parseArguments(args) {
-    var _args = slicedToArray(args, 2),
-        firstArg = _args[0],
-        secondArg = _args[1];
-
     if (args.length === 0) {
       return args;
     }
+
+    var _args = slicedToArray(args, 2),
+        firstArg = _args[0],
+        secondArg = _args[1];
 
     if (firstArg instanceof jQuery) {
       return [firstArg[0], secondArg];
     }
 
-    return [null, secondArg];
+    return [null, firstArg];
   }
 });
 
@@ -191,15 +177,17 @@ jQuery.fn.autotyper = function plugin() {
   return this;
 };
 
-jQuery.autotyper = function (options) {
-  return Object.create(jAutotyper).init(options);
+jQuery.autotyper = function () {
+  var _Object$create;
+
+  return (_Object$create = Object.create(jAutotyper)).init.apply(_Object$create, arguments);
 };
 
 jQuery.extend(jQuery.autotyper, {
   DEFAULTS: DEFAULTS,
   EVENTS: EVENTS,
-  VERSION: VERSION,
-  NAME: NAME
+  NAME: NAME,
+  VERSION: VERSION
 });
 
-export default autotyper;
+export default jAutotyper;

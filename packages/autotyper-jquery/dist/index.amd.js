@@ -7,17 +7,6 @@ define([ "autotyper", "jquery" ], function(autotyper, jQuery) {
   } : function(obj) {
     return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
   };
-  var _extends = Object.assign || function(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-    return target;
-  };
   var slicedToArray = function() {
     function sliceIterator(arr, i) {
       var _arr = [];
@@ -56,16 +45,16 @@ define([ "autotyper", "jquery" ], function(autotyper, jQuery) {
     return autotyper.EVENTS[name];
   });
   var jAutotyper = Object.create(autotyper__default);
-  _extends(jAutotyper, {
+  jQuery.extend(jAutotyper, {
     parseArguments: function parseArguments(args) {
-      var _args = slicedToArray(args, 2), firstArg = _args[0], secondArg = _args[1];
       if (args.length === 0) {
         return args;
       }
+      var _args = slicedToArray(args, 2), firstArg = _args[0], secondArg = _args[1];
       if (firstArg instanceof jQuery) {
         return [ firstArg[0], secondArg ];
       }
-      return [ null, secondArg ];
+      return [ null, firstArg ];
     }
   });
   jQuery.fn.autotyper = function plugin() {
@@ -114,14 +103,15 @@ define([ "autotyper", "jquery" ], function(autotyper, jQuery) {
     });
     return this;
   };
-  jQuery.autotyper = function(options) {
-    return Object.create(jAutotyper).init(options);
+  jQuery.autotyper = function() {
+    var _Object$create;
+    return (_Object$create = Object.create(jAutotyper)).init.apply(_Object$create, arguments);
   };
   jQuery.extend(jQuery.autotyper, {
     DEFAULTS: autotyper.DEFAULTS,
     EVENTS: autotyper.EVENTS,
-    VERSION: autotyper.VERSION,
-    NAME: autotyper.NAME
+    NAME: autotyper.NAME,
+    VERSION: autotyper.VERSION
   });
-  return autotyper__default;
+  return jAutotyper;
 });

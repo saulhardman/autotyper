@@ -8,7 +8,7 @@ var name = "autotyper";
 
 
 
-var version = "0.13.4";
+var version = "0.14.0";
 
 function upperCaseFirstLetter(string) {
   // e.g. text => Text
@@ -176,7 +176,7 @@ var EVENTS = {
   DESTROY: DESTROY
 };
 
-var DATA_ATTRIBUTES = ['text', 'interval', 'auto-start', 'loop', 'loop-interval', 'empty-text'];
+var DATA_ATTRIBUTES = ['text', 'interval', 'auto-start', 'loop', 'loop-interval', 'empty'];
 
 var DEFAULTS = {
   text: 'This is the default text.',
@@ -184,7 +184,7 @@ var DEFAULTS = {
   autoStart: true,
   loop: false,
   loopInterval: 0,
-  emptyText: '\xA0'
+  empty: '\xA0'
 };
 
 var autotyper = _extends(new Emitter(), {
@@ -207,14 +207,23 @@ var autotyper = _extends(new Emitter(), {
       var dataOptions = _extends(dataAttributesToObject(element, DATA_ATTRIBUTES, name), JSON.parse(element.getAttribute('data-' + name + '-options')));
 
       this.element = element;
+
       this.settings = _extends({}, DEFAULTS, text && { text: text }, dataOptions, options);
-      this.originalText = text;
+
+      Object.defineProperty(this, 'text', {
+        set: function set$$1(value) {
+          if (this.element) {
+            this.element.innerHTML = value;
+          }
+        }
+      });
     } else {
       this.settings = _extends({}, DEFAULTS, options);
-      this.originalText = this.settings.text;
     }
 
     this.isRunning = false;
+
+    this.reset();
 
     this.emit(INIT);
 
@@ -246,15 +255,7 @@ var autotyper = _extends(new Emitter(), {
 
     return [null, firstArg];
   },
-  start: function start() {
-    if (this.isRunning) {
-      return this;
-    }
-
-    clearTimeout(this.timeout);
-
-    this.isRunning = true;
-
+  reset: function reset() {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
@@ -266,23 +267,26 @@ var autotyper = _extends(new Emitter(), {
       this.loopCount = 0;
     }
 
+    return this;
+  },
+  start: function start() {
+    if (this.isRunning) {
+      return this;
+    }
+
+    clearTimeout(this.timeout);
+
+    this.isRunning = true;
+
     this.emit(START);
 
     this.type();
 
     return this;
   },
-  setText: function setText(text) {
-    this.text = text;
-
-    if (this.element) {
-      this.element.innerHTML = text;
-    }
-
-    return this;
-  },
   type: function type() {
     var text = void 0;
+    var character = void 0;
 
     this.tick(interval(this.settings.interval));
 
@@ -295,14 +299,23 @@ var autotyper = _extends(new Emitter(), {
     }
 
     if (this.letterCount === 0) {
-      text = this.settings.emptyText;
+      if (this.settings.empty === false) {
+        this.letterCount += 1;
+
+        text = this.settings.text.substring(0, this.letterCount);
+        character = this.settings.text.substring(this.letterCount - 1, this.letterCount);
+      } else if (typeof this.settings.empty === 'string') {
+        text = this.settings.empty;
+        character = this.settings.empty;
+      }
     } else {
       text = this.settings.text.substring(0, this.letterCount);
+      character = this.settings.text.substring(this.letterCount - 1, this.letterCount);
     }
 
-    this.setText(text);
+    this.text = text;
 
-    this.emit(TYPE, text);
+    this.emit(TYPE, text, character);
 
     this.letterCount += 1;
 
@@ -318,11 +331,6 @@ var autotyper = _extends(new Emitter(), {
     this.isRunning = false;
 
     this.emit(STOP);
-
-    return this;
-  },
-  resetText: function resetText() {
-    this.setText(this.originalText);
 
     return this;
   },
@@ -357,10 +365,39 @@ var autotyper = _extends(new Emitter(), {
 
     this.loopCount += 1;
 
-    this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
 
     this.emit(LOOP, this.loopCount);
+
+    return this;
+  },
+  empty: function empty() {
+    clearTimeout(this.timeout);
+
+    if (typeof this.settings.empty === 'string') {
+      this.text = this.settings.empty;
+    } else {
+      this.text = DEFAULTS.empty;
+    }
+
+    this.letterCount = 0;
+
+    if (this.isRunning) {
+      this.tick(interval(this.settings.interval));
+    }
+
+    return this;
+  },
+  fill: function fill() {
+    clearTimeout(this.timeout);
+
+    this.text = this.settings.text;
+
+    this.letterCount = this.settings.text.length;
+
+    if (this.isRunning) {
+      this.tick(interval(this.settings.interval));
+    }
 
     return this;
   }
