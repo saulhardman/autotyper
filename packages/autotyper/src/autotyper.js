@@ -53,6 +53,7 @@ const autotyper = Object.assign(new Emitter(), {
       );
 
       this.element = element;
+
       this.settings = Object.assign(
         {},
         DEFAULTS,
@@ -60,10 +61,16 @@ const autotyper = Object.assign(new Emitter(), {
         dataOptions,
         options,
       );
-      this.originalText = text;
+
+      Object.defineProperty(this, 'text', {
+        set(value) {
+          if (this.element) {
+            this.element.innerHTML = value;
+          }
+        },
+      });
     } else {
       this.settings = Object.assign({}, DEFAULTS, options);
-      this.originalText = this.settings.text;
     }
 
     this.isRunning = false;
@@ -129,11 +136,6 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
-  setText(text) {
-    this.text = text;
-
-    if (this.element) {
-      this.element.innerHTML = text;
     }
 
     return this;
@@ -163,7 +165,7 @@ const autotyper = Object.assign(new Emitter(), {
       text = this.settings.text.substring(0, this.letterCount);
     }
 
-    this.setText(text);
+    this.text = text;
 
     this.emit(TYPE, text);
 
@@ -181,11 +183,6 @@ const autotyper = Object.assign(new Emitter(), {
     this.isRunning = false;
 
     this.emit(STOP);
-
-    return this;
-  },
-  resetText() {
-    this.setText(this.originalText);
 
     return this;
   },
