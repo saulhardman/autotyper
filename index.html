@@ -24,24 +24,6 @@
     </style>
   </head>
   <body>
-    <p id="js-example-1"
-         data-autotyper-options='{ "autoStart": 2000 }'
-         data-autotyper-interval="[50, 500]"
-         data-autotyper-text='"This is some text being typed out automatically!"'>
-      This also acts as the no-JavaScript fallback.
-    </p>
-
-    <p id="js-example-2"
-       data-autotyper-interval="200"
-       data-autotyper-loop-interval="2000">
-      Looping example.
-    </p>
-
-    <p id="js-example-3">This example passes a function for `interval`.</p>
-
-    <p class="js-example-5" data-autotyper-auto-start="false"></p>
-    <p class="js-example-5" data-autotyper-auto-start="false"></p>
-
     <% htmlWebpackPlugin.options.packageNames.forEach((packageName) => { %>
       <script src="<%= packageName %>.js"></script>
     <% }) %>
@@ -52,8 +34,16 @@
       const autotyper = window.autotyper.default;
     </script>
 
-    <script data-id="example-1">
+    <!-- EXAMPLE 1 -->
 
+    <p id="js-example-1"
+         data-autotyper-options='{ "autoStart": 2000 }'
+         data-autotyper-interval="[50, 500]"
+         data-autotyper-text='"This is some text being typed out automatically!"'>
+      This also acts as the no-JavaScript fallback.
+    </p>
+
+    <script data-id="example-1">
       (function example1() {
         const example = Object.create(autotyper);
 
@@ -62,6 +52,14 @@
         example.on('start', () => console.log('It started!'));
       }());
     </script>
+
+    <!-- EXAMPLE 2 -->
+
+    <p id="js-example-2"
+       data-autotyper-interval="200"
+       data-autotyper-loop-interval="2000">
+      Looping example.
+    </p>
 
     <script data-id="example-2">
       (function example2() {
@@ -72,6 +70,10 @@
         example.on('loop', loopCount => console.log('loopCount: ', loopCount));
       }());
     </script>
+
+    <!-- EXAMPLE 3 -->
+
+    <p id="js-example-3">This example passes a function for `interval`.</p>
 
     <script data-id="example-3">
       (function example3() {
@@ -89,6 +91,8 @@
       }());
     </script>
 
+    <!-- EXAMPLE 4 -->
+
     <script data-id="example-4">
       (function example4() {
         const example = Object.create(autotyper);
@@ -98,6 +102,11 @@
         example.init();
       }());
     </script>
+
+    <!-- EXAMPLE 5 -->
+
+    <p class="js-example-5" data-autotyper-auto-start="false"></p>
+    <p class="js-example-5" data-autotyper-auto-start="false"></p>
 
     <script data-id="example-5">
       // jQuery Plugin
@@ -123,6 +132,56 @@
 
         setTimeout(() => $('.js-example-5').autotyper('destroy'), 2000);
       }(window.$ || window.jQuery));
+    </script>
+
+    <!-- EXAMPLE 6 -->
+
+    <p id="js-example-6"></p>
+
+    <script data-id="example-6">
+      (function example6() {
+        const example = Object.create(autotyper);
+        const element = document.getElementById('js-example-6');
+        const interval = 100;
+        const text = 'This is an example.';
+
+        example.on('type', (t) => {
+          if (t === 'This ') {
+            example.stop();
+
+            setTimeout(() => example.start(), 2000);
+          } else if (t === 'This is an ') {
+            example.stop();
+
+            setTimeout(() => example.reset().start(), 2000);
+
+            example.off('type');
+          }
+        });
+
+        example.init(element, { interval, text });
+      }());
+    </script>
+
+    <!-- EXAMPLE 7 -->
+
+    <p id="js-example-7">This starts and stops on hover.</p>
+
+    <script data-id="example-7">
+      (function example7() {
+        const example = Object.create(autotyper);
+        const element = document.getElementById('js-example-7');
+        const options = {
+          autoStart: false,
+          interval: [50, 150],
+        };
+
+        element.addEventListener('mouseover', () => example.reset().start(), false);
+
+        element.addEventListener('mouseout', () => example.stop().fill(), false);
+
+        example.init(element, options);
+      }());
     </script>
   </body>
 </html>
