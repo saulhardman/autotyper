@@ -26,7 +26,7 @@ const DATA_ATTRIBUTES = [
   'auto-start',
   'loop',
   'loop-interval',
-  'empty-text',
+  'empty',
 ];
 
 const DEFAULTS = {
@@ -35,7 +35,7 @@ const DEFAULTS = {
   autoStart: true,
   loop: false,
   loopInterval: 0,
-  emptyText: '\u00A0',
+  empty: '\u00A0',
 };
 
 const autotyper = Object.assign(new Emitter(), {
@@ -152,7 +152,13 @@ const autotyper = Object.assign(new Emitter(), {
     }
 
     if (this.letterCount === 0) {
-      text = this.settings.emptyText;
+      if (this.settings.empty === false) {
+        this.letterCount += 1;
+
+        text = this.settings.text.substring(0, this.letterCount);
+      } else if (typeof this.settings.empty === 'string') {
+        text = this.settings.empty;
+      }
     } else {
       text = this.settings.text.substring(0, this.letterCount);
     }
