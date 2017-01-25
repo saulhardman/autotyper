@@ -229,6 +229,7 @@ All versions and formats of the module are available via [unpkg](https://unpkg.c
 #### Arguments
 
 **text** ***(string)***: The current text value.
+
 **character** ***(string)***: The character that was typed.
 
 ### autotyper#loop(loopCount)
