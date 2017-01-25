@@ -224,6 +224,36 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+  empty() {
+    clearTimeout(this.timeout);
+
+    if (typeof this.settings.empty === 'string') {
+      this.text = this.settings.empty;
+    } else {
+      this.text = DEFAULTS.empty;
+    }
+
+    this.letterCount = 0;
+
+    if (this.isRunning) {
+      this.tick(interval(this.settings.interval));
+    }
+
+    return this;
+  },
+  fill() {
+    clearTimeout(this.timeout);
+
+    this.text = this.settings.text;
+
+    this.letterCount = this.settings.text.length;
+
+    if (this.isRunning) {
+      this.tick(interval(this.settings.interval));
+    }
+
+    return this;
+  },
 });
 
 export {
