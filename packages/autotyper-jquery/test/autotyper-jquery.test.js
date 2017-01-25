@@ -103,7 +103,7 @@ test('it sets options correctly when used with an element', (t) => {
     autoStart: false,
     loop: true,
     loopInterval: 100,
-    emptyText: '>',
+    empty: '>',
   };
 
   const { settings } = element.autotyper(options).data(NAME);
@@ -118,7 +118,7 @@ test('it sets options correctly when used without an element', (t) => {
     autoStart: false,
     loop: true,
     loopInterval: 100,
-    emptyText: '>',
+    empty: '>',
   };
 
   const { settings } = jQuery.autotyper(options);
