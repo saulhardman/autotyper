@@ -2,7 +2,7 @@
 
 > ⌨️ A simple, lightweight JavaScript package for automatically typing text.
 
-[![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper) [![Coverage Status](https://coveralls.io/repos/github/saulhardman/autotyper/badge.svg?branch=master)](https://coveralls.io/github/saulhardman/autotyper?branch=master) [![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
+[![npm version](https://img.shields.io/npm/v/autotyper.svg)](https://www.npmjs.com/package/autotyper) [![Build Status: Linux](https://travis-ci.org/saulhardman/autotyper.svg?branch=master)](https://travis-ci.org/saulhardman/autotyper) [![Build status: Windows](https://ci.appveyor.com/api/projects/status/s0dcjgnkfe1pikos?svg=true)](https://ci.appveyor.com/project/saulhardman/autotyper) [![Coverage Status](https://coveralls.io/repos/github/saulhardman/autotyper/badge.svg?branch=master)](https://coveralls.io/github/saulhardman/autotyper?branch=master) [![npm downloads](https://img.shields.io/npm/dm/autotyper.svg)](https://www.npmjs.com/package/autotyper)
 
 ![autotyper terminal example](https://raw.githubusercontent.com/saulhardman/autotyper/master/media/terminal.gif)
 
