@@ -9,7 +9,7 @@ For more information see the [core package](https://github.com/saulhardman/autot
 ### Yarn
 
 ```
-yarn add jquery autotyper-query
+yarn add jquery autotyper-jquery
 ```
 
 ### npm
