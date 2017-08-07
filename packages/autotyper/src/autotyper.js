@@ -71,6 +71,14 @@ const autotyper = Object.assign(new Emitter(), {
       });
     } else {
       this.settings = Object.assign({}, DEFAULTS, options);
+
+      if (typeof this.settings.empty === 'string') {
+        this.text = this.settings.empty;
+      } else if (this.settings.empty) {
+        this.text = DEFAULTS.empty;
+      } else {
+        this.text = undefined;
+      }
     }
 
     this.isRunning = false;
