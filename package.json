@@ -55,7 +55,7 @@
     "build": "cross-env NODE_ENV=production rollup -c",
     "commit": "node scripts/commit.js",
     "lerna-version": "lerna version --no-push --force-publish",
-    "lerna-publish": "lerna publish from-git",
+    "lerna-publish": "lerna publish from-package",
     "prepare-release": "npm-run-all test lerna-version build commit",
     "bootstrap": "lerna bootstrap --npm-client=yarn"
   },
