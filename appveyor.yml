@@ -1,16 +1,11 @@
-environment:
-  matrix:
-    - nodejs_version: "6"
-install:
-  - ps: Install-Product node $env:node_version
-  - yarn
-  - yarn bootstrap
+build: off
 matrix:
   fast_finish: true
-build: off
 cache:
   - "%LOCALAPPDATA%\\Yarn"
+install:
+  - ps: Install-Product node 12
+  - yarn
+  - yarn bootstrap
 test_script:
-  - node --version
-  - yarn --version
   - yarn test
