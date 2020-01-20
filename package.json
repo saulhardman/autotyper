@@ -40,7 +40,6 @@
     "rollup-plugin-filesize": "^6.2.1",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-terser": "^5.2.0",
-    "simple-git": "^1.130.0",
     "title-case": "^3.0.2",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
@@ -53,10 +52,10 @@
     "lint:fix": "prettier '**/*.js' --write && yarn lint --fix",
     "test": "yarn lint --quiet && cross-env NODE_ENV=test nyc ava",
     "build": "cross-env NODE_ENV=production rollup -c",
-    "commit": "node scripts/commit.js",
+    "post-build": "git add packages/* && git commit --amend --no-edit",
     "lerna-version": "lerna version --no-push --force-publish",
     "lerna-publish": "lerna publish from-package",
-    "prepare-release": "npm-run-all test lerna-version build commit lerna-publish",
+    "prepare-release": "npm-run-all test lerna-version build post-build lerna-publish",
     "bootstrap": "lerna bootstrap --npm-client=yarn"
   },
   "ava": {
