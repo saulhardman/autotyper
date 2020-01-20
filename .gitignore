@@ -8,3 +8,6 @@ package-lock.json
 
 # nyc output
 .nyc_output
+
+# debug
+*.log
