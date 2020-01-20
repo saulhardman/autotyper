@@ -56,7 +56,7 @@
     "commit": "node scripts/commit.js",
     "lerna-version": "lerna publish --skip-git --skip-npm --force-publish=*",
     "prepare-release": "npm-run-all build test lerna-version build commit",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap --npm-client=yarn"
   },
   "ava": {
     "babel": {
