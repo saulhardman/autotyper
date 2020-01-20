@@ -1,13 +1,14 @@
 import test from 'ava';
 
 import autotyper, { DEFAULTS, EVENTS, NAME } from '../src/autotyper';
+
 import objectToDataAttributes from './helpers/object-to-data-attributes';
 
 const EVENT_NAMES = Object.keys(EVENTS).map(name => EVENTS[name]);
 const { DESTROY, LOOP, START, STOP, TYPE } = EVENTS;
 const ASYNC_TIMEOUT = 10000;
 
-test.beforeEach((t) => {
+test.beforeEach(t => {
   const instance = Object.create(autotyper);
 
   document.body.innerHTML = `
@@ -22,24 +23,30 @@ test.beforeEach((t) => {
   });
 });
 
-test.afterEach((t) => {
-  const { context: { instance } } = t;
+test.afterEach(t => {
+  const {
+    context: { instance },
+  } = t;
 
   instance.destroy();
 
   document.body.innerHTML = '';
 });
 
-test('it sets default options correctly', (t) => {
-  const { context: { instance } } = t;
+test('it sets default options correctly', t => {
+  const {
+    context: { instance },
+  } = t;
 
   instance.init();
 
   t.deepEqual(instance.settings, DEFAULTS);
 });
 
-test('it sets options correctly', (t) => {
-  const { context: { instance } } = t;
+test('it sets options correctly', t => {
+  const {
+    context: { instance },
+  } = t;
 
   const options = {
     text: 'Example text.',
@@ -55,16 +62,20 @@ test('it sets options correctly', (t) => {
   t.deepEqual(instance.settings, options);
 });
 
-test('it works with an element', (t) => {
-  const { context: { instance, element } } = t;
+test('it works with an element', t => {
+  const {
+    context: { instance, element },
+  } = t;
 
   instance.init(element);
 
   t.deepEqual(instance.settings, DEFAULTS);
 });
 
-test('it sets `text` to the HTML content of an element', (t) => {
-  const { context: { instance, element } } = t;
+test('it sets `text` to the HTML content of an element', t => {
+  const {
+    context: { instance, element },
+  } = t;
   const text = 'Example text.';
 
   element.innerHTML = text;
@@ -74,13 +85,17 @@ test('it sets `text` to the HTML content of an element', (t) => {
   t.is(instance.settings.text, text);
 });
 
-test('it receives an options object via a single HTML data attribute', (t) => {
-  const { context: { instance } } = t;
+test('it receives an options object via a single HTML data attribute', t => {
+  const {
+    context: { instance },
+  } = t;
 
   const text = 'This text will not be used.';
 
   document.body.innerHTML = `
-    <p id="js-example" data-${NAME}-options='${JSON.stringify(DEFAULTS)}'>${text}</p>
+    <p id="js-example" data-${NAME}-options='${JSON.stringify(
+    DEFAULTS,
+  )}'>${text}</p>
   `;
 
   const element = document.getElementById('js-example');
@@ -90,8 +105,10 @@ test('it receives an options object via a single HTML data attribute', (t) => {
   t.deepEqual(instance.settings, DEFAULTS);
 });
 
-test('it receives individual options via HTML data attributes', (t) => {
-  const { context: { instance } } = t;
+test('it receives individual options via HTML data attributes', t => {
+  const {
+    context: { instance },
+  } = t;
 
   const text = 'This text will not be used.';
 
@@ -106,8 +123,10 @@ test('it receives individual options via HTML data attributes', (t) => {
   t.deepEqual(instance.settings, DEFAULTS);
 });
 
-test('it removes all event listeners on `destroy()`', (t) => {
-  const { context: { instance } } = t;
+test('it removes all event listeners on `destroy()`', t => {
+  const {
+    context: { instance },
+  } = t;
 
   const callback = () => {};
 
@@ -122,8 +141,10 @@ test('it removes all event listeners on `destroy()`', (t) => {
   EVENT_NAMES.forEach(event => t.false(instance.hasListeners(event)));
 });
 
-test('it emits events', (t) => {
-  const { context: { instance } } = t;
+test('it emits events', t => {
+  const {
+    context: { instance },
+  } = t;
 
   t.plan(EVENT_NAMES.length);
 
@@ -134,14 +155,16 @@ test('it emits events', (t) => {
   EVENT_NAMES.forEach(event => instance.emit(event));
 });
 
-test('it correctly sets the `text` value on `type()`', (t) => {
-  const { context: { instance } } = t;
+test('it correctly sets the `text` value on `type()`', t => {
+  const {
+    context: { instance },
+  } = t;
   const text = 'Example text.';
   let index = 0;
 
   t.plan(text.length + 1);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     instance.on(STOP, resolve);
 
     instance.on(TYPE, () => {
@@ -158,15 +181,17 @@ test('it correctly sets the `text` value on `type()`', (t) => {
   });
 });
 
-test('it correctly sets the `text` value on `type()` when empty is `false`', (t) => {
-  const { context: { instance } } = t;
+test('it correctly sets the `text` value on `type()` when empty is `false`', t => {
+  const {
+    context: { instance },
+  } = t;
   const text = 'Example text.';
   const empty = false;
   let index = 1;
 
   t.plan(text.length);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     instance.on(STOP, resolve);
 
     instance.on(TYPE, () => {
@@ -179,13 +204,15 @@ test('it correctly sets the `text` value on `type()` when empty is `false`', (t)
   });
 });
 
-test('it correctly sets the `element.innerHTML` value on `type()`', (t) => {
-  const { context: { instance, element } } = t;
+test('it correctly sets the `element.innerHTML` value on `type()`', t => {
+  const {
+    context: { instance, element },
+  } = t;
   const text = 'Example text.';
 
   t.plan(text.length + 1);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     instance.on(STOP, resolve);
 
     instance.on(TYPE, string => t.is(string, element.textContent));
@@ -194,13 +221,15 @@ test('it correctly sets the `element.innerHTML` value on `type()`', (t) => {
   });
 });
 
-test('it passes the correct `text` parameter when emitting the `TYPE` event', (t) => {
-  const { context: { instance } } = t;
+test('it passes the correct `text` parameter when emitting the `TYPE` event', t => {
+  const {
+    context: { instance },
+  } = t;
   const text = 'Example text.';
 
   t.plan(text.length + 1);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     instance.on(STOP, resolve);
 
     instance.on(TYPE, string => t.is(instance.text, string));
@@ -209,14 +238,16 @@ test('it passes the correct `text` parameter when emitting the `TYPE` event', (t
   });
 });
 
-test('it passes the correct `character` parameter when emitting the `TYPE` event', (t) => {
-  const { context: { instance } } = t;
+test('it passes the correct `character` parameter when emitting the `TYPE` event', t => {
+  const {
+    context: { instance },
+  } = t;
   const text = 'Example text.';
   let index = 0;
 
   t.plan(text.length + 1);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     instance.on(STOP, resolve);
 
     instance.on(TYPE, (string, character) => {
@@ -233,13 +264,15 @@ test('it passes the correct `character` parameter when emitting the `TYPE` event
   });
 });
 
-test('it correctly sets the first character when empty is default', (t) => {
-  const { context: { instance } } = t;
+test('it correctly sets the first character when empty is default', t => {
+  const {
+    context: { instance },
+  } = t;
 
   t.plan(1);
 
-  return new Promise((resolve) => {
-    instance.on(TYPE, (text) => {
+  return new Promise(resolve => {
+    instance.on(TYPE, text => {
       t.is(text, DEFAULTS.empty);
 
       resolve();
@@ -249,14 +282,16 @@ test('it correctly sets the first character when empty is default', (t) => {
   });
 });
 
-test('it correctly sets the first character when empty is not default', (t) => {
-  const { context: { instance } } = t;
+test('it correctly sets the first character when empty is not default', t => {
+  const {
+    context: { instance },
+  } = t;
   const empty = '';
 
   t.plan(1);
 
-  return new Promise((resolve) => {
-    instance.on(TYPE, (text) => {
+  return new Promise(resolve => {
+    instance.on(TYPE, text => {
       t.is(text, empty);
 
       resolve();
@@ -266,13 +301,15 @@ test('it correctly sets the first character when empty is not default', (t) => {
   });
 });
 
-test('it correctly sets the first character when empty is false', (t) => {
-  const { context: { instance } } = t;
+test('it correctly sets the first character when empty is false', t => {
+  const {
+    context: { instance },
+  } = t;
 
   t.plan(1);
 
-  return new Promise((resolve) => {
-    instance.on(TYPE, (text) => {
+  return new Promise(resolve => {
+    instance.on(TYPE, text => {
       t.is(text, DEFAULTS.text.substring(0, 1));
 
       resolve();
@@ -282,55 +319,80 @@ test('it correctly sets the first character when empty is false', (t) => {
   });
 });
 
-test('it starts if `autoStart` is `true`', (t) => {
-  const { context: { instance } } = t;
+test('it starts if `autoStart` is `true`', t => {
+  const {
+    context: { instance },
+  } = t;
   const autoStart = true;
 
-  return new Promise((resolve) => {
-    instance.on(START, () => resolve(true));
+  return new Promise(resolve => {
+    instance.on(START, () => {
+      t.pass();
+
+      resolve();
+    });
 
     instance.init({ autoStart });
   });
 });
 
-test('it starts if `autoStart` is an integer', (t) => {
-  const { context: { instance } } = t;
+test('it starts if `autoStart` is an integer', t => {
+  const {
+    context: { instance },
+  } = t;
   const autoStart = 1000;
 
+  return new Promise(resolve => {
+    instance.on(START, () => {
+      t.pass();
 
-  return new Promise((resolve) => {
-    instance.on(START, () => resolve(true));
+      resolve();
+    });
 
     instance.init({ autoStart });
   });
 });
 
-test('it starts if `autoStart` can be parsed as an integer', (t) => {
-  const { context: { instance } } = t;
+test('it starts if `autoStart` can be parsed as an integer', t => {
+  const {
+    context: { instance },
+  } = t;
   const autoStart = '1000';
 
-  return new Promise((resolve) => {
-    instance.on(START, () => resolve(true));
+  return new Promise(resolve => {
+    instance.on(START, () => {
+      t.pass();
+
+      resolve(true);
+    });
 
     instance.init({ autoStart });
   });
 });
 
-test('it does not start when `autoStart` cannot be parsed as an integer', (t) => {
-  const { context: { instance } } = t;
+test('it does not start when `autoStart` cannot be parsed as an integer', t => {
+  const {
+    context: { instance },
+  } = t;
   const autoStart = 'banana';
 
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(), 500);
+  return new Promise(resolve => {
+    setTimeout(() => {
+      t.pass();
 
-    instance.on(START, () => resolve(false));
+      resolve();
+    }, 500);
+
+    instance.on(START, () => t.fail());
 
     instance.init({ autoStart });
   });
 });
 
-test('it stops after 1 cycle when `loop` is `false`', (t) => {
-  const { context: { instance } } = t;
+test('it stops after 1 cycle when `loop` is `false`', t => {
+  const {
+    context: { instance },
+  } = t;
   const loop = false;
 
   instance.on(LOOP, () => t.fail());
@@ -339,11 +401,13 @@ test('it stops after 1 cycle when `loop` is `false`', (t) => {
 
   instance.init({ loop });
 
-  return new Promise(resolve => instance.on(STOP, () => resolve(true)));
+  return new Promise(resolve => instance.on(STOP, () => resolve()));
 });
 
-test('it loops or stops at the right time', (t) => {
-  const { context: { instance } } = t;
+test('it loops or stops at the right time', t => {
+  const {
+    context: { instance },
+  } = t;
   const autoStart = false;
   const loop = false;
   const text = 'Example text.';
@@ -357,13 +421,15 @@ test('it loops or stops at the right time', (t) => {
   t.false(instance.isRunning);
 });
 
-test('it emits events from respective functions', (t) => {
-  const { context: { instance } } = t;
+test('it emits events from respective functions', t => {
+  const {
+    context: { instance },
+  } = t;
   const options = { loop: 1, interval: 50 };
 
   t.plan(EVENT_NAMES.length);
 
-  EVENT_NAMES.forEach((event) => {
+  EVENT_NAMES.forEach(event => {
     instance.on(event, () => {
       instance.off(event);
 
@@ -382,8 +448,10 @@ test('it emits events from respective functions', (t) => {
   });
 });
 
-test('it sets `settings.text` to default value if undefined and HTML element is empty', (t) => {
-  const { context: { instance, element } } = t;
+test('it sets `settings.text` to default value if undefined and HTML element is empty', t => {
+  const {
+    context: { instance, element },
+  } = t;
 
   element.innerHTML = '';
 
@@ -392,13 +460,15 @@ test('it sets `settings.text` to default value if undefined and HTML element is 
   t.is(instance.settings.text, DEFAULTS.text);
 });
 
-test('it adds text after start', (t) => {
-  const { context: { instance } } = t;
+test('it adds text after start', t => {
+  const {
+    context: { instance },
+  } = t;
   const interval = 50;
 
   t.plan(1);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const text1 = instance.init({ interval }).text;
 
     t.plan(1);
@@ -413,12 +483,14 @@ test('it adds text after start', (t) => {
   });
 });
 
-test('it sets `isRunning` on start', (t) => {
-  const { context: { instance } } = t;
+test('it sets `isRunning` on start', t => {
+  const {
+    context: { instance },
+  } = t;
 
   t.plan(1);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     instance.on(START, () => {
       t.is(instance.isRunning, true);
 
@@ -429,13 +501,15 @@ test('it sets `isRunning` on start', (t) => {
   });
 });
 
-test('it does not add text after stop', (t) => {
-  const { context: { instance } } = t;
+test('it does not add text after stop', t => {
+  const {
+    context: { instance },
+  } = t;
   const interval = 50;
 
   t.plan(1);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     instance.init({ interval });
 
     t.plan(1);
@@ -454,12 +528,14 @@ test('it does not add text after stop', (t) => {
   });
 });
 
-test('it sets `isRunning` on stop', (t) => {
-  const { context: { instance } } = t;
+test('it sets `isRunning` on stop', t => {
+  const {
+    context: { instance },
+  } = t;
 
   t.plan(1);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     instance.on(STOP, () => {
       t.is(instance.isRunning, false);
 
@@ -470,13 +546,15 @@ test('it sets `isRunning` on stop', (t) => {
   });
 });
 
-test('it starts, stops and starts again', (t) => {
-  const { context: { instance } } = t;
+test('it starts, stops and starts again', t => {
+  const {
+    context: { instance },
+  } = t;
   const interval = 50;
 
   t.plan(4);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const startText = instance.init({ interval }).text;
 
     setTimeout(() => {
@@ -503,8 +581,10 @@ test('it starts, stops and starts again', (t) => {
 
 // test('it starts, stops, resets, and starts again');
 
-test('it does nothing when `start()` is called multiple times', (t) => {
-  const { context: { instance } } = t;
+test('it does nothing when `start()` is called multiple times', t => {
+  const {
+    context: { instance },
+  } = t;
   const autoStart = false;
 
   t.plan(1);
@@ -516,8 +596,10 @@ test('it does nothing when `start()` is called multiple times', (t) => {
   instance.start().start();
 });
 
-test('it does nothing when `stop()` is called multiple times', (t) => {
-  const { context: { instance } } = t;
+test('it does nothing when `stop()` is called multiple times', t => {
+  const {
+    context: { instance },
+  } = t;
 
   t.plan(1);
 
@@ -528,8 +610,10 @@ test('it does nothing when `stop()` is called multiple times', (t) => {
   instance.stop().stop();
 });
 
-test('it sets `empty`', (t) => {
-  const { context: { instance } } = t;
+test('it sets `empty`', t => {
+  const {
+    context: { instance },
+  } = t;
   const empty = '';
 
   t.plan(1);
@@ -539,16 +623,23 @@ test('it sets `empty`', (t) => {
   instance.init({ empty });
 });
 
-test('it can empty the text whilst running', (t) => {
-  const { context: { instance } } = t;
+test('it can empty the text whilst running', t => {
+  const {
+    context: { instance },
+  } = t;
 
-  instance.init().empty().stop();
+  instance
+    .init()
+    .empty()
+    .stop();
 
   t.is(instance.text, DEFAULTS.empty);
 });
 
-test('it can empty the text whilst not running', (t) => {
-  const { context: { instance } } = t;
+test('it can empty the text whilst not running', t => {
+  const {
+    context: { instance },
+  } = t;
   const autoStart = false;
 
   instance.init({ autoStart }).empty();
@@ -556,25 +647,37 @@ test('it can empty the text whilst not running', (t) => {
   t.is(instance.text, DEFAULTS.empty);
 });
 
-test('it can empty the text when `empty` is set to false', (t) => {
-  const { context: { instance } } = t;
+test('it can empty the text when `empty` is set to false', t => {
+  const {
+    context: { instance },
+  } = t;
   const empty = false;
 
-  instance.init({ empty }).empty().stop();
+  instance
+    .init({ empty })
+    .empty()
+    .stop();
 
   t.is(instance.text, DEFAULTS.empty);
 });
 
-test('it can fill the text whilst running', (t) => {
-  const { context: { instance } } = t;
+test('it can fill the text whilst running', t => {
+  const {
+    context: { instance },
+  } = t;
 
-  instance.init().fill().stop();
+  instance
+    .init()
+    .fill()
+    .stop();
 
   t.is(instance.text, DEFAULTS.text);
 });
 
-test('it can fill the text whilst not running', (t) => {
-  const { context: { instance } } = t;
+test('it can fill the text whilst not running', t => {
+  const {
+    context: { instance },
+  } = t;
   const autoStart = false;
 
   instance.init({ autoStart }).fill();

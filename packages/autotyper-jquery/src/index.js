@@ -1,9 +1,4 @@
-import autotyper, {
-  DEFAULTS,
-  EVENTS,
-  VERSION,
-  NAME,
-} from 'autotyper';
+import autotyper, { DEFAULTS, EVENTS, VERSION, NAME } from 'autotyper';
 import jQuery from 'jquery';
 
 const { DESTROY } = EVENTS;
@@ -41,7 +36,10 @@ jQuery.fn.autotyper = function plugin(...args) {
       const $this = jQuery(this);
       const instance = $this.data(NAME);
 
-      if (typeof instance === 'object' && typeof instance[functionName] === 'function') {
+      if (
+        typeof instance === 'object' &&
+        typeof instance[functionName] === 'function'
+      ) {
         instance[functionName](functionArgs);
       }
     });
@@ -57,7 +55,7 @@ jQuery.fn.autotyper = function plugin(...args) {
 
     $this.data(NAME, instance);
 
-    EVENT_NAMES.forEach((event) => {
+    EVENT_NAMES.forEach(event => {
       instance.on(event, (...eventArgs) => {
         $this.trigger(`${NAME}.${event}`, ...eventArgs);
 

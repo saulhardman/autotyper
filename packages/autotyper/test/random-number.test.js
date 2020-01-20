@@ -1,7 +1,8 @@
 import test from 'ava';
+
 import randomNumber from '../src/random-number';
 
-test('it works', (t) => {
+test('it works', t => {
   const min = 100;
   const max = 200;
   const result = randomNumber(min, max);
@@ -13,7 +14,7 @@ test('it works', (t) => {
   }
 });
 
-test('it works when min is equal to max', (t) => {
+test('it works when min is equal to max', t => {
   const min = 100;
   const max = 100;
   const result = randomNumber(min, max);
@@ -21,7 +22,7 @@ test('it works when min is equal to max', (t) => {
   t.is(result, 100);
 });
 
-test('it works when min is greater than max', (t) => {
+test('it works when min is greater than max', t => {
   const min = 200;
   const max = 100;
   const result = randomNumber(min, max);

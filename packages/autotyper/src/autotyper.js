@@ -1,8 +1,12 @@
 import Emitter from 'component-emitter';
 
-import { name as NAME, version as VERSION } from '../package.json';
+import { name, version } from '../package.json';
+
 import dataAttributesToObject from './data-attributes-to-object';
 import interval from './interval';
+
+export const NAME = name;
+export const VERSION = version;
 
 const INIT = 'init';
 const START = 'start';
@@ -11,7 +15,7 @@ const LOOP = 'loop';
 const STOP = 'stop';
 const DESTROY = 'destroy';
 
-const EVENTS = {
+export const EVENTS = {
   INIT,
   START,
   TYPE,
@@ -20,7 +24,7 @@ const EVENTS = {
   DESTROY,
 };
 
-const DATA_ATTRIBUTES = [
+export const DATA_ATTRIBUTES = [
   'text',
   'interval',
   'auto-start',
@@ -29,7 +33,7 @@ const DATA_ATTRIBUTES = [
   'empty',
 ];
 
-const DEFAULTS = {
+export const DEFAULTS = {
   text: 'This is the default text.',
   interval: [200, 300],
   autoStart: true,
@@ -38,29 +42,25 @@ const DEFAULTS = {
   empty: '\u00A0',
 };
 
-const autotyper = Object.assign(new Emitter(), {
+export default Emitter({
   init(...args) {
-    const [
-      element = null,
-      options = {},
-    ] = this.parseArguments(args);
+    const [element = null, options = {}] = this.parseArguments(args);
 
     if (element) {
       const text = element.innerHTML.trim();
-      const dataOptions = Object.assign(
-        dataAttributesToObject(element, DATA_ATTRIBUTES, NAME),
-        JSON.parse(element.getAttribute(`data-${NAME}-options`)),
-      );
+      const dataOptions = {
+        ...dataAttributesToObject(element, DATA_ATTRIBUTES, NAME),
+        ...JSON.parse(element.getAttribute(`data-${NAME}-options`)),
+      };
 
       this.element = element;
 
-      this.settings = Object.assign(
-        {},
-        DEFAULTS,
-        (text && { text }),
-        dataOptions,
-        options,
-      );
+      this.settings = {
+        ...DEFAULTS,
+        ...(text ? { text } : {}),
+        ...dataOptions,
+        ...options,
+      };
 
       Object.defineProperty(this, 'text', {
         set(value) {
@@ -68,9 +68,13 @@ const autotyper = Object.assign(new Emitter(), {
             this.element.innerHTML = value;
           }
         },
+
+        get() {
+          return this.text;
+        },
       });
     } else {
-      this.settings = Object.assign({}, DEFAULTS, options);
+      this.settings = { ...DEFAULTS, ...options };
     }
 
     this.isRunning = false;
@@ -91,6 +95,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+
   parseArguments(args) {
     if (args.length === 0) {
       return args;
@@ -112,6 +117,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return [null, firstArg];
   },
+
   reset() {
     this.letterTotal = this.settings.text.length;
     this.letterCount = 0;
@@ -126,6 +132,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+
   start() {
     if (this.isRunning) {
       return this;
@@ -141,6 +148,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+
   type() {
     let text;
     let character;
@@ -160,14 +168,23 @@ const autotyper = Object.assign(new Emitter(), {
         this.letterCount += 1;
 
         text = this.settings.text.substring(0, this.letterCount);
-        character = this.settings.text.substring(this.letterCount - 1, this.letterCount);
+
+        character = this.settings.text.substring(
+          this.letterCount - 1,
+          this.letterCount,
+        );
       } else if (typeof this.settings.empty === 'string') {
         text = this.settings.empty;
+
         character = this.settings.empty;
       }
     } else {
       text = this.settings.text.substring(0, this.letterCount);
-      character = this.settings.text.substring(this.letterCount - 1, this.letterCount);
+
+      character = this.settings.text.substring(
+        this.letterCount - 1,
+        this.letterCount,
+      );
     }
 
     this.text = text;
@@ -178,6 +195,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+
   stop() {
     if (!this.isRunning) {
       return this;
@@ -191,6 +209,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+
   destroy() {
     if (this.isRunning) {
       this.stop();
@@ -202,6 +221,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     this.element = null;
   },
+
   tick(duration) {
     clearTimeout(this.timeout);
 
@@ -209,6 +229,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+
   loop() {
     this.tick(interval(this.settings.loopInterval));
 
@@ -224,6 +245,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+
   empty() {
     clearTimeout(this.timeout);
 
@@ -241,6 +263,7 @@ const autotyper = Object.assign(new Emitter(), {
 
     return this;
   },
+
   fill() {
     clearTimeout(this.timeout);
 
@@ -255,12 +278,3 @@ const autotyper = Object.assign(new Emitter(), {
     return this;
   },
 });
-
-export {
-  autotyper as default,
-  DATA_ATTRIBUTES,
-  DEFAULTS,
-  EVENTS,
-  NAME,
-  VERSION,
-};

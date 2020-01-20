@@ -2,8 +2,9 @@
 .DS_Store
 ._*
 
-# NPM dependencies
+# NPM
 node_modules/
+package-lock.json
 
 # nyc output
 .nyc_output

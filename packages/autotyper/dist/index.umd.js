@@ -1,22 +1,10 @@
 (function(global, factory) {
-  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("component-emitter")) : typeof define === "function" && define.amd ? define([ "exports", "component-emitter" ], factory) : factory(global.autotyper = global.autotyper || {}, global.Emitter);
-})(this, function(exports, Emitter) {
+  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("component-emitter")) : typeof define === "function" && define.amd ? define([ "exports", "component-emitter" ], factory) : (global = global || self, 
+  factory(global.autotyper = {}, global.Emitter));
+})(this, (function(exports, Emitter) {
   "use strict";
-  Emitter = "default" in Emitter ? Emitter["default"] : Emitter;
-  var name = "autotyper";
-  var version = "0.14.2";
-  function upperCaseFirstLetter(string) {
-    return "" + string.substring(0, 1).toUpperCase() + string.substring(1);
-  }
-  function paramCaseToCamelCase(string) {
-    return string.split("-").map(function(s, i) {
-      if (i === 0) {
-        return s;
-      }
-      return upperCaseFirstLetter(s);
-    }).join("");
-  }
-  var defineProperty = function(obj, key, value) {
+  Emitter = Emitter && Emitter.hasOwnProperty("default") ? Emitter["default"] : Emitter;
+  function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
         value: value,
@@ -28,66 +16,97 @@
       obj[key] = value;
     }
     return obj;
-  };
-  var _extends = Object.assign || function(target) {
+  }
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) symbols = symbols.filter((function(sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      }));
+      keys.push.apply(keys, symbols);
+    }
+    return keys;
+  }
+  function _objectSpread2(target) {
     for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
+      var source = arguments[i] != null ? arguments[i] : {};
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach((function(key) {
+          _defineProperty(target, key, source[key]);
+        }));
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach((function(key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        }));
       }
     }
     return target;
-  };
-  var slicedToArray = function() {
-    function sliceIterator(arr, i) {
-      var _arr = [];
-      var _n = true;
-      var _d = false;
-      var _e = undefined;
-      try {
-        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-          _arr.push(_s.value);
-          if (i && _arr.length === i) break;
-        }
-      } catch (err) {
-        _d = true;
-        _e = err;
-      } finally {
-        try {
-          if (!_n && _i["return"]) _i["return"]();
-        } finally {
-          if (_d) throw _e;
-        }
-      }
-      return _arr;
+  }
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+  }
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+  function _iterableToArrayLimit(arr, i) {
+    if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+      return;
     }
-    return function(arr, i) {
-      if (Array.isArray(arr)) {
-        return arr;
-      } else if (Symbol.iterator in Object(arr)) {
-        return sliceIterator(arr, i);
-      } else {
-        throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+        if (i && _arr.length === i) break;
       }
-    };
-  }();
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+    return _arr;
+  }
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  }
+  const name = "autotyper";
+  const version = "0.14.2";
+  function upperCaseFirstLetter(string) {
+    return "".concat(string.substring(0, 1).toUpperCase()).concat(string.substring(1));
+  }
+  function paramCaseToCamelCase(string) {
+    return string.split("-").map((function(s, i) {
+      if (i === 0) {
+        return s;
+      }
+      return upperCaseFirstLetter(s);
+    })).join("");
+  }
   function attributeName(name, namespace) {
     if (namespace) {
-      return "data-" + namespace + "-" + name;
+      return "data-".concat(namespace, "-").concat(name);
     }
-    return "data-" + name;
+    return "data-".concat(name);
   }
   function dataAttributesToObject(element, names, namespace) {
-    return names.reduce(function(obj, name) {
+    return names.reduce((function(obj, name) {
       var value = element.getAttribute(attributeName(name, namespace));
       var propertyName = paramCaseToCamelCase(name);
       if (value === null) {
         return obj;
       }
-      return _extends({}, obj, defineProperty({}, propertyName, JSON.parse(value)));
-    }, {});
+      return _objectSpread2({}, obj, _defineProperty({}, propertyName, JSON.parse(value)));
+    }), {});
   }
   function randomNumber(min, max) {
     var minimum = Math.min(min, max);
@@ -95,10 +114,10 @@
     var multiplier = maximum - minimum + 1;
     return Math.floor(Math.random() * multiplier) + minimum;
   }
-  var interval = function(interval) {
-    var value = void 0;
+  function interval(interval) {
+    var value;
     if (Array.isArray(interval) && interval.length === 2) {
-      var _interval = slicedToArray(interval, 2), min = _interval[0], max = _interval[1];
+      var _interval = _slicedToArray(interval, 2), min = _interval[0], max = _interval[1];
       value = randomNumber(min, max);
     } else if (typeof interval === "function") {
       value = interval();
@@ -106,7 +125,9 @@
       value = parseInt(interval, 10);
     }
     return value;
-  };
+  }
+  var NAME = name;
+  var VERSION = version;
   var INIT = "init";
   var START = "start";
   var TYPE = "type";
@@ -130,29 +151,32 @@
     loopInterval: 0,
     empty: " "
   };
-  var autotyper = _extends(new Emitter(), {
+  var autotyper = Emitter({
     init: function init() {
       var _this = this;
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
-      var _parseArguments = this.parseArguments(args), _parseArguments2 = slicedToArray(_parseArguments, 2), _parseArguments2$ = _parseArguments2[0], element = _parseArguments2$ === undefined ? null : _parseArguments2$, _parseArguments2$2 = _parseArguments2[1], options = _parseArguments2$2 === undefined ? {} : _parseArguments2$2;
+      var _this$parseArguments = this.parseArguments(args), _this$parseArguments2 = _slicedToArray(_this$parseArguments, 2), _this$parseArguments3 = _this$parseArguments2[0], element = _this$parseArguments3 === void 0 ? null : _this$parseArguments3, _this$parseArguments4 = _this$parseArguments2[1], options = _this$parseArguments4 === void 0 ? {} : _this$parseArguments4;
       if (element) {
         var text = element.innerHTML.trim();
-        var dataOptions = _extends(dataAttributesToObject(element, DATA_ATTRIBUTES, name), JSON.parse(element.getAttribute("data-" + name + "-options")));
+        var dataOptions = _objectSpread2({}, dataAttributesToObject(element, DATA_ATTRIBUTES, NAME), {}, JSON.parse(element.getAttribute("data-".concat(NAME, "-options"))));
         this.element = element;
-        this.settings = _extends({}, DEFAULTS, text && {
+        this.settings = _objectSpread2({}, DEFAULTS, {}, text ? {
           text: text
-        }, dataOptions, options);
+        } : {}, {}, dataOptions, {}, options);
         Object.defineProperty(this, "text", {
-          set: function set$$1(value) {
+          set: function set(value) {
             if (this.element) {
               this.element.innerHTML = value;
             }
+          },
+          get: function get() {
+            return this.text;
           }
         });
       } else {
-        this.settings = _extends({}, DEFAULTS, options);
+        this.settings = _objectSpread2({}, DEFAULTS, {}, options);
       }
       this.isRunning = false;
       this.reset();
@@ -162,9 +186,9 @@
       } else {
         var delay = parseInt(this.settings.autoStart, 10);
         if (!isNaN(delay)) {
-          setTimeout(function() {
+          setTimeout((function() {
             return _this.start();
-          }, delay);
+          }), delay);
         }
       }
       return this;
@@ -173,7 +197,7 @@
       if (args.length === 0) {
         return args;
       }
-      var _args = slicedToArray(args, 1), firstArg = _args[0];
+      var _args = _slicedToArray(args, 1), firstArg = _args[0];
       if (firstArg instanceof HTMLElement) {
         return args;
       }
@@ -201,8 +225,8 @@
       return this;
     },
     type: function type() {
-      var text = void 0;
-      var character = void 0;
+      var text;
+      var character;
       this.tick(interval(this.settings.interval));
       if (this.letterCount > this.letterTotal) {
         if (this.settings.loop) {
@@ -248,9 +272,9 @@
     tick: function tick(duration) {
       var _this2 = this;
       clearTimeout(this.timeout);
-      this.timeout = setTimeout(function() {
+      this.timeout = setTimeout((function() {
         return _this2.type();
-      }, duration);
+      }), duration);
       return this;
     },
     loop: function loop() {
@@ -286,13 +310,13 @@
       return this;
     }
   });
-  exports["default"] = autotyper;
   exports.DATA_ATTRIBUTES = DATA_ATTRIBUTES;
   exports.DEFAULTS = DEFAULTS;
   exports.EVENTS = EVENTS;
-  exports.NAME = name;
-  exports.VERSION = version;
+  exports.NAME = NAME;
+  exports.VERSION = VERSION;
+  exports.default = autotyper;
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-});
+}));

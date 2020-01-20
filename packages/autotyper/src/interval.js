@@ -1,6 +1,6 @@
 import randomNumber from './random-number';
 
-export default function (interval) {
+export default function(interval) {
   let value;
 
   if (Array.isArray(interval) && interval.length === 2) {
