@@ -17,7 +17,7 @@
   ],
   "author": "Saul Hardman <hello@iamsaul.co.uk>",
   "homepage": "https://github.com/saulhardman/autotyper/",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "repository": "https://github.com/saulhardman/autotyper/tree/master/packages/autotyper",
   "dependencies": {
     "component-emitter": "^1.2.1"

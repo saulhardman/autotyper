@@ -2,7 +2,7 @@ import Emitter from "component-emitter";
 
 const name = "autotyper";
 
-const version = "0.15.0";
+const version = "0.15.1";
 
 function upperCaseFirstLetter(string) {
   return `${string.substring(0, 1).toUpperCase()}${string.substring(1)}`;

@@ -94,7 +94,7 @@ function _nonIterableRest() {
 
 const name = "autotyper";
 
-const version = "0.15.0";
+const version = "0.15.1";
 
 function upperCaseFirstLetter(string) {
   return "".concat(string.substring(0, 1).toUpperCase()).concat(string.substring(1));
