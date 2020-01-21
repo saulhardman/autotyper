@@ -20,12 +20,8 @@ const PACKAGES_DIR = path.join(process.cwd(), 'packages');
 
 const builds = {
   modern: [{ format: 'es' }],
-  legacy: [
-    { format: 'cjs' },
-    { format: 'amd' },
-    { format: 'umd' },
-    { format: 'umd', minify: true },
-  ],
+  legacy: [{ format: 'cjs' }, { format: 'amd' }, { format: 'umd' }],
+  browser: [{ format: 'umd', minify: true }],
 };
 
 const globals = {
@@ -87,6 +83,14 @@ const getFilename = (format, minify) => {
   return parts.join('.');
 };
 
+const getExternal = (buildType, dependencies, peerDependencies) => {
+  if (buildType === 'browser') {
+    return Object.keys(peerDependencies);
+  }
+
+  return [...Object.keys(dependencies), ...Object.keys(peerDependencies)];
+};
+
 export default async () => {
   const packageNames = await readDir(PACKAGES_DIR);
 
@@ -105,10 +109,7 @@ export default async () => {
 
         plugins: getPlugins(buildType),
 
-        external: [
-          ...Object.keys(dependencies),
-          ...Object.keys(peerDependencies),
-        ],
+        external: getExternal(buildType, dependencies, peerDependencies),
 
         output: outputs.map(({ format, minify }) => ({
           file: path.join(outputDir, getFilename(format, minify)),
