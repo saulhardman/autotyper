@@ -3,6 +3,6 @@ cache: yarn
 node_js:
   - '12'
 before_script:
-  - yarn bootstrap
+  - yarn lerna-bootstrap
 after_success:
   - 'yarn nyc report --reporter=text-lcov | yarn coveralls'

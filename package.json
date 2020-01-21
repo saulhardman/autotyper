@@ -53,10 +53,10 @@
     "test": "yarn lint --quiet && cross-env NODE_ENV=test nyc ava",
     "build": "cross-env NODE_ENV=production rollup -c",
     "post-build": "git add packages/* && git commit --amend --no-edit",
+    "lerna-bootstrap": "lerna bootstrap --npm-client=yarn",
     "lerna-version": "lerna version --no-push --force-publish",
     "lerna-publish": "lerna publish from-package",
-    "prepare-release": "npm-run-all test lerna-version build post-build lerna-publish",
-    "bootstrap": "lerna bootstrap --npm-client=yarn"
+    "release": "npm-run-all test lerna-version build post-build lerna-publish"
   },
   "ava": {
     "babel": {
